@@ -1,7 +1,0 @@
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/bin/json_xs relocate_as=../../../../../../../bin/json_xs
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/darwin-thread-multi-2level/JSON/XS.pm relocate_as=../../../JSON/XS.pm
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/darwin-thread-multi-2level/JSON/XS/Boolean.pm relocate_as=../../../JSON/XS/Boolean.pm
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/JSON/XS/XS.bundle relocate_as=XS.bundle
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man1/json_xs.1 relocate_as=../../../../../../../man/man1/json_xs.1
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/JSON::XS.3 relocate_as=../../../../../../../man/man3/JSON::XS.3
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/JSON::XS::Boolean.3 relocate_as=../../../../../../../man/man3/JSON::XS::Boolean.3

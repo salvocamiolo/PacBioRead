@@ -1,4 +1,0 @@
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Mozilla/CA.pm relocate_as=../../../../Mozilla/CA.pm
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Mozilla/CA/cacert.pem relocate_as=../../../../Mozilla/CA/cacert.pem
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Mozilla/mk-ca-bundle.pl relocate_as=../../../../Mozilla/mk-ca-bundle.pl
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/Mozilla::CA.3 relocate_as=../../../../../../../man/man3/Mozilla::CA.3

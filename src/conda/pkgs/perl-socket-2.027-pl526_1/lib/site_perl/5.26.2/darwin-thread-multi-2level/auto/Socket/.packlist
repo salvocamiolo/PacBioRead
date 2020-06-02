@@ -1,3 +1,0 @@
-/opt/anaconda1anaconda2anaconda3/lib/site_perl/5.26.2/darwin-thread-multi-2level/Socket.pm relocate_as=../../Socket.pm
-/opt/anaconda1anaconda2anaconda3/lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/Socket/Socket.bundle relocate_as=Socket.bundle
-/opt/anaconda1anaconda2anaconda3/man/man3/Socket.3 relocate_as=../../../../../../man/man3/Socket.3

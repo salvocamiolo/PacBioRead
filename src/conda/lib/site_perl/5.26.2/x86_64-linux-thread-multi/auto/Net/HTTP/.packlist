@@ -1,8 +1,0 @@
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Net/HTTP.pm relocate_as=../../../../Net/HTTP.pm
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Net/HTTP/Methods.pm relocate_as=../../../../Net/HTTP/Methods.pm
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Net/HTTP/NB.pm relocate_as=../../../../Net/HTTP/NB.pm
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Net/HTTPS.pm relocate_as=../../../../Net/HTTPS.pm
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/Net::HTTP.3 relocate_as=../../../../../../../man/man3/Net::HTTP.3
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/Net::HTTP::Methods.3 relocate_as=../../../../../../../man/man3/Net::HTTP::Methods.3
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/Net::HTTP::NB.3 relocate_as=../../../../../../../man/man3/Net::HTTP::NB.3
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/Net::HTTPS.3 relocate_as=../../../../../../../man/man3/Net::HTTPS.3

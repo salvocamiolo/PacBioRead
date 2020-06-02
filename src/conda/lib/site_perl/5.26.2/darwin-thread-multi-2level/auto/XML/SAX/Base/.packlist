@@ -1,6 +1,0 @@
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/XML/SAX/Base.pm relocate_as=../../../../../XML/SAX/Base.pm
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/XML/SAX/BuildSAXBase.pl relocate_as=../../../../../XML/SAX/BuildSAXBase.pl
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/XML/SAX/Exception.pm relocate_as=../../../../../XML/SAX/Exception.pm
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/XML::SAX::Base.3 relocate_as=../../../../../../../../man/man3/XML::SAX::Base.3
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/XML::SAX::BuildSAXBase.3 relocate_as=../../../../../../../../man/man3/XML::SAX::BuildSAXBase.3
-/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/XML::SAX::Exception.3 relocate_as=../../../../../../../../man/man3/XML::SAX::Exception.3
