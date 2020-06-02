@@ -1,4 +1,4 @@
-src/conda/
+src/conda
 *.fastq
 *.fq
 *.fasta
