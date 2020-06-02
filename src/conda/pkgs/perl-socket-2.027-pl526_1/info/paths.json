@@ -1,0 +1,27 @@
+{
+  "paths": [
+    {
+      "_path": "lib/site_perl/5.26.2/darwin-thread-multi-2level/Socket.pm",
+      "path_type": "hardlink",
+      "sha256": "df59b658655a46adbf9beb80e4c0d0771cc5c7c4bae2e4a3728345192fa3bfbb",
+      "size_in_bytes": 37062
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/Socket/.packlist",
+      "file_mode": "text",
+      "path_type": "hardlink",
+      "prefix_placeholder": "/opt/anaconda1anaconda2anaconda3",
+      "sha256": "c9078d802d0309e779a0700e064ac2010c48063d31571f8bb84cf4a78e10fa9f",
+      "size_in_bytes": 351
+    },
+    {
+      "_path": "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/Socket/Socket.bundle",
+      "file_mode": "binary",
+      "path_type": "hardlink",
+      "prefix_placeholder": "/Users/distiller/project/miniconda/conda-bld/perl-socket_1531642468161/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placeho",
+      "sha256": "ed24f1ad13d3b4d95e8bcd72ff369356fa3527699afb315307931ade603e6d71",
+      "size_in_bytes": 37324
+    }
+  ],
+  "paths_version": 1
+}

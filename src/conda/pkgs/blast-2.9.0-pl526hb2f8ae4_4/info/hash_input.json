@@ -1,0 +1,9 @@
+{
+  "cxx_compiler_version": "4",
+  "c_compiler": "clang",
+  "c_compiler_version": "4",
+  "bzip2": "1",
+  "cxx_compiler": "clangxx",
+  "curl": "7.64",
+  "zlib": "1.2"
+}

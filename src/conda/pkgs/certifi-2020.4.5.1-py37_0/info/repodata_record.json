@@ -1,0 +1,24 @@
+{
+  "arch": "x86_64",
+  "build": "py37_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/osx-64",
+  "constrains": [],
+  "depends": [
+    "python >=3.7,<3.8.0a0"
+  ],
+  "features": "",
+  "fn": "certifi-2020.4.5.1-py37_0.conda",
+  "legacy_bz2_md5": "f86ee1fb1b5b404c454cd75e4dd0ad9c",
+  "license": "ISC",
+  "md5": "62343bc7d903df90ce3ea3d5ae85002e",
+  "name": "certifi",
+  "platform": "darwin",
+  "sha256": "c754eb8b0cb59695defd666d118fc2959f4d1b5d7af4ec0bddb2208b30fbafde",
+  "size": 158448,
+  "subdir": "osx-64",
+  "timestamp": 1586199330080,
+  "track_features": "",
+  "url": "https://repo.anaconda.com/pkgs/main/osx-64/certifi-2020.4.5.1-py37_0.conda",
+  "version": "2020.4.5.1"
+}

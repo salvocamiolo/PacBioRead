@@ -1,0 +1,44 @@
+# This file created by conda-build 3.18.7
+# meta.yaml template originally from:
+# /Users/distiller/project/recipes/perl-compress-raw-bzip2, last modified Sat Aug 10 12:41:59 2019
+# ------------------------------------------------
+
+package:
+    name: perl-compress-raw-bzip2
+    version: '2.087'
+source:
+    sha256: 77bb0dfdda0475b9a2f5d463e4536a6f0ee480917b6743e72bfe31da8cf00cfb
+    url: https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.087.tar.gz
+build:
+    number: '0'
+    string: pl526h6de7cb9_0
+requirements:
+    build:
+        - cctools 895 h7512d6f_0
+        - clang 4.0.1 h662ec87_0
+        - clang_osx-64 4.0.1 h1ce6c1d_17
+        - clangxx 4.0.1 hc9b4283_0
+        - clangxx_osx-64 4.0.1 h22b1bf0_17
+        - compiler-rt 4.0.1 h5487866_0
+        - ld64 274.2 h7c2db76_0
+        - libcxx 4.0.1 h579ed51_0
+        - libcxxabi 4.0.1 hebd6815_0
+        - llvm 4.0.1 hc748206_0
+        - llvm-lto-tapi 4.0.1 h6701bc3_0
+    host:
+        - libcxx 8.0.0 4
+        - libcxxabi 8.0.0 4
+        - perl 5.26.2 haec8ef5_1006
+    run:
+        - libcxx >=4.0.1
+        - perl >=5.26.2,<5.26.3.0a0
+test:
+    imports:
+        - Compress::Raw::Bzip2
+about:
+    home: http://metacpan.org/pod/Compress::Raw::Bzip2
+    license: perl_5
+    summary: Low-Level Interface to bzip2 compression library
+extra:
+    copy_test_source_files: true
+    final: true

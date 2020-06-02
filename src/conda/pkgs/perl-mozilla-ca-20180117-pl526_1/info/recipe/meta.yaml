@@ -1,0 +1,32 @@
+# This file created by conda-build 3.17.8
+# meta.yaml template originally from:
+# /Users/distiller/project/recipes/perl-mozilla-ca, last modified Tue May  7 04:00:34 2019
+# ------------------------------------------------
+
+package:
+    name: perl-mozilla-ca
+    version: '20180117'
+source:
+    sha256: f2cc9fbe119f756313f321e0d9f1fac0859f8f154ac9d75b1a264c1afdf4e406
+    url: https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-20180117.tar.gz
+build:
+    number: '1'
+    string: pl526_1
+requirements:
+    host:
+        - perl 5.26.2 haec8ef5_1006
+        - perl-extutils-makemaker 7.36 pl526_1
+        - perl-test 1.26 pl526_1
+        - perl-test-harness 3.42 pl526_0
+    run:
+        - perl >=5.26.2,<5.26.3.0a0
+test:
+    imports:
+        - Mozilla::CA
+about:
+    home: http://metacpan.org/pod/Mozilla::CA
+    license: unknown
+    summary: Mozilla's CA cert bundle in PEM format
+extra:
+    copy_test_source_files: true
+    final: true

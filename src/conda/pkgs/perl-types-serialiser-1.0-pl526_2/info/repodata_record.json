@@ -1,0 +1,24 @@
+{
+  "arch": "x86_64",
+  "build": "pl526_2",
+  "build_number": 2,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-common-sense"
+  ],
+  "features": "",
+  "fn": "perl-types-serialiser-1.0-pl526_2.tar.bz2",
+  "license": "perl_5",
+  "md5": "dddd57971f67328ed28ed6400b340bde",
+  "name": "perl-types-serialiser",
+  "platform": "darwin",
+  "sha256": "e85dd78e879ce80da9b009c7337ba7f4d983195582b580c3bb79d1d8a798582c",
+  "size": 10646,
+  "subdir": "osx-64",
+  "timestamp": 1533073549136,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-types-serialiser-1.0-pl526_2.tar.bz2",
+  "version": "1.0"
+}

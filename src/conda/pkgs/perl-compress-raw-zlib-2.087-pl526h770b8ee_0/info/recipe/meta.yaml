@@ -1,0 +1,45 @@
+# This file created by conda-build 3.18.7
+# meta.yaml template originally from:
+# /Users/distiller/project/recipes/perl-compress-raw-zlib, last modified Sat Aug 10 12:47:23 2019
+# ------------------------------------------------
+
+package:
+    name: perl-compress-raw-zlib
+    version: '2.087'
+source:
+    sha256: 8c81c9e1e386b3620ea7aa4c393afe8c80d3587e4fde57b7f83106aea05bee8d
+    url: https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.087.tar.gz
+build:
+    number: '0'
+    string: pl526h770b8ee_0
+requirements:
+    build:
+        - cctools 895 h7512d6f_0
+        - clang 4.0.1 h662ec87_0
+        - clang_osx-64 4.0.1 h1ce6c1d_17
+        - clangxx 4.0.1 hc9b4283_0
+        - clangxx_osx-64 4.0.1 h22b1bf0_17
+        - compiler-rt 4.0.1 h5487866_0
+        - ld64 274.2 h7c2db76_0
+        - libcxx 4.0.1 h579ed51_0
+        - libcxxabi 4.0.1 hebd6815_0
+        - llvm 4.0.1 hc748206_0
+        - llvm-lto-tapi 4.0.1 h6701bc3_0
+    host:
+        - libcxx 8.0.0 4
+        - libcxxabi 8.0.0 4
+        - perl 5.26.2 haec8ef5_1006
+        - perl-extutils-makemaker 7.36 pl526_1
+    run:
+        - libcxx >=4.0.1
+        - perl >=5.26.2,<5.26.3.0a0
+test:
+    imports:
+        - Compress::Raw::Zlib
+about:
+    home: http://metacpan.org/pod/Compress::Raw::Zlib
+    license: perl_5
+    summary: Basic utilities for writing tests.
+extra:
+    copy_test_source_files: true
+    final: true

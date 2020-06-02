@@ -1,0 +1,15 @@
+{
+  "arch": "x86_64",
+  "build": "pl526_1",
+  "build_number": 1,
+  "depends": [
+    "perl >=5.26.2,<5.27.0a0",
+    "perl-xsloader"
+  ],
+  "license": "perl_5",
+  "name": "perl-mime-base64",
+  "platform": "osx",
+  "subdir": "osx-64",
+  "timestamp": 1531054502826,
+  "version": "3.15"
+}

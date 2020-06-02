@@ -1,0 +1,24 @@
+{
+  "arch": "x86_64",
+  "build": "pl526h1de35cc_0",
+  "build_number": 0,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-xsloader"
+  ],
+  "features": "",
+  "fn": "perl-storable-3.15-pl526h1de35cc_0.tar.bz2",
+  "license": "perl_5",
+  "md5": "5b8bb028dbdb5db75381d6715c4d8384",
+  "name": "perl-storable",
+  "platform": "darwin",
+  "sha256": "b70c553ba694d23552dbf0d6441ef383244e0cb0fb93f949f5644f465743c820",
+  "size": 57454,
+  "subdir": "osx-64",
+  "timestamp": 1557135169446,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-storable-3.15-pl526h1de35cc_0.tar.bz2",
+  "version": "3.15"
+}

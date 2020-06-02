@@ -1,0 +1,23 @@
+{
+  "arch": "x86_64",
+  "build": "pl526_3",
+  "build_number": 3,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "perl >=5.26.2,<5.26.3.0a0"
+  ],
+  "features": "",
+  "fn": "perl-html-tagset-3.20-pl526_3.tar.bz2",
+  "license": "unknown",
+  "md5": "65fb77dff678cc20a4fe4f49e857bc99",
+  "name": "perl-html-tagset",
+  "platform": "darwin",
+  "sha256": "868c9651a85ba61450c0e506a11988e0c87c2c8b6f19329398848f31c4f2cb77",
+  "size": 11923,
+  "subdir": "osx-64",
+  "timestamp": 1535080267000,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-html-tagset-3.20-pl526_3.tar.bz2",
+  "version": "3.20"
+}

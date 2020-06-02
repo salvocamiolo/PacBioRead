@@ -1,0 +1,17 @@
+{
+  "arch": "x86_64",
+  "build": "pl526h04f5b5a_3",
+  "build_number": 3,
+  "depends": [
+    "libcxx >=4.0.1",
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-common-sense",
+    "perl-types-serialiser"
+  ],
+  "license": "unknown",
+  "name": "perl-json-xs",
+  "platform": "osx",
+  "subdir": "osx-64",
+  "timestamp": 1557227348333,
+  "version": "2.34"
+}

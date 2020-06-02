@@ -1,0 +1,15 @@
+{
+  "arch": "x86_64",
+  "build": "pl526h776b7f1_7",
+  "build_number": 7,
+  "depends": [
+    "expat >=2.2.5,<2.3.0a0",
+    "perl >=5.26.2,<5.26.3.0a0"
+  ],
+  "license": "perl_5",
+  "name": "perl-xml-parser",
+  "platform": "osx",
+  "subdir": "osx-64",
+  "timestamp": 1556976552274,
+  "version": "2.44"
+}

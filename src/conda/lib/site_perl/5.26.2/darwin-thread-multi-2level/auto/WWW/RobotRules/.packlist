@@ -1,0 +1,4 @@
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/WWW/RobotRules.pm relocate_as=../../../../WWW/RobotRules.pm
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/WWW/RobotRules/AnyDBM_File.pm relocate_as=../../../../WWW/RobotRules/AnyDBM_File.pm
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/WWW::RobotRules.3 relocate_as=../../../../../../../man/man3/WWW::RobotRules.3
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/WWW::RobotRules::AnyDBM_File.3 relocate_as=../../../../../../../man/man3/WWW::RobotRules::AnyDBM_File.3

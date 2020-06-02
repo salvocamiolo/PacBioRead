@@ -1,0 +1,26 @@
+{
+  "arch": "x86_64",
+  "build": "pl526_1",
+  "build_number": 1,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-xml-namespacesupport",
+    "perl-xml-sax",
+    "perl-xml-sax-expat"
+  ],
+  "features": "",
+  "fn": "perl-xml-simple-2.25-pl526_1.tar.bz2",
+  "license": "perl_5",
+  "md5": "967b6424f30954f9aaa96496f161e982",
+  "name": "perl-xml-simple",
+  "platform": "darwin",
+  "sha256": "2d90161c8284a89833a52c87596481f3fbe0916a52e38b045c317d84685c64c8",
+  "size": 48440,
+  "subdir": "osx-64",
+  "timestamp": 1552515952719,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-xml-simple-2.25-pl526_1.tar.bz2",
+  "version": "2.25"
+}

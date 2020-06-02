@@ -1,0 +1,5 @@
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/darwin-thread-multi-2level/MIME/Base64.pm relocate_as=../../../MIME/Base64.pm
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/darwin-thread-multi-2level/MIME/QuotedPrint.pm relocate_as=../../../MIME/QuotedPrint.pm
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/MIME/Base64/Base64.bundle relocate_as=Base64.bundle
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/MIME::Base64.3 relocate_as=../../../../../../../man/man3/MIME::Base64.3
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/MIME::QuotedPrint.3 relocate_as=../../../../../../../man/man3/MIME::QuotedPrint.3

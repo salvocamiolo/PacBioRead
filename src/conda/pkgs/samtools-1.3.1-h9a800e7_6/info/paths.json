@@ -1,0 +1,137 @@
+{
+  "paths": [
+    {
+      "_path": "bin/ace2sam",
+      "path_type": "hardlink",
+      "sha256": "7e0daa085b553b27cb739f7abca7f332a47634a4a8b97b6e3d7da08a9b6b815c",
+      "size_in_bytes": 22020
+    },
+    {
+      "_path": "bin/blast2sam.pl",
+      "path_type": "hardlink",
+      "sha256": "4d7720b9095cef6e51311e6de3fa8fe629f941e5a1cc1d86356945d1888eae7e",
+      "size_in_bytes": 5328
+    },
+    {
+      "_path": "bin/bowtie2sam.pl",
+      "path_type": "hardlink",
+      "sha256": "44378bc61de934a6a07cd62c75405636c51f1e96fa1aada3304cd5ec4868d876",
+      "size_in_bytes": 3364
+    },
+    {
+      "_path": "bin/export2sam.pl",
+      "path_type": "hardlink",
+      "sha256": "e61cd3f77fc4858bc0610314b7df74d67afb2ce4109ce07694f6f7273177778a",
+      "size_in_bytes": 18032
+    },
+    {
+      "_path": "bin/interpolate_sam.pl",
+      "path_type": "hardlink",
+      "sha256": "3b05d8dac6abd6499a45ff8ddd01fc558815ad863f16b7380da861ea09fc11dd",
+      "size_in_bytes": 6125
+    },
+    {
+      "_path": "bin/maq2sam-long",
+      "path_type": "hardlink",
+      "sha256": "a257c1f660625d026a8961e0801111e12fcfb65194e09200e07cb14b84647839",
+      "size_in_bytes": 9588
+    },
+    {
+      "_path": "bin/maq2sam-short",
+      "path_type": "hardlink",
+      "sha256": "76c1829183f1e22bc43e8c342bbdb7c9f2a1137281d456edd781ac083cca557c",
+      "size_in_bytes": 9588
+    },
+    {
+      "_path": "bin/md5fa",
+      "path_type": "hardlink",
+      "sha256": "a242c9320490e9e49adf6883e1615865484205628b0216e196aade8888227a0d",
+      "size_in_bytes": 18040
+    },
+    {
+      "_path": "bin/md5sum-lite",
+      "path_type": "hardlink",
+      "sha256": "3cd6b67b1a487a4788520236486887d512cf203729bab0153352ea4eab2504a9",
+      "size_in_bytes": 13540
+    },
+    {
+      "_path": "bin/novo2sam.pl",
+      "path_type": "hardlink",
+      "sha256": "168b0ddb970b8618b02daf27a84297f84c31b2e87d57a8572baf1afbbf634a29",
+      "size_in_bytes": 6773
+    },
+    {
+      "_path": "bin/plot-bamstats",
+      "path_type": "hardlink",
+      "sha256": "02caec7383869fd0ab65cbed5d59181fabd5ea200dedb6acb4fdd6f48477e229",
+      "size_in_bytes": 48367
+    },
+    {
+      "_path": "bin/psl2sam.pl",
+      "path_type": "hardlink",
+      "sha256": "cb3b63aa7e52d5d382549f14d775bb3d9e3ee16f7c38d3fa7433dfd102e009f9",
+      "size_in_bytes": 3208
+    },
+    {
+      "_path": "bin/sam2vcf.pl",
+      "path_type": "hardlink",
+      "sha256": "9b462294867cacbc49aabc26188ab3066ace629f5ab03a664780b92abb11f8c0",
+      "size_in_bytes": 8961
+    },
+    {
+      "_path": "bin/samtools",
+      "path_type": "hardlink",
+      "sha256": "89917e1754956bb8b1e034c60d68d7b29f823a1e1ecc9cd5a3dbc97091fedb12",
+      "size_in_bytes": 1061952
+    },
+    {
+      "_path": "bin/samtools.pl",
+      "path_type": "hardlink",
+      "sha256": "0e59d966a74db4c2da0431e6a73c5737ca10f5bbc42ee0695ecf7cd0b5c11c2e",
+      "size_in_bytes": 16478
+    },
+    {
+      "_path": "bin/seq_cache_populate.pl",
+      "path_type": "hardlink",
+      "sha256": "92c72f6106cf1c105e22d8b730f990feb3e09d841ef6ccc85c8e8ea2dcf955ad",
+      "size_in_bytes": 11105
+    },
+    {
+      "_path": "bin/soap2sam.pl",
+      "path_type": "hardlink",
+      "sha256": "ad4b0819220a711483023235e441e762e9912eb6040aacec65049d781e4357e7",
+      "size_in_bytes": 3909
+    },
+    {
+      "_path": "bin/wgsim",
+      "path_type": "hardlink",
+      "sha256": "5b5f15284e5378fc960f43844fe282e6a31a5610fcddcad180a35e84ec132362",
+      "size_in_bytes": 22708
+    },
+    {
+      "_path": "bin/wgsim_eval.pl",
+      "path_type": "hardlink",
+      "sha256": "2596796cab6daa117bdd63edde99594f9659684de0945e619d1c54ee1b80279a",
+      "size_in_bytes": 12540
+    },
+    {
+      "_path": "bin/zoom2sam.pl",
+      "path_type": "hardlink",
+      "sha256": "b6ce3d3d3814569b76bfb8df69a458a11f11efdc56183c922eeefe2e17d08900",
+      "size_in_bytes": 3583
+    },
+    {
+      "_path": "share/man/man1/samtools.1",
+      "path_type": "hardlink",
+      "sha256": "2c9555773833a763361a40a13cd820c7f103b7050abe54b32a96966ecbd302da",
+      "size_in_bytes": 54835
+    },
+    {
+      "_path": "share/man/man1/wgsim.1",
+      "path_type": "hardlink",
+      "sha256": "d97ab28b501ef9e66a1935ad10a7361391af42e12a4a94bb8e3d14ceb1691242",
+      "size_in_bytes": 1193
+    }
+  ],
+  "paths_version": 1
+}

@@ -1,0 +1,229 @@
+commit 70ca5b44b6d03e6cdf882a40819ef2c8019ca29d
+Author: Ray Donnelly <mingw.android@gmail.com>
+Date:   Thu May 24 14:29:34 2018 +0100
+
+    Add make dep
+
+commit cef86c2afbb75d4d02d42124ce66ffd685a3714c
+Author: Ray Donnelly <mingw.android@gmail.com>
+Date:   Fri Apr 13 14:27:48 2018 +0100
+
+    Rename patch as it is a workaround a not just a debugging-build-failure thing
+
+commit 86e3cbd817708cc67c068b54e20ccf833d69d537
+Author: Ray Donnelly <mingw.android@gmail.com>
+Date:   Thu Apr 12 14:21:49 2018 +0100
+
+    Workaround conda base env being on PATH breaking CMake
+
+commit 408efb65811fac3b0442e8653a80223dd016b24a
+Author: Ray Donnelly <mingw.android@gmail.com>
+Date:   Wed Apr 11 23:51:03 2018 +0100
+
+    Fix _snprintf_s args
+
+commit 4e7977c48833bde202e13ad719a85e1f282b5eb2
+Author: Ray Donnelly <mingw.android@gmail.com>
+Date:   Wed Apr 11 23:37:30 2018 +0100
+
+    Windows VS2008 fix
+
+commit 19df2faffc9538732bf660c43576bc2bcbd0ff19
+Author: Ray Donnelly <mingw.android@gmail.com>
+Date:   Wed Apr 11 13:47:41 2018 +0100
+
+    Update to 8.42
+
+commit 2a3a311b9fdefa60e8e2296ab8e7d87d14dbd30e
+Author: Michael Sarahan <msarahan@gmail.com>
+Date:   Tue Nov 14 15:41:55 2017 -0600
+
+    remove vc feature
+
+commit 49cf29c0e975d191d861256052d5f7b718c44823
+Author: Nehal J Wani <nehaljw.kkd1@gmail.com>
+Date:   Thu Sep 7 13:39:22 2017 -0500
+
+    Simplify recipe for CB3; Updata metadata
+
+commit f11b68370a52e64d1d419d1e825d8140d4230746
+Author: Ray Donnelly <mingw.android@gmail.com>
+Date:   Tue Aug 29 01:47:40 2017 -0700
+
+    (WIP) Update to 8.41 and work around libtool bug
+
+commit e57787d30eeddf1de3a2ec93c5faaf58c2a873fd
+Author: Ray Donnelly <mingw.android@gmail.com>
+Date:   Tue Aug 29 06:59:33 2017 +0100
+
+    Remove Darwin customizations (10.7, CC, CXX etc)
+
+commit 19f16729c46e0f925c2e94fb88a3f8e9d7777528
+Author: Ray Donnelly <mingw.android@gmail.com>
+Date:   Sun Aug 27 17:30:38 2017 +0100
+
+    Generalize logging
+
+commit 6006d9ff67389ce1deb736dfbba487b233dd24c7
+Author: Nehal J Wani <nehaljw.kkd1@gmail.com>
+Date:   Mon Jul 24 06:41:53 2017 +0000
+
+    Make recipe cross-compile capable
+
+commit ca53f0a6c6c57b243734459141fa1c16cfc66d66
+Merge: a6d8286 a5ea124
+Author: Anthony Scopatz <scopatz@gmail.com>
+Date:   Tue Jan 17 10:06:25 2017 -0800
+
+    Merge pull request #8 from conda-forge-admin/feedstock_rerender_master
+    
+    MNT: Re-render the feedstock [ci skip]
+
+commit a5ea124f958b288995a02532e8a77edce8b7d3b6
+Author: conda-forge-admin <pelson.pub+conda-forge@gmail.com>
+Date:   Mon Jan 16 01:41:31 2017 +0000
+
+    MNT: Updated the feedstock for conda-smithy version 2.0.0.
+
+commit a6d82861f402ab9b4a67ad44f913b8e3835dd2ef
+Merge: 0165d36 8d45f24
+Author: Filipe <ocefpaf@gmail.com>
+Date:   Mon Jan 2 05:57:33 2017 -0300
+
+    Merge pull request #7 from gillins/master
+    
+    Add Windows support and bump to latest version
+
+commit 8d45f24e91ff560976824daedfcbcf7a104b9dc3
+Author: Sam Gillingham <gillingham.sam@gmail.com>
+Date:   Sun Jan 1 15:43:47 2017 +1000
+
+    MNT: Re-rendered with conda-smithy 1.7.0
+
+commit ddbb33004a0d69fffcfe21e05517067ffd3049ce
+Author: Sam Gillingham <gillingham.sam@gmail.com>
+Date:   Sun Jan 1 15:33:42 2017 +1000
+
+    Add Windows support and bump to latest version
+
+commit 0165d367e6a9886261abbf615c2a9318fa1f5338
+Merge: a538ab1 1a7b87d
+Author: Anthony Scopatz <scopatz@gmail.com>
+Date:   Fri Dec 16 21:01:42 2016 -0800
+
+    Merge pull request #6 from conda-forge-admin/feedstock_rerender_master
+    
+    MNT: Re-render the feedstock [ci skip]
+
+commit 1a7b87df6f3c0c16e07af8ff3fc4f80c75f6dd5d
+Author: conda-forge-admin <pelson.pub+conda-forge@gmail.com>
+Date:   Sat Dec 17 01:43:40 2016 +0000
+
+    MNT: Updated the feedstock for conda-smithy version 1.7.0.
+
+commit a538ab11320ec5d57bc59b1cdb5d09b8f3d937b3
+Merge: 7d06e43 b5880ff
+Author: jakirkham <jakirkham@gmail.com>
+Date:   Sun Oct 23 21:54:11 2016 -0400
+
+    Merge pull request #5 from conda-forge-admin/feedstock_rerender_master
+    
+    MNT: Re-render the feedstock [ci skip]
+
+commit b5880ffefddcaaaa23a7d4d8da4e0228a64bc681
+Author: conda-forge-admin <pelson.pub+conda-forge@gmail.com>
+Date:   Mon Oct 24 01:34:52 2016 +0000
+
+    MNT: Updated the feedstock for conda-smithy version 1.3.3.
+
+commit 7d06e4320e50fdf92b9e7a2cf9b6c069f80615db
+Merge: 06d654d 87f9272
+Author: Anthony Scopatz <scopatz@gmail.com>
+Date:   Sat Aug 27 20:08:48 2016 -0400
+
+    Merge pull request #4 from jakirkham/add_sebastian-luna-valero
+    
+    Add @sebastian-luna-valero
+
+commit 87f9272b1892e47a3c8f6754a5c834977f837d42
+Author: John Kirkham <kirkhamj@janelia.hhmi.org>
+Date:   Sat Aug 27 19:10:50 2016 -0400
+
+    recipe: Add @sebastian-luna-valero as a maintainer.
+
+commit 06d654da646ba68eb8cfc39a76d2f72f98e76a2a
+Merge: 773af24 83deb01
+Author: Anthony Scopatz <scopatz@gmail.com>
+Date:   Sun May 15 09:38:33 2016 -0400
+
+    Merge pull request #3 from conda-forge-admin/feedstock_rerender_master
+    
+    MNT: Re-render the feedstock
+
+commit 83deb0108267bedda74dab6089d277c05771c503
+Author: conda-forge-admin <pelson.pub+conda-forge@gmail.com>
+Date:   Sun May 15 10:43:31 2016 +0000
+
+    MNT: Updated the feedstock for conda-smithy version 0.10.3.
+    
+    [ci skip]
+
+commit 773af2488f9c08c7fc4720addd67a4a67c2bfd03
+Merge: b9193bb 2a4fa40
+Author: jakirkham <jakirkham@gmail.com>
+Date:   Thu Apr 21 20:07:37 2016 -0400
+
+    Merge pull request #2 from scopatz/master
+    
+    --enable-unicode-properties
+
+commit 2a4fa4072a832a41e642ec1bd4af17b010aec306
+Author: Anthony Scopatz <scopatz@gmail.com>
+Date:   Thu Apr 21 19:35:19 2016 -0400
+
+    --enable-unicode-properties
+
+commit b9193bb59bcf5732a8d6d2206c612dc92ab961aa
+Merge: 8cf0cd0 afc48eb
+Author: jakirkham <jakirkham@gmail.com>
+Date:   Thu Apr 21 17:22:41 2016 -0400
+
+    Merge pull request #1 from scopatz/master
+    
+    --enable-unicode
+
+commit afc48ebdd5b2838cf52a53e1583f71023ab757b4
+Author: Anthony Scopatz <scopatz@gmail.com>
+Date:   Thu Apr 21 15:37:37 2016 -0400
+
+    bump to v8.38 [skip appveyor]
+
+commit 4bef2a5eb98ced88477d986dfa4f62a55370036f
+Author: Anthony Scopatz <scopatz@gmail.com>
+Date:   Thu Apr 21 15:30:04 2016 -0400
+
+    --enable-utf [skip appveyor]
+
+commit 63075b3cc10c77380ca83ac8c899b5a95bc05d6e
+Author: Anthony Scopatz <scopatz@gmail.com>
+Date:   Thu Apr 21 15:00:28 2016 -0400
+
+    build 1 [skip appveyor]
+
+commit 1c5279ffd196b76c92635195224314e2a5f00fff
+Author: Anthony Scopatz <scopatz@gmail.com>
+Date:   Thu Apr 21 14:49:08 2016 -0400
+
+    --enable-unicode [skip appveyor]
+
+commit 8cf0cd053356122b434aa52a6ea407796e33216e
+Author: Travis-CI on github.com/conda-forge/staged-recipes <conda-forge@googlegroups.com>
+Date:   Mon Apr 18 23:59:31 2016 +0000
+
+    Re-render the feedstock after CI registration.
+
+commit c6609ced1177a12da0d07c7558ccc4adf3da55f8
+Author: Travis-CI on github.com/conda-forge/staged-recipes <conda-forge@googlegroups.com>
+Date:   Mon Apr 18 23:58:35 2016 +0000
+
+    Initial commit of the pcre feedstock.

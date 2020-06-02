@@ -1,0 +1,12 @@
+{
+  "arch": "x86_64",
+  "build": "1",
+  "build_number": 1,
+  "depends": [],
+  "license": "Michigan Tech.",
+  "name": "cap3",
+  "platform": "osx",
+  "subdir": "osx-64",
+  "timestamp": 1530466616302,
+  "version": "10.2011"
+}

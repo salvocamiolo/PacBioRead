@@ -1,0 +1,29 @@
+{
+  "arch": "x86_64",
+  "build": "hddcf347_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/osx-64",
+  "constrains": [],
+  "depends": [
+    "libcxx >=4.0.1",
+    "libedit >=3.1.20181209,<3.2.0a0",
+    "libedit >=3.1.20181209,<4.0a0",
+    "openssl >=1.1.1d,<1.1.2a",
+    "tk >=8.6.8,<8.7.0a0"
+  ],
+  "features": "",
+  "fn": "krb5-1.17.1-hddcf347_0.conda",
+  "legacy_bz2_md5": "9710c3467a02c5377160c63a5f837a9d",
+  "legacy_bz2_size": 1266972,
+  "license": "MIT",
+  "md5": "df2b8a1cad22381ace191ac71b56b50b",
+  "name": "krb5",
+  "platform": "darwin",
+  "sha256": "673fcb846df7240e9e5d94ddbb60190c9bb78281a05004ce1e43a1f608793686",
+  "size": 1104744,
+  "subdir": "osx-64",
+  "timestamp": 1576540570345,
+  "track_features": "",
+  "url": "https://repo.anaconda.com/pkgs/main/osx-64/krb5-1.17.1-hddcf347_0.conda",
+  "version": "1.17.1"
+}

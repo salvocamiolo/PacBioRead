@@ -1,0 +1,15 @@
+{
+  "arch": "x86_64",
+  "build": "h0a44026_0",
+  "build_number": 0,
+  "depends": [
+    "libcxx >=4.0.1"
+  ],
+  "license": "BSD 3-Clause",
+  "license_family": "BSD",
+  "name": "pcre",
+  "platform": "osx",
+  "subdir": "osx-64",
+  "timestamp": 1552419909926,
+  "version": "8.43"
+}

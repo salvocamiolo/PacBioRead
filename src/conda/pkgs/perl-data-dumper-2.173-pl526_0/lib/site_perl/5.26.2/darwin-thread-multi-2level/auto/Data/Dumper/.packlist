@@ -1,0 +1,3 @@
+/opt/anaconda1anaconda2anaconda3/lib/site_perl/5.26.2/darwin-thread-multi-2level/Data/Dumper.pm relocate_as=../../../Data/Dumper.pm
+/opt/anaconda1anaconda2anaconda3/lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/Data/Dumper/Dumper.bundle relocate_as=Dumper.bundle
+/opt/anaconda1anaconda2anaconda3/man/man3/Data::Dumper.3 relocate_as=../../../../../../../man/man3/Data::Dumper.3

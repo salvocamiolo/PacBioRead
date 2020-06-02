@@ -1,0 +1,59 @@
+# This file created by conda-build 3.18.11
+# meta.yaml template originally from:
+# /opt/concourse/worker/volumes/live/0dab1cd5-0738-459a-5fa5-0ce0fe25e32a/volume/rsync-recipes/libssh2-1.9.0-on-osx, last modified Mon Mar  9 12:50:51 2020
+# ------------------------------------------------
+
+package:
+    name: libssh2
+    version: 1.9.0
+source:
+    patches:
+        - 0001-libssh2-1.9.0-CVE-2019-17498.patch
+    sha256: d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
+    url: https://www.libssh2.org/download/libssh2-1.9.0.tar.gz
+build:
+    number: '1'
+    run_exports:
+        - libssh2 >=1.9.0,<2.0a0
+    string: ha12b0ac_1
+requirements:
+    build:
+        - cctools 895 1
+        - clang 4.0.1 1
+        - clang_osx-64 4.0.1 h1ce6c1d_18
+        - cmake-binary 3.9.1 h19c0166_1
+        - compiler-rt 4.0.1 hcfea43d_1
+        - ld64 274.2 1
+        - libcxx 4.0.1 hcfea43d_1
+        - libcxxabi 4.0.1 hcfea43d_1
+        - llvm 4.0.1 1
+        - llvm-lto-tapi 4.0.1 1
+        - make 4.2.1 h3efe00b_1
+    host:
+        - ca-certificates 2020.1.1 0
+        - openssl 1.1.1d h1de35cc_4
+    run:
+        - openssl >=1.1.1d,<1.1.2a
+test:
+    commands:
+        - test -f $PREFIX/include/libssh2.h
+        - test -f $PREFIX/include/libssh2_publickey.h
+        - test -f $PREFIX/include/libssh2_sftp.h
+        - test -f $PREFIX/lib/libssh2.a
+        - test -f $PREFIX/lib/libssh2${SHLIB_EXT}
+about:
+    description: 'libssh2 is a library implementing the SSH2 protocol, available under
+        the revised BSD license.
+
+        '
+    dev_url: https://github.com/libssh2/libssh2
+    home: https://www.libssh2.org/
+    license: BSD-3-Clause
+    license_family: BSD
+    license_file: COPYING
+    summary: the SSH library
+extra:
+    copy_test_source_files: true
+    final: true
+    recipe-maintainers:
+        - shadowwalkersb

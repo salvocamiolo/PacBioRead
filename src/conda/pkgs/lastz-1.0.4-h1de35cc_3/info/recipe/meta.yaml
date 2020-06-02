@@ -1,0 +1,39 @@
+# This file created by conda-build 3.15.1
+# meta.yaml template originally from:
+# /Users/distiller/project/recipes/lastz, last modified Fri Mar  8 02:44:20 2019
+# ------------------------------------------------
+
+package:
+    name: lastz
+    version: 1.0.4
+source:
+    patches:
+        - makefile.patch
+    sha256: dd2e417c088a794532125d4c3e83a2c4ce39e6d287ed69312fb8c665f885ed52
+    url: http://www.bx.psu.edu/~rsharris/lastz/lastz-1.04.00.tar.gz
+build:
+    number: '3'
+    string: h1de35cc_3
+requirements:
+    build:
+        - cctools 895 h7512d6f_0
+        - clang 4.0.1 h662ec87_0
+        - clang_osx-64 4.0.1 h1ce6c1d_11
+        - compiler-rt 4.0.1 h5487866_0
+        - ld64 274.2 h7c2db76_0
+        - libcxx 4.0.1 h579ed51_0
+        - libcxxabi 4.0.1 hebd6815_0
+        - llvm 4.0.1 hc748206_0
+        - llvm-lto-tapi 4.0.1 h6701bc3_0
+test:
+    commands:
+        - lastz --version 2>&1 | grep 1.04.00 > /dev/null
+about:
+    home: http://www.bx.psu.edu/~rsharris/lastz/
+    license: MIT
+    summary: LASTZ is a program for aligning DNA sequences, a pairwise aligner.
+extra:
+    copy_test_source_files: true
+    final: true
+    identifiers:
+        - biotools:lastz

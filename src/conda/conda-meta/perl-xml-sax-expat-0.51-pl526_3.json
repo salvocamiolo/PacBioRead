@@ -1,0 +1,65 @@
+{
+  "build": "pl526_3",
+  "build_number": 3,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-xml-namespacesupport",
+    "perl-xml-parser",
+    "perl-xml-sax",
+    "perl-xml-sax-base"
+  ],
+  "extracted_package_dir": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-xml-sax-expat-0.51-pl526_3",
+  "features": "",
+  "files": [
+    "lib/site_perl/5.26.2/XML/SAX/Expat.pm",
+    "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/XML/SAX/Expat/.packlist",
+    "man/man3/XML::SAX::Expat.3"
+  ],
+  "fn": "perl-xml-sax-expat-0.51-pl526_3.tar.bz2",
+  "license": "perl_5",
+  "link": {
+    "source": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-xml-sax-expat-0.51-pl526_3",
+    "type": 1
+  },
+  "md5": "601335c5657816aeefdd65588b45f49e",
+  "name": "perl-xml-sax-expat",
+  "package_tarball_full_path": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-xml-sax-expat-0.51-pl526_3.tar.bz2",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "lib/site_perl/5.26.2/XML/SAX/Expat.pm",
+        "path_type": "hardlink",
+        "sha256": "d67c71cd5cb987ef6c91cf0560669a93f812ecb52d3510be6b59f858329fb5ca",
+        "sha256_in_prefix": "d67c71cd5cb987ef6c91cf0560669a93f812ecb52d3510be6b59f858329fb5ca",
+        "size_in_bytes": 19653
+      },
+      {
+        "_path": "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/XML/SAX/Expat/.packlist",
+        "file_mode": "text",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/anaconda1anaconda2anaconda3",
+        "sha256": "c3211508503d59efb4a14f99d618f8a680c32727135948a8d6c16f56d969b352",
+        "sha256_in_prefix": "6f063deb9fb8bfc06be95193912df2d3145883b1d5d63b058a5a8992180fee26",
+        "size_in_bytes": 238
+      },
+      {
+        "_path": "man/man3/XML::SAX::Expat.3",
+        "path_type": "hardlink",
+        "sha256": "9a5f18254f94c49cc7121901e96497c53424514f52c8a57abb76091252a70c3b",
+        "sha256_in_prefix": "9a5f18254f94c49cc7121901e96497c53424514f52c8a57abb76091252a70c3b",
+        "size_in_bytes": 4510
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "None",
+  "sha256": "e88c11c27860d78ca525d160b0446e61ce64481332fd109d91a2a199bc9e94ef",
+  "size": 10256,
+  "subdir": "osx-64",
+  "timestamp": 1552515895209,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-xml-sax-expat-0.51-pl526_3.tar.bz2",
+  "version": "0.51"
+}

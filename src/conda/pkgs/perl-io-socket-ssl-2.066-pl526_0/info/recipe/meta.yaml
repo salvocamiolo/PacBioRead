@@ -1,0 +1,37 @@
+# This file created by conda-build 3.17.8
+# meta.yaml template originally from:
+# /Users/distiller/project/recipes/perl-io-socket-ssl, last modified Sat Apr 27 21:04:45 2019
+# ------------------------------------------------
+
+package:
+    name: perl-io-socket-ssl
+    version: '2.066'
+source:
+    sha256: 0d47064781a545304d5dcea5dfcee3acc2e95a32e1b4884d80505cde8ee6ebcd
+    url: https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.066.tar.gz
+build:
+    number: '0'
+    string: pl526_0
+requirements:
+    host:
+        - ca-certificates 2019.3.9 hecc5488_0
+        - openssl 1.1.1b h01d97ff_2
+        - perl 5.26.2 haec8ef5_1006
+        - perl-extutils-makemaker 7.34 pl526_3
+        - perl-mime-base64 3.15 pl526_1
+        - perl-net-ssleay 1.86 pl526hb1dc21d_0
+        - perl-xsloader 0.24 pl526_0
+        - zlib 1.2.11 h1de35cc_1004
+    run:
+        - perl >=5.26.2,<5.26.3.0a0
+        - perl-net-ssleay
+test:
+    imports:
+        - IO::Socket::SSL
+about:
+    home: https://github.com/noxxi/p5-io-socket-ssl
+    license: perl_5
+    summary: Nearly transparent SSL encapsulation for IO::Socket::INET.
+extra:
+    copy_test_source_files: true
+    final: true

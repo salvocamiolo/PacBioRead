@@ -1,0 +1,6 @@
+{
+  "c_compiler": "clang",
+  "c_compiler_version": "4",
+  "cxx_compiler_version": "4",
+  "cxx_compiler": "clangxx"
+}

@@ -1,0 +1,5 @@
+{
+  "zlib": "1.2",
+  "openssl": "1.1.1a",
+  "c_compiler": "clang"
+}

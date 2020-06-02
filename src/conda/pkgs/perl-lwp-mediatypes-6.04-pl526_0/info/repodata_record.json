@@ -1,0 +1,25 @@
+{
+  "arch": "x86_64",
+  "build": "pl526_0",
+  "build_number": 0,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-carp",
+    "perl-exporter"
+  ],
+  "features": "",
+  "fn": "perl-lwp-mediatypes-6.04-pl526_0.tar.bz2",
+  "license": "perl_5",
+  "md5": "caa580a16916653a227e23b949d3caa5",
+  "name": "perl-lwp-mediatypes",
+  "platform": "darwin",
+  "sha256": "ddb6c12c8545d972d422cfa341f4ca4d91d0467c61d952ffd97b763e29131f74",
+  "size": 22355,
+  "subdir": "osx-64",
+  "timestamp": 1557139456898,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-lwp-mediatypes-6.04-pl526_0.tar.bz2",
+  "version": "6.04"
+}

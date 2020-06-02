@@ -1,0 +1,50 @@
+# This file created by conda-build 3.17.8
+# meta.yaml template originally from:
+# /Users/distiller/project/recipes/perl-net-ssleay, last modified Fri May 10 21:54:36 2019
+# ------------------------------------------------
+
+package:
+    name: perl-net-ssleay
+    version: '1.88'
+source:
+    sha256: 02f64e2d7722dc83d831bef4099d17b5f4f2f07f87b786c806b67276979f7273
+    url: https://github.com/radiator-software/p5-net-ssleay/archive/1.88.tar.gz
+build:
+    number: '0'
+    string: pl526hb1dc21d_0
+requirements:
+    build:
+        - cctools 895 h7512d6f_0
+        - clang 4.0.1 h662ec87_0
+        - clang_osx-64 4.0.1 h1ce6c1d_16
+        - compiler-rt 4.0.1 h5487866_0
+        - ld64 274.2 h7c2db76_0
+        - libcxx 4.0.1 h579ed51_0
+        - libcxxabi 4.0.1 hebd6815_0
+        - llvm 4.0.1 hc748206_0
+        - llvm-lto-tapi 4.0.1 h6701bc3_0
+    host:
+        - ca-certificates 2019.3.9 hecc5488_0
+        - openssl 1.1.1a h1de35cc_1001
+        - perl 5.26.2 haec8ef5_1006
+        - perl-extutils-makemaker 7.36 pl526_1
+        - perl-mime-base64 3.15 pl526_1
+        - perl-xsloader 0.24 pl526_0
+        - zlib 1.2.11 h1de35cc_1004
+    run:
+        - openssl >=1.1.1a,<1.1.2a
+        - openssl >=1.1.1a,<1.1.2a
+        - perl >=5.26.2,<5.26.3.0a0
+        - perl-mime-base64
+        - zlib >=1.2.11,<1.3.0a0
+        - zlib >=1.2.11,<1.3.0a0
+test:
+    imports:
+        - Net::SSLeay
+about:
+    home: http://metacpan.org/pod/Net::SSLeay
+    license: perl_5
+    summary: Perl extension for using OpenSSL
+extra:
+    copy_test_source_files: true
+    final: true

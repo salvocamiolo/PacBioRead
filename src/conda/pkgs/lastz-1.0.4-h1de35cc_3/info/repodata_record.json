@@ -1,0 +1,21 @@
+{
+  "arch": "x86_64",
+  "build": "h1de35cc_3",
+  "build_number": 3,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [],
+  "features": "",
+  "fn": "lastz-1.0.4-h1de35cc_3.tar.bz2",
+  "license": "MIT",
+  "md5": "90350f2d394aa9f0001bc16d0de0da01",
+  "name": "lastz",
+  "platform": "darwin",
+  "sha256": "b972a132647e74b6d318f0d2c6f0a0bab131a4cf96fc06353822bcf4be77dbd5",
+  "size": 592682,
+  "subdir": "osx-64",
+  "timestamp": 1552042073526,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/lastz-1.0.4-h1de35cc_3.tar.bz2",
+  "version": "1.0.4"
+}

@@ -1,0 +1,6 @@
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Digest/HMAC.pm relocate_as=../../../../Digest/HMAC.pm
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Digest/HMAC_MD5.pm relocate_as=../../../../Digest/HMAC_MD5.pm
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Digest/HMAC_SHA1.pm relocate_as=../../../../Digest/HMAC_SHA1.pm
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/Digest::HMAC.3 relocate_as=../../../../../../../man/man3/Digest::HMAC.3
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/Digest::HMAC_MD5.3 relocate_as=../../../../../../../man/man3/Digest::HMAC_MD5.3
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/Digest::HMAC_SHA1.3 relocate_as=../../../../../../../man/man3/Digest::HMAC_SHA1.3

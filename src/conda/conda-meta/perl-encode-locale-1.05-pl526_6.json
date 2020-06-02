@@ -1,0 +1,62 @@
+{
+  "build": "pl526_6",
+  "build_number": 6,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-encode"
+  ],
+  "extracted_package_dir": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-encode-locale-1.05-pl526_6",
+  "features": "",
+  "files": [
+    "lib/site_perl/5.26.2/Encode/Locale.pm",
+    "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/Encode/Locale/.packlist",
+    "man/man3/Encode::Locale.3"
+  ],
+  "fn": "perl-encode-locale-1.05-pl526_6.tar.bz2",
+  "license": "perl_5",
+  "link": {
+    "source": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-encode-locale-1.05-pl526_6",
+    "type": 1
+  },
+  "md5": "5e10016dfe697bf17c6a99e53bb09fbb",
+  "name": "perl-encode-locale",
+  "package_tarball_full_path": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-encode-locale-1.05-pl526_6.tar.bz2",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "lib/site_perl/5.26.2/Encode/Locale.pm",
+        "path_type": "hardlink",
+        "sha256": "1b5ded6313c0d57aeb8159171c34ca4c16607d260f590cf815471f5f69184fe3",
+        "sha256_in_prefix": "1b5ded6313c0d57aeb8159171c34ca4c16607d260f590cf815471f5f69184fe3",
+        "size_in_bytes": 12353
+      },
+      {
+        "_path": "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/Encode/Locale/.packlist",
+        "file_mode": "text",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/anaconda1anaconda2anaconda3",
+        "sha256": "5b5843065d3d7553de1aabb92a788658deb8107862ba1b57eaf5c4430e0ce3b5",
+        "sha256_in_prefix": "879801554f681a673f5deb92b30858c40728daec8dabc2230eaa06a57bdc3650",
+        "size_in_bytes": 230
+      },
+      {
+        "_path": "man/man3/Encode::Locale.3",
+        "path_type": "hardlink",
+        "sha256": "237557f6b6fd00e0ad7fe523903cbf2884c58ae48b6e1a75aa21931074d85a9c",
+        "sha256_in_prefix": "237557f6b6fd00e0ad7fe523903cbf2884c58ae48b6e1a75aa21931074d85a9c",
+        "size_in_bytes": 11046
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "None",
+  "sha256": "da144ba152a78450534b2b0f3f5989e12e8a9aae0393e21851abb26736e833ad",
+  "size": 11314,
+  "subdir": "osx-64",
+  "timestamp": 1534367146094,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-encode-locale-1.05-pl526_6.tar.bz2",
+  "version": "1.05"
+}

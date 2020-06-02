@@ -1,0 +1,4 @@
+lib/5.26.2/darwin-thread-multi-2level/perllocal.pod
+lib/site_perl/5.26.2/IO/HTML.pm
+lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/IO/HTML/.packlist
+man/man3/IO::HTML.3

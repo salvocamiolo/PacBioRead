@@ -1,0 +1,24 @@
+{
+  "arch": "x86_64",
+  "build": "pl526h6de7cb9_0",
+  "build_number": 0,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "libcxx >=4.0.1",
+    "perl >=5.26.2,<5.26.3.0a0"
+  ],
+  "features": "",
+  "fn": "perl-compress-raw-bzip2-2.087-pl526h6de7cb9_0.tar.bz2",
+  "license": "perl_5",
+  "md5": "63315b52c87d8d6da6335c87eb9dc711",
+  "name": "perl-compress-raw-bzip2",
+  "platform": "darwin",
+  "sha256": "0f53bfdcacab0490ef896391714189ee6eef9d8e345236a30c7052878b38a2f3",
+  "size": 48600,
+  "subdir": "osx-64",
+  "timestamp": 1565466373912,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-compress-raw-bzip2-2.087-pl526h6de7cb9_0.tar.bz2",
+  "version": "2.087"
+}

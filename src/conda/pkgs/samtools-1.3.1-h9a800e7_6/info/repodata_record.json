@@ -1,0 +1,24 @@
+{
+  "arch": "x86_64",
+  "build": "h9a800e7_6",
+  "build_number": 6,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "curl >=7.64.1,<8.0a0",
+    "zlib >=1.2.11,<1.3.0a0"
+  ],
+  "features": "",
+  "fn": "samtools-1.3.1-h9a800e7_6.tar.bz2",
+  "license": "MIT",
+  "md5": "b3b2d1161c67080eb202c7021f0484ad",
+  "name": "samtools",
+  "platform": "darwin",
+  "sha256": "ef3ce64e925543fca1389d62c564c73bf4ea72a25b0d6da5a9d69be6f4922519",
+  "size": 479209,
+  "subdir": "osx-64",
+  "timestamp": 1573569674254,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/samtools-1.3.1-h9a800e7_6.tar.bz2",
+  "version": "1.3.1"
+}

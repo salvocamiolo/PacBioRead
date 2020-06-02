@@ -2,7 +2,7 @@ installationPath=$(pwd)
 echo "#!"$installationPath"/src/conda/bin/python" >PacBioReads
 echo "installationDirectory = \""$installationPath"/\"" >> PacBioReads
 echo " " >> PacBioReads
-cat PacBioReads ./src/.mainScript >temp ; mv temp PacBioReads
+cat PacBioReads ./src/.mainScript.py >temp ; mv temp PacBioReads
 chmod +x PacBioReads
 
 if  test -f "./src/conda/bin/conda"; then
@@ -17,3 +17,9 @@ else
 	echo "Miniconda3 successfully installed"
 	fi
 fi
+
+
+./src/conda/bin/conda install -c bioconda -y  lastz=1.0.4
+./src/conda/bin/conda install -c bioconda -y  cap3
+./src/conda/bin/conda install -c bioconda -y  blast=2.9.0
+./src/conda/bin/conda install -c bioconda -y  samtools=1.3.1

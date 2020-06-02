@@ -1,0 +1,61 @@
+{
+  "build": "pl526_1",
+  "build_number": 1,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "perl >=5.26.2,<5.27.0a0"
+  ],
+  "extracted_package_dir": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-base-2.23-pl526_1",
+  "features": "",
+  "files": [
+    "lib/site_perl/5.26.2/base.pm",
+    "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/base/.packlist",
+    "lib/site_perl/5.26.2/fields.pm"
+  ],
+  "fn": "perl-base-2.23-pl526_1.tar.bz2",
+  "license": "unknown",
+  "link": {
+    "source": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-base-2.23-pl526_1",
+    "type": 1
+  },
+  "md5": "920c5cf4149c32402b882e9cfa2c7535",
+  "name": "perl-base",
+  "package_tarball_full_path": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-base-2.23-pl526_1.tar.bz2",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "lib/site_perl/5.26.2/base.pm",
+        "path_type": "hardlink",
+        "sha256": "c5a10495d42c9d84b8246596fb810e0d6d2db6022e3738139d3f2f64f5e5e92b",
+        "sha256_in_prefix": "c5a10495d42c9d84b8246596fb810e0d6d2db6022e3738139d3f2f64f5e5e92b",
+        "size_in_bytes": 7390
+      },
+      {
+        "_path": "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/base/.packlist",
+        "file_mode": "text",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/anaconda1anaconda2anaconda3",
+        "sha256": "f08e069521f9e87a0673d506624f7523cf15691e0753e557ee12ebfc935fe905",
+        "sha256_in_prefix": "86afb27b97793191991e42f7e9eb9e5496edb93b12176971249f7be899116360",
+        "size_in_bytes": 380
+      },
+      {
+        "_path": "lib/site_perl/5.26.2/fields.pm",
+        "path_type": "hardlink",
+        "sha256": "38cf1a904399788bea53ac3c72986d68ab8cfd369224b872fad307152ca473cc",
+        "sha256_in_prefix": "38cf1a904399788bea53ac3c72986d68ab8cfd369224b872fad307152ca473cc",
+        "size_in_bytes": 9489
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "None",
+  "sha256": "9309c7401807ba67adf9a8953886ede7a50fa90f4b8fc7a1de0d54c0ade5cf54",
+  "size": 10218,
+  "subdir": "osx-64",
+  "timestamp": 1531056705308,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-base-2.23-pl526_1.tar.bz2",
+  "version": "2.23"
+}

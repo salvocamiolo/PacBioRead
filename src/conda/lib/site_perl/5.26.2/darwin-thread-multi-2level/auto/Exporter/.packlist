@@ -1,0 +1,4 @@
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Exporter.pm relocate_as=../../../Exporter.pm
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/lib/site_perl/5.26.2/Exporter/Heavy.pm relocate_as=../../../Exporter/Heavy.pm
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/Exporter.3 relocate_as=../../../../../../man/man3/Exporter.3
+/Users/salvo/Desktop/Github/PacBioRead/src/conda/man/man3/Exporter::Heavy.3 relocate_as=../../../../../../man/man3/Exporter::Heavy.3

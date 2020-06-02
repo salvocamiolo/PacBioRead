@@ -1,0 +1,24 @@
+{
+  "arch": "x86_64",
+  "build": "pl526_0",
+  "build_number": 0,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-json-xs <3"
+  ],
+  "features": "",
+  "fn": "perl-json-4.02-pl526_0.tar.bz2",
+  "license": "perl_5",
+  "md5": "38d4f83091cd50fa5a7993dd0d2aa48a",
+  "name": "perl-json",
+  "platform": "darwin",
+  "sha256": "dcf753fea56b0bcecb2192d042b1b295ef0340ea45670b678bf78498d082e133",
+  "size": 53409,
+  "subdir": "osx-64",
+  "timestamp": 1557552959980,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-json-4.02-pl526_0.tar.bz2",
+  "version": "4.02"
+}

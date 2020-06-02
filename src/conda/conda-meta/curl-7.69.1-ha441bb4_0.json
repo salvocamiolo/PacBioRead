@@ -1,0 +1,51 @@
+{
+  "build": "ha441bb4_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/osx-64",
+  "constrains": [],
+  "depends": [
+    "krb5 >=1.17.1,<1.18.0a0",
+    "libcurl 7.69.1 h051b688_0",
+    "libssh2 >=1.9.0,<2.0a0",
+    "zlib >=1.2.11,<1.3.0a0"
+  ],
+  "extracted_package_dir": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/curl-7.69.1-ha441bb4_0",
+  "features": "",
+  "files": [
+    "bin/curl"
+  ],
+  "fn": "curl-7.69.1-ha441bb4_0.conda",
+  "legacy_bz2_md5": "43f01b4a4684e913de4c8639dfec17eb",
+  "legacy_bz2_size": 144022,
+  "license": "MIT/X derivate (http://curl.haxx.se/docs/copyright.html)",
+  "license_family": "MIT",
+  "link": {
+    "source": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/curl-7.69.1-ha441bb4_0",
+    "type": 1
+  },
+  "md5": "f77df4da96675ca5ec2a978d95115c5f",
+  "name": "curl",
+  "package_tarball_full_path": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/curl-7.69.1-ha441bb4_0.conda",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "bin/curl",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/concourse/worker/volumes/live/36489fbd-a23f-49e4-684e-166b08b23fcd/volume/curl_split_recipe_1584461473742/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placeho",
+        "sha256": "1bd334a2dce3238914a1c0cbd71e43e11fa20c9c5f1a777957946d34ed3e1397",
+        "sha256_in_prefix": "0aa2b404f6e22a015efb582e5cab5b7668aa00f7d7e5f77ec8f675a0acdf729f",
+        "size_in_bytes": 225832
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "None",
+  "sha256": "6ba7641db74b5778a573b1963890097b13f6ec7172f5e72413f461bd2705d12e",
+  "size": 129851,
+  "subdir": "osx-64",
+  "timestamp": 1584461690337,
+  "track_features": "",
+  "url": "https://repo.anaconda.com/pkgs/main/osx-64/curl-7.69.1-ha441bb4_0.conda",
+  "version": "7.69.1"
+}

@@ -1,0 +1,73 @@
+# This file created by conda-build 3.18.7
+# meta.yaml template originally from:
+# /opt/concourse/worker/volumes/live/e6a76c4c-5f7c-4fcd-79bf-b27bb826a020/volume/rsync-recipes/bzip2-1.0.8-on-osx, last modified Mon Jul 15 14:34:04 2019
+# ------------------------------------------------
+
+package:
+    name: bzip2
+    version: 1.0.8
+source:
+    patches:
+        - 0001-cross.patch
+    sha256: ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
+    url: https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
+build:
+    number: '0'
+    run_exports:
+        - bzip2 >=1.0.8,<2.0a0
+    string: h1de35cc_0
+requirements:
+    build:
+        - cctools 895 1
+        - clang 4.0.1 1
+        - clang_osx-64 4.0.1 h1ce6c1d_16
+        - compiler-rt 4.0.1 hcfea43d_1
+        - ld64 274.2 1
+        - libcxx 4.0.1 hcfea43d_1
+        - libcxxabi 4.0.1 hcfea43d_1
+        - llvm 4.0.1 1
+        - llvm-lto-tapi 4.0.1 1
+        - make 4.2.1 h3efe00b_1
+test:
+    commands:
+        - bzip2 --help
+        - test -f ${PREFIX}/bin/bunzip2
+        - test -f ${PREFIX}/bin/bzcat
+        - test -f ${PREFIX}/bin/bzcmp
+        - test -f ${PREFIX}/bin/bzdiff
+        - test -f ${PREFIX}/bin/bzegrep
+        - test -f ${PREFIX}/bin/bzfgrep
+        - test -f ${PREFIX}/bin/bzgrep
+        - test -f ${PREFIX}/bin/bzip2recover
+        - test -f ${PREFIX}/bin/bzip2
+        - test -f ${PREFIX}/bin/bzless
+        - test -f ${PREFIX}/bin/bzmore
+        - test -f ${PREFIX}/include/bzlib.h
+        - test -f ${PREFIX}/lib/libbz2.a
+        - test -f ${PREFIX}/lib/libbz2.dylib
+about:
+    description: 'Bzip2 is a freely available high-quality data compressor. It typically
+
+        compresses files to within 10% to 15% of the best available techniques,
+
+        whilst being around twice as fast at compression and six times faster
+
+        at decompression.
+
+        '
+    doc_url: http://www.bzip.org/docs.html
+    home: http://www.bzip.org/
+    license: bzip2
+    license_family: BSD
+    license_file: LICENSE
+    summary: high-quality data compressor
+extra:
+    copy_test_source_files: true
+    final: true
+    recipe-maintainers:
+        - jakirkham
+        - jjhelmus
+        - jlanga
+        - mingwandroid
+        - msarahan
+        - pelson

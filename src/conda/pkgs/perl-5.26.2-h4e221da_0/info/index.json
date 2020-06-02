@@ -1,0 +1,13 @@
+{
+  "arch": "x86_64",
+  "build": "h4e221da_0",
+  "build_number": 0,
+  "depends": [],
+  "license": "Perl Artistic",
+  "license_family": "Other",
+  "name": "perl",
+  "platform": "osx",
+  "subdir": "osx-64",
+  "timestamp": 1527832840615,
+  "version": "5.26.2"
+}

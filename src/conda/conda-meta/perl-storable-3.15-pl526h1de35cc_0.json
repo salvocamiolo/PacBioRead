@@ -1,0 +1,64 @@
+{
+  "build": "pl526h1de35cc_0",
+  "build_number": 0,
+  "channel": "https://conda.anaconda.org/bioconda/osx-64",
+  "constrains": [],
+  "depends": [
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-xsloader"
+  ],
+  "extracted_package_dir": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-storable-3.15-pl526h1de35cc_0",
+  "features": "",
+  "files": [
+    "lib/site_perl/5.26.2/darwin-thread-multi-2level/Storable.pm",
+    "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/Storable/.packlist",
+    "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/Storable/Storable.bundle"
+  ],
+  "fn": "perl-storable-3.15-pl526h1de35cc_0.tar.bz2",
+  "license": "perl_5",
+  "link": {
+    "source": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-storable-3.15-pl526h1de35cc_0",
+    "type": 1
+  },
+  "md5": "5b8bb028dbdb5db75381d6715c4d8384",
+  "name": "perl-storable",
+  "package_tarball_full_path": "/Users/salvo/Desktop/Github/PacBioRead/src/conda/pkgs/perl-storable-3.15-pl526h1de35cc_0.tar.bz2",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "lib/site_perl/5.26.2/darwin-thread-multi-2level/Storable.pm",
+        "path_type": "hardlink",
+        "sha256": "a3153bc2bccb0df6e4602f87c84e7e0f5dc69263912c969b7f98737fbf049499",
+        "sha256_in_prefix": "a3153bc2bccb0df6e4602f87c84e7e0f5dc69263912c969b7f98737fbf049499",
+        "size_in_bytes": 49780
+      },
+      {
+        "_path": "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/Storable/.packlist",
+        "file_mode": "text",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/anaconda1anaconda2anaconda3",
+        "sha256": "22c62c41748cc8e6f09367e75acf087a14a3cee6d7e95b83f04a39e622375d72",
+        "sha256_in_prefix": "f933e3bb551037e5a0df4aa7c7c5b486cfb5dad07bb73b34f0d876df7246390d",
+        "size_in_bytes": 365
+      },
+      {
+        "_path": "lib/site_perl/5.26.2/darwin-thread-multi-2level/auto/Storable/Storable.bundle",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/Users/distiller/project/miniconda/conda-bld/perl-storable_1557135022715/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "7ff9ddb19b3fd501bdb68de026231b826e3833b967d34b7ab624f03496c7fed7",
+        "sha256_in_prefix": "2b35bbb6c7434617c8c1efe5bc17a29e30ff424111ddf9561b4d979b9ad203e0",
+        "size_in_bytes": 99652
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "None",
+  "sha256": "b70c553ba694d23552dbf0d6441ef383244e0cb0fb93f949f5644f465743c820",
+  "size": 57454,
+  "subdir": "osx-64",
+  "timestamp": 1557135169446,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/osx-64/perl-storable-3.15-pl526h1de35cc_0.tar.bz2",
+  "version": "3.15"
+}
