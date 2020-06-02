@@ -23,3 +23,5 @@ fi
 ./src/conda/bin/conda install -c bioconda -y  cap3
 ./src/conda/bin/conda install -c bioconda -y  blast=2.9.0
 ./src/conda/bin/conda install -c bioconda -y  samtools=1.3.1
+./src/conda/bin/conda install -c anaconda -y pyqt=5.9.2
+./src/conda/bin/conda install -c bioconda -y  biopython=1.76
