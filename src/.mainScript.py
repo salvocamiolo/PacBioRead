@@ -230,6 +230,7 @@ class Ui_Form(object):
 
 		# Perform HQ read fragmentaiton
 		if self.hqFragmentationCheckBox.isChecked() == True:
+			self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
 			self.logTextEdit.append(str(numSeq)+"High quality read fragmentation started\n")
 			self.logTextEdit.repaint()
 
@@ -266,6 +267,7 @@ class Ui_Form(object):
 			os.system("rm "+outputFolder+"/masked.fasta")
 			self.logTextEdit.append(str(numSeq)+"\nHigh quality read fragmentation finished\n")
 			self.logTextEdit.repaint()
+			self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 		
 
 
