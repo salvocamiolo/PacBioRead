@@ -157,6 +157,15 @@ class Ui_Form(object):
 	def selectProjectFolder(self):
 		folderName = QFileDialog.getExistingDirectory(None, "Select project folder","./")
 		self.projectFolderLineEdit.setText(folderName)
+		if os.path.isdir(folderName) == False:
+			os.system("mkdir "+folderName)
+
+		else:
+			if os.path.isfile(folderName+"/hq.fasta") == True:
+				self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+			
+			if os.path.isfile(folderName+"/lastzOutput.txt") == True:
+				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 
 	def selectReadFile(self):
 		filename, __ = QFileDialog.getOpenFileName(None,"Select read file","./")
@@ -215,15 +224,7 @@ class Ui_Form(object):
 
 		#Create project folder if it does not exist
 		outputFolder = self.projectFolderLineEdit.text()
-		if os.path.isdir(outputFolder) == False:
-			os.system("mkdir "+outputFolder)
 		
-		else:
-			if os.path.isfile(outputFolder+"/hq.fasta") == True:
-				self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-			
-			if os.path.isfile(outputFolder+"/lastzOutput.txt") == True:
-				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 
 
 
