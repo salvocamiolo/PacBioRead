@@ -305,7 +305,7 @@ class Ui_Form(object):
 				return
 
 		#Perform read mapping on reference to extract organisms specific reads
-		if self.readsMappingCheckBox.isChecked() == True:
+		if self.readFilteringCheckBox.isChecked() == True:
 			if os.path.isfile(outputFolder+"/lastzOutput.txt") == True:
 				if os.path.isfile(outputFolder+"/hq.fasta") == True:
 					self.readFilteringCheckBox.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
@@ -361,7 +361,6 @@ class Ui_Form(object):
 					msg.setStandardButtons(QMessageBox.Ok)
 					msg.exec_()
 					return
-
 
 			else:
 				msg = QMessageBox()
