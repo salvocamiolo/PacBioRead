@@ -16,7 +16,7 @@ from Bio import SeqIO
 
 
 class Ui_Form(object):
-	def setupUi(self, Form):
+	def setupUi(self, Form,installationDirectory):
 		Form.setObjectName("Form")
 		Form.resize(900, 651)
 		self.label = QtWidgets.QLabel(Form)
