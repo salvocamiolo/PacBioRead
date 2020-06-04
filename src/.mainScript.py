@@ -231,7 +231,7 @@ class Ui_Form(object):
 		# Perform HQ read fragmentaiton
 		if self.hqFragmentationCheckBox.isChecked() == True:
 			self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
-			self.logTextEdit.append(str(numSeq)+"High quality read fragmentation started\n")
+			self.logTextEdit.append("High quality read fragmentation started\n")
 			self.logTextEdit.repaint()
 
 			inputFile = self.readsFileLineEdit.text()
@@ -265,7 +265,7 @@ class Ui_Form(object):
 					SeqIO.write(seq_record,outfile,"fasta")
 
 			os.system("rm "+outputFolder+"/masked.fasta")
-			self.logTextEdit.append(str(numSeq)+"\nHigh quality read fragmentation finished\n")
+			self.logTextEdit.append("\nHigh quality read fragmentation finished\n")
 			self.logTextEdit.repaint()
 			self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 		
@@ -273,7 +273,7 @@ class Ui_Form(object):
 
 		#Perform read mapping on reference to extract organisms specific reads
 		if self.readsMappingCheckBox.isChecked() == True:
-			self.logTextEdit.append(str(numSeq)+"Read mapping on reference started\n")
+			self.logTextEdit.append("Read mapping on reference started\n")
 			self.logTextEdit.repaint()
 			if os.path.isfile(outputFolder+"/hq.fasta")==True:
 				inputFile = outputFolder+"/hq.fasta"
@@ -290,7 +290,7 @@ class Ui_Form(object):
 					numSeq+=1
 					print(numSeq)
 				os.system("rm "+outputFolder+"/temp.fasta")
-				self.logTextEdit.append(str(numSeq)+"\nRead mapping on reference finished\n")
+				self.logTextEdit.append("\nRead mapping on reference finished\n")
 				self.logTextEdit.repaint()
 			else:
 				msg = QMessageBox()
