@@ -344,7 +344,7 @@ class Ui_Form(object):
 
 							if abs(end-start)/length> coverage:
 								numSeq +=1
-								if numSeq%100 == 0:
+								if numSeq%1000 == 0:
 									self.logTextEdit.append(str(numSeq)+" reads passed the filter")
 									self.logTextEdit.repaint()
 								SeqIO.write(sequences[readName],outfile,"fasta")
@@ -372,6 +372,112 @@ class Ui_Form(object):
 				msg.setStandardButtons(QMessageBox.Ok)
 				msg.exec_()
 				return
+
+			
+		#Perform reference guided de novo assembly
+		if self.readFilteringCheckBox_2.isChecked() == True:
+			reads = ""
+			if os.path.isfile(outputFolder+"/hq_specific.fasta") == True:
+				reads = outputFolder+"/hq_specific.fasta"
+			if os.path.isfile(outputFolder+"/hq.fasta") == True:
+				reads = outputFolder+"/hq.fasta"
+			
+			if reads == "":
+				msg = QMessageBox()
+				msg.setIcon(QMessageBox.Warning)
+				msg.setText("Please run the HQ fragmentation first")
+				msg.setWindowTitle("Warning")
+				msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
+				msg.setStandardButtons(QMessageBox.Ok)
+				msg.setStandardButtons(QMessageBox.Ok)
+				msg.exec_()
+				return
+
+			else:
+				refFile = self.referenceLineEdit.text()
+				readsSeq = {}
+				windowSize = int(self.windowSizeLineEdit.text())
+				windowStep = int(self.windowStepLineEdit.text())
+
+				self.logTextEdit.append("Reference guided de novo assembly started")
+				self.logTextEdit.repaint("Loading reads in memory")
+				self.logTextEdit.append("Reference guided de novo assembly started")
+				self.logTextEdit.repaint()
+				for seq_record in SeqIO.parse(reads,"fasta"):
+					if not str(seq_record.id) in readsSeq:
+						readsSeq[str(seq_record.id)] = str(seq_record.seq)
+
+
+
+				for seq_record in SeqIO.parse(refFile,"fasta"):
+    				refSeq = str(seq_record.seq)
+
+				toElong = ""
+				stage_a = open(outputFolder+"/preliminaryContigs.fasta","w")
+				for a in range(0,len(refSeq)-windowSize,+windowStep):
+					self.logTextEdit.append("Assembling region "+str(a)+"-"+str(a+windowSize))
+					self.logTextEdit.repaint()
+					#print("Assembling range %d-%d" %(a,a+windowSize))
+					partSeq = refSeq[a:a+windowSize]
+					tempFasta = open(outputFolder+"/partReference.fasta","w")
+					tempFasta.write(">partReference\n"+partSeq+"\n")
+					tempFasta.close()
+
+					os.system("makeblastdb -dbtype nucl -in "+outputFolder+"/partReference.fasta >null 2>&1")
+					os.system("blastn -query "+reads+" -db "+outputFolder+"/partReference.fasta -outfmt 6 -out "+outputFolder+"/outputBlast.txt >null 2>&1")
+					os.system("sort  -k4rn,4rn "+outputFolder+"/outputBlast.txt > "+outputFolder+"/temp; mv "+outputFolder+"/temp "+outputFolder+"/outputBlast.txt")
+					
+					infile = open(outputFolder+"/outputBlast.txt")
+					
+					outfile = open(outputFolder+"/toAssemble.fasta","w")
+					attemptNum = 0
+					while True:
+						numSeq = 0
+						attemptNum +=1
+						self.logTextEdit.append("Attempt number "+str(attemptNum))
+						self.logTextEdit.repaint()
+						for b in range(5):
+							line = infile.readline().rstrip()
+							if not line:
+								break
+							fields = line.split("\t")
+							
+							numSeq+=1
+							outfile.write(">"+fields[0]+"\n"+readsSeq[fields[0]]+"\n")
+
+						#print("%d sequences will be assembled with cap3...." %numSeq)
+						self.logTextEdit.append(str(numSeq)+" equences will be assembled with cap3")
+						self.logTextEdit.repaint()
+						outfile.close()
+						#print("Assembling reads....")
+						os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
+						longestContigLength = 0
+						longestContig = ""
+						for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
+							if len(str(seq_record.seq)) > longestContigLength:
+								longestContigLength = len(str(seq_record.seq))
+								longestContig = str(seq_record.seq)
+						print("Longest found contig = %d " %longestContigLength)
+						if longestContigLength>=windowSize:
+							break
+						else:
+							outfile.close()
+							outfile = open(outputFolder+"/toAssemble.fasta","w")
+							outfile.write(">previouslyAssembled\n"+longestContig+"\n")
+
+						
+
+					stage_a.write(">Range_"+str(a)+"_"+str(a+windowSize)+"\n"+longestContig+"\n")
+
+				stage_a.close()
+				os.system("rm "+outputFolder+"/partReference.fasta* "+outputFolder+"/outputBlast.txt "+outputFolder+"/toAssemble*")
+
+			
+			
+
+			
+
+
 
 
 			
