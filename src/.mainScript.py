@@ -431,12 +431,13 @@ class Ui_Form(object):
 					
 					outfile = open(outputFolder+"/toAssemble.fasta","w")
 					attemptNum = 0
+					sequenceToAdd = 5
 					while True:
 						numSeq = 0
 						attemptNum +=1
 						self.logTextEdit.append("Attempt number "+str(attemptNum))
 						self.logTextEdit.repaint()
-						for b in range(5):
+						for b in range(sequenceToAdd):
 							line = infile.readline().rstrip()
 							if not line:
 								break
@@ -464,6 +465,7 @@ class Ui_Form(object):
 							outfile.close()
 							outfile = open(outputFolder+"/toAssemble.fasta","w")
 							outfile.write(">previouslyAssembled\n"+longestContig+"\n")
+							sequenceToAdd += 5
 
 						
 
