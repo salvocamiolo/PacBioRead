@@ -173,7 +173,7 @@ class Ui_Form(object):
 			if os.path.isfile(folderName+"/lastzOutput.txt") == True:
 				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 			
-			if os.path.isfile(folderName+"hq_specific.fasta") == True:
+			if os.path.isfile(folderName+"/hq_specific.fasta") == True:
 				self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 
 	def selectReadFile(self):
@@ -400,8 +400,8 @@ class Ui_Form(object):
 				windowStep = int(self.windowStepLineEdit.text())
 
 				self.logTextEdit.append("Reference guided de novo assembly started")
-				self.logTextEdit.repaint("Loading reads in memory")
-				self.logTextEdit.append("Reference guided de novo assembly started")
+				self.logTextEdit.append("Loading reads in memory")
+
 				self.logTextEdit.repaint()
 				for seq_record in SeqIO.parse(reads,"fasta"):
 					if not str(seq_record.id) in readsSeq:
