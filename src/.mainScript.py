@@ -55,7 +55,7 @@ class Ui_Form(object):
 		self.hqFragmentationLabel = QtWidgets.QLabel(Form)
 		self.hqFragmentationLabel.setGeometry(QtCore.QRect(30, 220, 31, 31))
 		self.hqFragmentationLabel.setText("")
-		self.hqFragmentationLabel.setPixmap(QtGui.QPixmap("../Images/1024px-Green_tick.png"))
+		self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 		self.hqFragmentationLabel.setObjectName("hqFragmentationLabel")
 		self.hqFragmentationCheckBox = QtWidgets.QCheckBox(Form)
 		self.hqFragmentationCheckBox.setGeometry(QtCore.QRect(70, 230, 151, 20))
@@ -80,7 +80,7 @@ class Ui_Form(object):
 		self.referenceReadMappingLabel = QtWidgets.QLabel(Form)
 		self.referenceReadMappingLabel.setGeometry(QtCore.QRect(30, 300, 31, 31))
 		self.referenceReadMappingLabel.setText("")
-		self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap("../Images/1024px-Green_tick.png"))
+		self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 		self.referenceReadMappingLabel.setObjectName("referenceReadMappingLabel")
 		self.readsMappingCheckBox = QtWidgets.QCheckBox(Form)
 		self.readsMappingCheckBox.setGeometry(QtCore.QRect(70, 310, 211, 20))
@@ -98,7 +98,7 @@ class Ui_Form(object):
 		self.denovoAssemblyLabel = QtWidgets.QLabel(Form)
 		self.denovoAssemblyLabel.setGeometry(QtCore.QRect(30, 460, 31, 31))
 		self.denovoAssemblyLabel.setText("")
-		self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap("../Images/1024px-Green_tick.png"))
+		self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 		self.denovoAssemblyLabel.setObjectName("denovoAssemblyLabel")
 		self.label_13 = QtWidgets.QLabel(Form)
 		self.label_13.setGeometry(QtCore.QRect(290, 450, 101, 16))
@@ -120,7 +120,7 @@ class Ui_Form(object):
 		self.consensusCorrectionLaebl = QtWidgets.QLabel(Form)
 		self.consensusCorrectionLaebl.setGeometry(QtCore.QRect(30, 540, 31, 31))
 		self.consensusCorrectionLaebl.setText("")
-		self.consensusCorrectionLaebl.setPixmap(QtGui.QPixmap("../Images/1024px-Green_tick.png"))
+		self.consensusCorrectionLaebl.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 		self.consensusCorrectionLaebl.setObjectName("consensusCorrectionLaebl")
 		self.runButton = QtWidgets.QPushButton(Form)
 		self.runButton.setGeometry(QtCore.QRect(650, 610, 113, 32))
@@ -137,7 +137,7 @@ class Ui_Form(object):
 		self.specificReadsLabel = QtWidgets.QLabel(Form)
 		self.specificReadsLabel.setGeometry(QtCore.QRect(30, 380, 31, 31))
 		self.specificReadsLabel.setText("")
-		self.specificReadsLabel.setPixmap(QtGui.QPixmap("../Images/1024px-Green_tick.png"))
+		self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 		self.specificReadsLabel.setObjectName("specificReadsLabel")
 		self.logTextEdit = QtWidgets.QTextEdit(Form)
 		self.logTextEdit.setGeometry(QtCore.QRect(560, 30, 321, 561))
@@ -176,11 +176,11 @@ class Ui_Form(object):
 	
 	#Check required fields
 	def runAssembly(self):
-		self.hqFragmentationLabel.setPixmap(QtGui.QPixmap("../Images/1024px-Red_tick.png"))
-		self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap("../Images/1024px-Red_tick.png"))
-		self.specificReadsLabel.setPixmap(QtGui.QPixmap("../Images/1024px-Red_tick.png"))
-		self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap("../Images/1024px-Red_tick.png"))
-		self.consensusCorrectionLaebl.setPixmap(QtGui.QPixmap("../Images/1024px-Red_tick.png"))
+		self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
+		self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
+		self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
+		self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
+		self.consensusCorrectionLaebl.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
 
 
 		if os.path.isdir(self.projectFolderLineEdit.text()) == "":
@@ -220,10 +220,10 @@ class Ui_Form(object):
 		
 		else:
 			if os.path.isfile(outputFolder+"/hq.fasta") == True:
-				self.hqFragmentationLabel.setPixmap(QtGui.QPixmap("../Images/1024px-Green_tick.png"))
+				self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 			
 			if os.path.isfile(outputFolder+"/lastzOutput.txt") == True:
-				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap("../Images/1024px-Green_tick.png"))
+				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 
 
 
