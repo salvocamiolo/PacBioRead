@@ -308,7 +308,7 @@ class Ui_Form(object):
 		if self.readFilteringCheckBox.isChecked() == True:
 			if os.path.isfile(outputFolder+"/lastzOutput.txt") == True:
 				if os.path.isfile(outputFolder+"/hq.fasta") == True:
-					self.readFilteringCheckBox.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
+					self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
 					inputFile = outputFolder+"/hq.fasta"
 					lastzOutput = outputFolder+"/lastzOutput.txt"
 					coverage = float(self.coverageLineEdit.text())/100
@@ -351,6 +351,7 @@ class Ui_Form(object):
 								print("Read %s comes from Reference!" %readName)
 					self.logTextEdit.append(str(numSeq)+" reads passed the filter")
 					self.logTextEdit.repaint()
+					self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 				else:
 					msg = QMessageBox()
 					msg.setIcon(QMessageBox.Warning)
