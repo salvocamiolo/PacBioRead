@@ -230,6 +230,9 @@ class Ui_Form(object):
 
 		# Perform HQ read fragmentaiton
 		if self.hqFragmentationCheckBox.isChecked() == True:
+			self.logTextEdit.append(str(numSeq)+"High quality read fragmentation started\n")
+			self.logTextEdit.repaint()
+
 			inputFile = self.readsFileLineEdit.text()
 			threshold = self.qualityLineEdit.text()
 			minLen = self.lengthLineEdit.text()
@@ -261,11 +264,15 @@ class Ui_Form(object):
 					SeqIO.write(seq_record,outfile,"fasta")
 
 			os.system("rm "+outputFolder+"/masked.fasta")
+			self.logTextEdit.append(str(numSeq)+"\nHigh quality read fragmentation finished\n")
+			self.logTextEdit.repaint()
 		
 
 
 		#Perform read mapping on reference to extract organisms specific reads
 		if self.readsMappingCheckBox.isChecked() == True:
+			self.logTextEdit.append(str(numSeq)+"Read mapping on reference started\n")
+			self.logTextEdit.repaint()
 			if os.path.isfile(outputFolder+"/hq.fasta")==True:
 				inputFile = outputFolder+"/hq.fasta"
 				reference = self.referenceLineEdit.text()
@@ -281,6 +288,8 @@ class Ui_Form(object):
 					numSeq+=1
 					print(numSeq)
 				os.system("rm "+outputFolder+"/temp.fasta")
+				self.logTextEdit.append(str(numSeq)+"\nRead mapping on reference finished\n")
+				self.logTextEdit.repaint()
 			else:
 				msg = QMessageBox()
 				msg.setIcon(QMessageBox.Warning)
