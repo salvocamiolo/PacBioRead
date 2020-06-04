@@ -410,7 +410,7 @@ class Ui_Form(object):
 
 
 				for seq_record in SeqIO.parse(refFile,"fasta"):
-    				refSeq = str(seq_record.seq)
+					refSeq = str(seq_record.seq)
 
 				toElong = ""
 				stage_a = open(outputFolder+"/preliminaryContigs.fasta","w")
