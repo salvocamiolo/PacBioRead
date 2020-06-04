@@ -172,6 +172,9 @@ class Ui_Form(object):
 			
 			if os.path.isfile(folderName+"/lastzOutput.txt") == True:
 				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+			
+			if os.path.isfile(folderName+"hq_specific.fasta") == True:
+				self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 
 	def selectReadFile(self):
 		filename, __ = QFileDialog.getOpenFileName(None,"Select read file","./")
@@ -191,7 +194,6 @@ class Ui_Form(object):
 	
 	#Check required fields
 	def runAssembly(self):
-
 
 		if os.path.isdir(self.projectFolderLineEdit.text()) == "":
 			msg = QMessageBox()
@@ -225,44 +227,73 @@ class Ui_Form(object):
 
 		#Create project folder if it does not exist
 		outputFolder = self.projectFolderLineEdit.text()
-		
 
-
-
-
-		
 		# Perform HQ read fragmentaiton
-		inputFile = self.readsFileLineEdit.text()
-		threshold = self.qualityLineEdit.text()
-		minLen = self.lengthLineEdit.text()
+		if self.hqFragmentationCheckBox.isChecked() == True:
+			inputFile = self.readsFileLineEdit.text()
+			threshold = self.qualityLineEdit.text()
+			minLen = self.lengthLineEdit.text()
 
-		numSeq = 0
-		outfile = open(outputFolder+"/masked.fasta","w")
-		for seq_record in SeqIO.parse(inputFile,"fastq"):
-			numSeq+=1
-			if numSeq%1000 == 0:
-				self.logTextEdit.append(str(numSeq)+" analyzed....")
-				self.logTextEdit.repaint()
-				print(str(numSeq)+" analyzed....\n")
-			sequence = str(seq_record.seq)
-			quality = seq_record.letter_annotations["phred_quality"]
-			maskedSeq = ""
-			maskedQual = ""
-			for a in range(len(quality)):
-				if quality[a]>int(threshold):
-					maskedSeq+=sequence[a]
-					maskedQual+="G"
-				else:
-					outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+			numSeq = 0
+			outfile = open(outputFolder+"/masked.fasta","w")
+			for seq_record in SeqIO.parse(inputFile,"fastq"):
+				numSeq+=1
+				if numSeq%1000 == 0:
+					self.logTextEdit.append(str(numSeq)+" analyzed....")
+					self.logTextEdit.repaint()
+					print(str(numSeq)+" analyzed....\n")
+				sequence = str(seq_record.seq)
+				quality = seq_record.letter_annotations["phred_quality"]
+				maskedSeq = ""
+				maskedQual = ""
+				for a in range(len(quality)):
+					if quality[a]>int(threshold):
+						maskedSeq+=sequence[a]
+						maskedQual+="G"
+					else:
+						outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+						numSeq+=1
+						maskedSeq=""
+			outfile.close()
+			outfile = open(outputFolder+"/hq.fasta","w")
+			for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
+				if len(str(seq_record.seq))>int(minLen):
+					SeqIO.write(seq_record,outfile,"fasta")
+
+			os.system("rm "+outputFolder+"/masked.fasta")
+		
+
+
+		#Perform read mapping on reference to extract organisms specific reads
+		if self.readsMappingCheckBox.isChecked() == True:
+			if os.path.isfile(outputFolder+"/hq.fasta")==True:
+				inputFile = outputFolder+"/hq.fasta"
+				reference = self.referenceLineEdit.text()
+
+				numSeq = 0
+				os.system("rm -f "+outputFolder+"/lastzOutput.txt")
+				os.system("touch "+outputFolder+"/lastzOutput.txt")
+				for seq_record in SeqIO.parse(inputFile,"fasta"):
+					outfile = open(outputFolder+"/tempFasta.fasta","w")
+					SeqIO.write(seq_record,outfile,"fasta")
+					outfile.close()
+					os.system(installationDirectory+"/src/conda/bin/lastz "+outputFolder+"/tempFasta.fasta "+reference+"  --format=general  >> "+outputFolder+"/lastzOutput.txt")
 					numSeq+=1
-					maskedSeq=""
-		outfile.close()
-		outfile = open(outputFolder+"/hq.fasta","w")
-		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
-			if len(str(seq_record.seq))>int(minLen):
-				SeqIO.write(seq_record,outfile,"fasta")
+					print(numSeq)
+				os.system("rm "+outputFolder+"/temp.fasta")
+			else:
+				msg = QMessageBox()
+				msg.setIcon(QMessageBox.Warning)
+				msg.setText("Please run the HQ fragmentation first")
+				msg.setWindowTitle("Warning")
+				msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
+				msg.setStandardButtons(QMessageBox.Ok)
+				msg.exec_()
+				return
 
-		os.system("rm "+outputFolder+"/masked.fasta")
+		
+
+
 
 
 
