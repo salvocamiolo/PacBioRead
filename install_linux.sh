@@ -15,13 +15,13 @@ else
 	cd ../
 	if  test -f "./src/conda/bin/conda"; then
 	echo "Miniconda3 successfully installed"
+	./src/conda/bin/conda install -c bioconda -y  lastz=1.0.4
+	./src/conda/bin/conda install -c bioconda -y  cap3
+	./src/conda/bin/conda install -c bioconda -y  blast=2.9.0
+	./src/conda/bin/conda install -c bioconda -y  samtools=1.3.1
+	./src/conda/bin/conda install -c anaconda -y pyqt=5.9.2
+	./src/conda/bin/conda install -c bioconda -y  biopython=1.76
 	fi
 fi
 
 
-./src/conda/bin/conda install -c bioconda -y  lastz=1.0.4
-./src/conda/bin/conda install -c bioconda -y  cap3
-./src/conda/bin/conda install -c bioconda -y  blast=2.9.0
-./src/conda/bin/conda install -c bioconda -y  samtools=1.3.1
-./src/conda/bin/conda install -c anaconda -y pyqt=5.9.2
-./src/conda/bin/conda install -c bioconda -y  biopython=1.76
