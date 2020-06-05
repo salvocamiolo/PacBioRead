@@ -418,11 +418,15 @@ class Ui_Form(object):
 					refSeq = str(seq_record.seq)
 
 				stage_a = open(outputFolder+"/preliminaryContigs.fasta","w")
-				for a in range(0,len(refSeq)-windowSize,+windowStep):
-					self.logTextEdit.append("Assembling region "+str(a)+"-"+str(a+windowSize))
+				for a in range(0,len(refSeq),+windowStep):
+					endPos = a+windowSize
+					if endPos>len(refSeq):
+						endPos=len(refSeq)
+
+					self.logTextEdit.append("Assembling region "+str(a)+"-"+str(endPos))
 					self.logTextEdit.repaint()
 					#print("Assembling range %d-%d" %(a,a+windowSize))
-					partSeq = refSeq[a:a+windowSize]
+					partSeq = refSeq[a:endPos]
 					tempFasta = open(outputFolder+"/partReference.fasta","w")
 					tempFasta.write(">partReference\n"+partSeq+"\n")
 					tempFasta.close()
@@ -482,12 +486,15 @@ class Ui_Form(object):
 
 					self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
 					self.logTextEdit.repaint()
-					stage_a.write(">Range_"+str(a)+"_"+str(a+windowSize)+"\n"+longestContig+"\n")
+					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 				stage_a.close()
 				os.system("rm "+outputFolder+"/partReference.fasta* "+outputFolder+"/outputBlast.txt "+outputFolder+"/toAssemble*")
 
-				
+				self.logTextEdit.append("\nScaffolding.... ")
+				self.logTextEdit.repaint()
+				os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/preliminaryContigs.fasta >null 2>&1")
+
 			
 
 			
