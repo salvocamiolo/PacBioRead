@@ -478,7 +478,7 @@ class Ui_Form(object):
 								longestContig = str(seq_record.seq)
 						print("Max Scaffold length is %d" %maxScaffoldLength)
 						outfile.close()
-						if float(maxScaffoldLength)<0.9*widnowSize:
+						if float(maxScaffoldLength)<0.9*windowSize:
 							outfile = open("toAssemble.fasta","w")
 							for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
 								SeqIO.write(seq_record,outfile,"fasta")
