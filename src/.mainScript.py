@@ -411,13 +411,12 @@ class Ui_Form(object):
 						readsSeq[str(seq_record.id)] = str(seq_record.seq)
 
 				reference = outputFolder+"/partReference.fasta"
-				readsFile = "hq_specific.fastq"
+
 
 
 				for seq_record in SeqIO.parse(refFile,"fasta"):
 					refSeq = str(seq_record.seq)
 
-				toElong = ""
 				stage_a = open(outputFolder+"/preliminaryContigs.fasta","w")
 				for a in range(0,len(refSeq)-windowSize,+windowStep):
 					self.logTextEdit.append("Assembling region "+str(a)+"-"+str(a+windowSize))
@@ -430,8 +429,8 @@ class Ui_Form(object):
 
 					self.logTextEdit.append("Aligning reads.... ")
 					self.logTextEdit.repaint()
-					os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+refFile+" bowtie2Ref")
-					os.system(installationDirectory+"/src/conda/bin/bowtie2 -U "+reads+" "+"-x bowtie2Ref -S "+outputFolder+"/bowtie2Alignment.sam -p 8") #To add num threads
+					os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+reference+" bowtie2Ref")
+					os.system(installationDirectory+"/src/conda/bin/bowtie2 -U "+reads+" "+" -x "+outputFolder+"/bowtie2Ref -S "+outputFolder+"/bowtie2Alignment.sam -p 8") #To add num threads
 					os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 "+outputFolder+"/bowtie2Alignment.sam > "+outputFolder+"/bowtie2Mapped.sam")
 
 					infile = open(outputFolder+"/bowtie2Mapped.sam")
