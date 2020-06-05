@@ -444,7 +444,7 @@ class Ui_Form(object):
 					self.logTextEdit.repaint()
 					readsToAssemble = set()
 					for a in range(0,19500+150):
-						os.system(installationDirectory+"/src/conda/bin/samtools view "+outputFolder+"/bowtie2Mapped_sorted.bam partReference:"+str(a)+","+str(a+150)+" > "+outputFolder+">localAlignment.sam")
+						os.system(installationDirectory+"/src/conda/bin/samtools view "+outputFolder+"/bowtie2Mapped_sorted.bam partReference:"+str(a)+","+str(a+150)+" > "+outputFolder+"/localAlignment.sam")
 						infile = open(outputFolder+"/localAlignment.sam")
 						longestRead = ""
 						longestReadLength = 0
