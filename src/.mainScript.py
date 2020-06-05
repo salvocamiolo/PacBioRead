@@ -445,13 +445,10 @@ class Ui_Form(object):
 					readsToAssemble = set()
 					for a in range(0,19500,+150):
 						print("Analyzing range %d-%d" %(a,a+150))
-						os.system(installationDirectory+"/src/conda/bin/samtools view "+outputFolder+"/bowtie2Mapped_sorted.bam partReference:"+str(a)+","+str(a+150)+" > "+outputFolder+"/localAlignment.sam")
-						print(installationDirectory+"/src/conda/bin/samtools view "+outputFolder+"/bowtie2Mapped_sorted.bam partReference:"+str(a)+","+str(a+150)+" > "+outputFolder+"/localAlignment.sam")
+						os.system(installationDirectory+"/src/conda/bin/samtools view "+outputFolder+"/bowtie2Mapped_sorted.bam partReference:"+str(a)+"-"+str(a+150)+" > "+outputFolder+"/localAlignment.sam")
 						infile = open(outputFolder+"/localAlignment.sam")
 						longestRead = ""
 						longestReadLength = 0
-						print("Stop")
-						sys.stdin.read(1)
 						while True:
 							line = infile.readline().rstrip()
 							if not line:
