@@ -443,7 +443,8 @@ class Ui_Form(object):
 					self.logTextEdit.append("Scanning alignment.... ")
 					self.logTextEdit.repaint()
 					readsToAssemble = set()
-					for a in range(0,19500+150):
+					for a in range(0,19500,+150):
+						print("Analyzing range %d-%d" %(a,a+150))
 						os.system(installationDirectory+"/src/conda/bin/samtools view "+outputFolder+"/bowtie2Mapped_sorted.bam partReference:"+str(a)+","+str(a+150)+" > "+outputFolder+"/localAlignment.sam")
 						infile = open(outputFolder+"/localAlignment.sam")
 						longestRead = ""
@@ -457,6 +458,7 @@ class Ui_Form(object):
 								longestReadLength = len(fields[7])
 								longestRead = fields[0]
 						readsToAssemble.add(longestRead)
+						print("Selected %d sequences" %len(readsToAssemble))
 
 					outfile = open(outputFolder+"/toAssemble.fasta","w")
 					numReadsToAssemble = 0
