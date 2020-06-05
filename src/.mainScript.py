@@ -460,6 +460,7 @@ class Ui_Form(object):
 						readsToAssemble.add(longestRead)
 						print(longestRead,longestReadLength)
 						print("Selected %d sequences" %len(readsToAssemble))
+						infile.close()
 
 					outfile = open(outputFolder+"/toAssemble.fasta","w")
 					numReadsToAssemble = 0
