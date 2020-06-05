@@ -436,59 +436,45 @@ class Ui_Form(object):
 							SeqIO.write(record, fastq, "fastq")
 					os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+reference+" bowtie2Ref")
 					os.system(installationDirectory+"/src/conda/bin/bowtie2 -U "+reads+".fastq "+" "+" -x "+outputFolder+"/bowtie2Ref -S "+outputFolder+"/bowtie2Alignment.sam -p 8") #To add num threads
-					os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 "+outputFolder+"/bowtie2Alignment.sam > "+outputFolder+"/bowtie2Mapped.sam")
-
-					infile = open(outputFolder+"/bowtie2Mapped.sam")
-					outfile = open(outputFolder+"/mapped_length.txt","w")
-					while True:
-						line = infile.readline().rstrip()
-						if not line:
-							break
-						fields = line.split("\t")
-						outfile.write(fields[0]+"\t"+str(len(fields[9]))+"\n")
-					outfile.close()
-					infile.close()
-					os.system("sort  -k2rn,2rn  "+outputFolder+"/mapped_length.txt > "+outputFolder+"/temp; mv "+outputFolder+"/temp "+outputFolder+"/mapped_length.txt")
-
-					coverageToAdd = 0
-					maxScaffoldLength = 0
-					attemptNumber = 1
-					longestContig  = ""
-					infile = open(outputFolder+"/mapped_length.txt")
-					outfile = open("toAssemble.fasta","w")
-					assembledBases = 0
-					while maxScaffoldLength < 0.9*windowSize:
-						coverage = 0
-						self.logTextEdit.append("Attempt numer  "+str(attemptNumber))
-						self.logTextEdit.repaint()
-						while coverage < windowSize:
+					os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/bowtie2Alignment.sam > "+outputFolder+"/bowtie2Mapped.bam")
+					os.system(installationDirectory+"/src/conda/bin/samtools sort "+outputFolder+"/bowtie2Mapped_sorted.bam "+outputFolder+"/bowtie2Mapped.bam") 
+					os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/bowtie2Mapped_sorted.bam")
+					
+					self.logTextEdit.append("Scanning alignment.... ")
+					self.logTextEdit.repaint()
+					readsToAssemble = set()
+					for a in range(0,19500+150):
+						os.system(installationDirectory+"/src/conda/bin/samtools view "+outputFolder+"/bowtie2Mapped_sorted.bam partReference:"+str(a)+","+str(a+150)+" > "+outputFolder+">localAlignment.sam")
+						infile = open(outputFolder+"/localAlignment.sam")
+						longestRead = ""
+						longestReadLength = 0
+						while True:
 							line = infile.readline().rstrip()
 							if not line:
 								break
 							fields = line.split("\t")
-							coverage+=int(fields[1])
-							assembledBases+=int(fields[1])
-							outfile.write(">"+fields[0]+"\n"+readsSeq[fields[0]]+"\n")
+							if len(fields[7])>longestReadLength:
+								longestReadLength = len(fields[7])
+								longestRead = fields[0]
+						readsToAssemble.add(longestRead)
 
-						outfile.close()
+					outfile = open(outputFolder+"/toAssemble.fasta","w")
+					numReadsToAssemble = 0
+					for item in readsToAssemble:
+						outfile.write(">"+item+"\n"+readsSeq[item]+"\n")
+						numReadsToAssemble+=1
+					outfile.close()
+					print("Assembling %d reads with cap3" %numReadsToAssemble)
+					os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
+					print("Finito")
+					sys.stdin.read(1)
 
-						self.logTextEdit.append("Assembling "+str(assembledBases)+" bases....")
-						self.logTextEdit.repaint()
-						os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
-						
-						for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
-							if len(str(seq_record.seq)) > maxScaffoldLength:
-								maxScaffoldLength = len(str(seq_record.seq))
-								longestContig = str(seq_record.seq)
-						print("Max Scaffold length is %d" %maxScaffoldLength)
-						outfile.close()
-						if float(maxScaffoldLength)<0.9*windowSize:
-							outfile = open("toAssemble.fasta","w")
-							for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
-								SeqIO.write(seq_record,outfile,"fasta")
-						attemptNumber +=1
 
-					stage_a.write(">Range_"+str(a)+"_"+str(a+windowSize)+"\n"+longestContig+"\n")
+
+
+
+
+
 
 				stage_a.close()
 				os.system("rm "+outputFolder+"/partReference.fasta* "+outputFolder+"/outputBlast.txt "+outputFolder+"/toAssemble*")
