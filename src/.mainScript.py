@@ -467,7 +467,7 @@ class Ui_Form(object):
 							outfile.write(">"+fields[0]+"\n"+sequences[fields[0]]+"\n")
 
 						outfile.close()
-						infile.close() 
+
 						self.logTextEdit.append("Assembling "+str(assembledBases)+" bases....")
 						self.logTextEdit.repaint()
 						os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
