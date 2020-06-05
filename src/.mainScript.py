@@ -372,12 +372,13 @@ class Ui_Form(object):
 				msg.setStandardButtons(QMessageBox.Ok)
 				msg.exec_()
 				return
-		infile.close()
-		outfile.close()
+		
 
 			
 		#Perform reference guided de novo assembly
 		if self.readFilteringCheckBox_2.isChecked() == True:
+			infile.close()
+			outfile.close()
 			reads = ""
 			if os.path.isfile(outputFolder+"/hq_specific.fasta") == True:
 				reads = outputFolder+"/hq_specific.fasta"
