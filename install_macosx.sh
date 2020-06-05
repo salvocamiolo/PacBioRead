@@ -25,3 +25,4 @@ fi
 ./src/conda/bin/conda install -c bioconda -y  samtools=1.3.1
 ./src/conda/bin/conda install -c anaconda -y pyqt=5.9.2
 ./src/conda/bin/conda install -c bioconda -y  biopython=1.76
+./src/conda/bin/conda install -c bioconda bowtie2

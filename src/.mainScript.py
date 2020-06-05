@@ -372,6 +372,8 @@ class Ui_Form(object):
 				msg.setStandardButtons(QMessageBox.Ok)
 				msg.exec_()
 				return
+		infile.close()
+		outfile.close()
 
 			
 		#Perform reference guided de novo assembly
@@ -407,7 +409,9 @@ class Ui_Form(object):
 					if not str(seq_record.id) in readsSeq:
 						readsSeq[str(seq_record.id)] = str(seq_record.seq)
 
-
+				reference = outputFolder+"/partReference.fasta"
+				readsFile = "hq_specific.fastq"
+				installationDirectory = "/Users/salvo/Desktop/Github/PacBioRead"
 
 				for seq_record in SeqIO.parse(refFile,"fasta"):
 					refSeq = str(seq_record.seq)
@@ -423,51 +427,61 @@ class Ui_Form(object):
 					tempFasta.write(">partReference\n"+partSeq+"\n")
 					tempFasta.close()
 
-					os.system("makeblastdb -dbtype nucl -in "+outputFolder+"/partReference.fasta >null 2>&1")
-					os.system("blastn -query "+reads+" -db "+outputFolder+"/partReference.fasta -outfmt 6 -out "+outputFolder+"/outputBlast.txt >null 2>&1")
-					os.system("sort  -k4rn,4rn "+outputFolder+"/outputBlast.txt > "+outputFolder+"/temp; mv "+outputFolder+"/temp "+outputFolder+"/outputBlast.txt")
-					
-					infile = open(outputFolder+"/outputBlast.txt")
-					
-					outfile = open(outputFolder+"/toAssemble.fasta","w")
-					attemptNum = 0
-					sequenceToAdd = 5
+					self.logTextEdit.append("Aligning reads.... ")
+					self.logTextEdit.repaint()
+					os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+refFile+" bowtie2Ref")
+					os.system(installationDirectory+"/src/conda/bin/bowtie2 -U "+reads+" "+"-x bowtie2Ref -S "+outputFolder"/bowtie2Alignment.sam -p 8") #To add num threads
+					os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 "+outputFolder+"/bowtie2Alignment.sam > "+outputFolder+"/bowtie2Mapped.sam")
+
+					infile = open(outputFolder+"/bowtie2Mapped.sam")
+					outfile = open(outputFolder+"/mapped_length.txt","w")
 					while True:
-						numSeq = 0
-						attemptNum +=1
-						self.logTextEdit.append("Attempt number "+str(attemptNum))
+						line = infile.readline().rstrip()
+						if not line:
+							break
+						fields = line.split("\t")
+						outfile.write(fields[0]+"\t"+str(len(fields[9]))+"\n")
+					outfile.close()
+					infile.close()
+					os.system("sort  -k2rn,2rn  "+outputFolder+"/mapped_length.txt > "+outputFolder+"/temp; mv "+outputFolder+"/temp "+outputFolder+"/mapped_length.txt")
+
+					coverageToAdd = 0
+					maxScaffoldLength = 0
+					attemptNumber = 1
+					longestContig  = ""
+					infile = open(outputFolder+"/mapped_length.txt")
+					outfile = open("toAssemble.fasta","w")
+					assembledBases = 0
+					while maxScaffoldLength < 0.9*windowSize:
+						coverage = 0
+						self.logTextEdit.append("Attempt numer  "+str(attemptNumber))
 						self.logTextEdit.repaint()
-						for b in range(sequenceToAdd):
+						while coverage < windowSize:
 							line = infile.readline().rstrip()
 							if not line:
 								break
 							fields = line.split("\t")
-							
-							numSeq+=1
-							outfile.write(">"+fields[0]+"\n"+readsSeq[fields[0]]+"\n")
+							coverage+=int(fields[1])
+							assembledBases+=int(fields[1])
+							outfile.write(">"+fields[0]+"\n"+sequences[fields[0]]+"\n")
 
-						#print("%d sequences will be assembled with cap3...." %numSeq)
-						self.logTextEdit.append(str(numSeq)+" equences will be assembled with cap3")
-						self.logTextEdit.repaint()
 						outfile.close()
-						#print("Assembling reads....")
+						infile.close() 
+						self.logTextEdit.append("Assembling "+str(assembledBases)+" bases....")
+						self.logTextEdit.repaint()
 						os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
-						longestContigLength = 0
-						longestContig = ""
-						for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
-							if len(str(seq_record.seq)) > longestContigLength:
-								longestContigLength = len(str(seq_record.seq))
-								longestContig = str(seq_record.seq)
-						print("Longest found contig = %d " %longestContigLength)
-						if longestContigLength>=windowSize:
-							break
-						else:
-							outfile.close()
-							outfile = open(outputFolder+"/toAssemble.fasta","w")
-							outfile.write(">previouslyAssembled\n"+longestContig+"\n")
-							sequenceToAdd += 5
-
 						
+						for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
+							if len(str(seq_record.seq)) > maxScaffoldLength:
+								maxScaffoldLength = len(str(seq_record.seq))
+								longestContig = str(seq_record.seq)
+						print("Max Scaffold length is %d" %maxScaffoldLength)
+						outfile.close()
+						if float(maxScaffoldLength)<0.9*widnowSize:
+							outfile = open("toAssemble.fasta","w")
+							for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
+								SeqIO.write(seq_record,outfile,"fasta")
+						attemptNumber +=1
 
 					stage_a.write(">Range_"+str(a)+"_"+str(a+windowSize)+"\n"+longestContig+"\n")
 

@@ -21,7 +21,7 @@ from Bio import SeqIO
 class Ui_Form(object):
 	def setupUi(self, Form,installationDirectory):
 		Form.setObjectName("Form")
-		Form.resize(900, 518)
+		Form.resize(900, 651)
 		self.label = QtWidgets.QLabel(Form)
 		self.label.setGeometry(QtCore.QRect(10, 10, 101, 16))
 		self.label.setObjectName("label")
@@ -55,11 +55,11 @@ class Ui_Form(object):
 		self.label_5 = QtWidgets.QLabel(Form)
 		self.label_5.setGeometry(QtCore.QRect(20, 170, 51, 16))
 		self.label_5.setObjectName("label_5")
-		self.label_6 = QtWidgets.QLabel(Form)
-		self.label_6.setGeometry(QtCore.QRect(30, 220, 31, 31))
-		self.label_6.setText("")
-		self.label_6.setPixmap(QtGui.QPixmap(installationDirectory+"src/Images/1024px-Green_tick.png"))
-		self.label_6.setObjectName("label_6")
+		self.hqFragmentationLabel = QtWidgets.QLabel(Form)
+		self.hqFragmentationLabel.setGeometry(QtCore.QRect(30, 220, 31, 31))
+		self.hqFragmentationLabel.setText("")
+		self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+		self.hqFragmentationLabel.setObjectName("hqFragmentationLabel")
 		self.hqFragmentationCheckBox = QtWidgets.QCheckBox(Form)
 		self.hqFragmentationCheckBox.setGeometry(QtCore.QRect(70, 230, 151, 20))
 		self.hqFragmentationCheckBox.setObjectName("hqFragmentationCheckBox")
@@ -80,63 +80,71 @@ class Ui_Form(object):
 		self.qualityLineEdit.setGeometry(QtCore.QRect(430, 230, 101, 21))
 		self.qualityLineEdit.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
 		self.qualityLineEdit.setObjectName("qualityLineEdit")
-		self.label_10 = QtWidgets.QLabel(Form)
-		self.label_10.setGeometry(QtCore.QRect(30, 300, 31, 31))
-		self.label_10.setText("")
-		self.label_10.setPixmap(QtGui.QPixmap(installationDirectory+"src/Images/1024px-Green_tick.png"))
-		self.label_10.setObjectName("label_10")
-		self.readFilteringCheckBox = QtWidgets.QCheckBox(Form)
-		self.readFilteringCheckBox.setGeometry(QtCore.QRect(70, 310, 211, 20))
-		self.readFilteringCheckBox.setObjectName("readFilteringCheckBox")
+		self.referenceReadMappingLabel = QtWidgets.QLabel(Form)
+		self.referenceReadMappingLabel.setGeometry(QtCore.QRect(30, 300, 31, 31))
+		self.referenceReadMappingLabel.setText("")
+		self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+		self.referenceReadMappingLabel.setObjectName("referenceReadMappingLabel")
+		self.readsMappingCheckBox = QtWidgets.QCheckBox(Form)
+		self.readsMappingCheckBox.setGeometry(QtCore.QRect(70, 310, 211, 20))
+		self.readsMappingCheckBox.setObjectName("readsMappingCheckBox")
 		self.coverageLineEdit = QtWidgets.QLineEdit(Form)
-		self.coverageLineEdit.setGeometry(QtCore.QRect(290, 310, 101, 21))
+		self.coverageLineEdit.setGeometry(QtCore.QRect(290, 390, 101, 21))
 		self.coverageLineEdit.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
 		self.coverageLineEdit.setObjectName("coverageLineEdit")
 		self.label_11 = QtWidgets.QLabel(Form)
-		self.label_11.setGeometry(QtCore.QRect(290, 290, 101, 16))
+		self.label_11.setGeometry(QtCore.QRect(290, 370, 101, 16))
 		self.label_11.setObjectName("label_11")
 		self.readFilteringCheckBox_2 = QtWidgets.QCheckBox(Form)
-		self.readFilteringCheckBox_2.setGeometry(QtCore.QRect(70, 390, 211, 20))
+		self.readFilteringCheckBox_2.setGeometry(QtCore.QRect(70, 470, 211, 20))
 		self.readFilteringCheckBox_2.setObjectName("readFilteringCheckBox_2")
-		self.label_12 = QtWidgets.QLabel(Form)
-		self.label_12.setGeometry(QtCore.QRect(30, 380, 31, 31))
-		self.label_12.setText("")
-		self.label_12.setPixmap(QtGui.QPixmap(installationDirectory+"src/Images/1024px-Green_tick.png"))
-		self.label_12.setObjectName("label_12")
+		self.denovoAssemblyLabel = QtWidgets.QLabel(Form)
+		self.denovoAssemblyLabel.setGeometry(QtCore.QRect(30, 460, 31, 31))
+		self.denovoAssemblyLabel.setText("")
+		self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+		self.denovoAssemblyLabel.setObjectName("denovoAssemblyLabel")
 		self.label_13 = QtWidgets.QLabel(Form)
-		self.label_13.setGeometry(QtCore.QRect(290, 370, 101, 16))
+		self.label_13.setGeometry(QtCore.QRect(290, 450, 101, 16))
 		self.label_13.setObjectName("label_13")
 		self.windowSizeLineEdit = QtWidgets.QLineEdit(Form)
-		self.windowSizeLineEdit.setGeometry(QtCore.QRect(290, 390, 101, 21))
+		self.windowSizeLineEdit.setGeometry(QtCore.QRect(290, 470, 101, 21))
 		self.windowSizeLineEdit.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
 		self.windowSizeLineEdit.setObjectName("windowSizeLineEdit")
 		self.windowStepLineEdit = QtWidgets.QLineEdit(Form)
-		self.windowStepLineEdit.setGeometry(QtCore.QRect(430, 390, 101, 21))
+		self.windowStepLineEdit.setGeometry(QtCore.QRect(430, 470, 101, 21))
 		self.windowStepLineEdit.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
 		self.windowStepLineEdit.setObjectName("windowStepLineEdit")
 		self.label_14 = QtWidgets.QLabel(Form)
-		self.label_14.setGeometry(QtCore.QRect(430, 370, 101, 16))
+		self.label_14.setGeometry(QtCore.QRect(430, 450, 101, 16))
 		self.label_14.setObjectName("label_14")
 		self.readFilteringCheckBox_3 = QtWidgets.QCheckBox(Form)
-		self.readFilteringCheckBox_3.setGeometry(QtCore.QRect(70, 470, 211, 20))
+		self.readFilteringCheckBox_3.setGeometry(QtCore.QRect(70, 550, 211, 20))
 		self.readFilteringCheckBox_3.setObjectName("readFilteringCheckBox_3")
-		self.label_15 = QtWidgets.QLabel(Form)
-		self.label_15.setGeometry(QtCore.QRect(30, 460, 31, 31))
-		self.label_15.setText("")
-		self.label_15.setPixmap(QtGui.QPixmap(installationDirectory+"src/Images/1024px-Green_tick.png"))
-		self.label_15.setObjectName("label_15")
+		self.consensusCorrectionLaebl = QtWidgets.QLabel(Form)
+		self.consensusCorrectionLaebl.setGeometry(QtCore.QRect(30, 540, 31, 31))
+		self.consensusCorrectionLaebl.setText("")
+		self.consensusCorrectionLaebl.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+		self.consensusCorrectionLaebl.setObjectName("consensusCorrectionLaebl")
 		self.runButton = QtWidgets.QPushButton(Form)
-		self.runButton.setGeometry(QtCore.QRect(770, 450, 113, 32))
+		self.runButton.setGeometry(QtCore.QRect(650, 610, 113, 32))
 		self.runButton.setObjectName("runButton")
 		self.exitButton = QtWidgets.QPushButton(Form)
-		self.exitButton.setGeometry(QtCore.QRect(770, 480, 113, 32))
+		self.exitButton.setGeometry(QtCore.QRect(770, 610, 113, 32))
 		self.exitButton.setObjectName("exitButton")
-		self.plainTextEdit = QtWidgets.QTextEdit(Form)
-		self.plainTextEdit.setGeometry(QtCore.QRect(570, 30, 311, 411))
-		self.plainTextEdit.setObjectName("plainTextEdit")
 		self.label_16 = QtWidgets.QLabel(Form)
 		self.label_16.setGeometry(QtCore.QRect(570, 10, 111, 16))
 		self.label_16.setObjectName("label_16")
+		self.readFilteringCheckBox = QtWidgets.QCheckBox(Form)
+		self.readFilteringCheckBox.setGeometry(QtCore.QRect(70, 390, 211, 20))
+		self.readFilteringCheckBox.setObjectName("readFilteringCheckBox")
+		self.specificReadsLabel = QtWidgets.QLabel(Form)
+		self.specificReadsLabel.setGeometry(QtCore.QRect(30, 380, 31, 31))
+		self.specificReadsLabel.setText("")
+		self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+		self.specificReadsLabel.setObjectName("specificReadsLabel")
+		self.logTextEdit = QtWidgets.QTextEdit(Form)
+		self.logTextEdit.setGeometry(QtCore.QRect(560, 30, 321, 561))
+		self.logTextEdit.setObjectName("logTextEdit")
 
 		self.retranslateUi(Form)
 		QtCore.QMetaObject.connectSlotsByName(Form)
@@ -152,6 +160,24 @@ class Ui_Form(object):
 	def selectProjectFolder(self):
 		folderName = QFileDialog.getExistingDirectory(None, "Select project folder","./")
 		self.projectFolderLineEdit.setText(folderName)
+		self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
+		self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
+		self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
+		self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
+		self.consensusCorrectionLaebl.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
+
+		if os.path.isdir(folderName) == False:
+			os.system("mkdir "+folderName)
+
+		else:
+			if os.path.isfile(folderName+"/hq.fasta") == True:
+				self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+			
+			if os.path.isfile(folderName+"/lastzOutput.txt") == True:
+				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+			
+			if os.path.isfile(folderName+"/hq_specific.fasta") == True:
+				self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 
 	def selectReadFile(self):
 		filename, __ = QFileDialog.getOpenFileName(None,"Select read file","./")
@@ -171,6 +197,7 @@ class Ui_Form(object):
 	
 	#Check required fields
 	def runAssembly(self):
+
 		if os.path.isdir(self.projectFolderLineEdit.text()) == "":
 			msg = QMessageBox()
 			msg.setIcon(QMessageBox.Warning)
@@ -203,42 +230,266 @@ class Ui_Form(object):
 
 		#Create project folder if it does not exist
 		outputFolder = self.projectFolderLineEdit.text()
-		if os.path.isdir(outputFolder) == False:
-			os.system("mkdir "+outputFolder)
+
+		# Perform HQ read fragmentaiton
+		if self.hqFragmentationCheckBox.isChecked() == True:
+			self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
+			self.logTextEdit.append("High quality read fragmentation started\n")
+			self.logTextEdit.repaint()
+
+			inputFile = self.readsFileLineEdit.text()
+			threshold = self.qualityLineEdit.text()
+			minLen = self.lengthLineEdit.text()
+
+			numSeq = 0
+			outfile = open(outputFolder+"/masked.fasta","w")
+			for seq_record in SeqIO.parse(inputFile,"fastq"):
+				numSeq+=1
+				if numSeq%1000 == 0:
+					self.logTextEdit.append(str(numSeq)+" analyzed....")
+					self.logTextEdit.repaint()
+					print(str(numSeq)+" analyzed....\n")
+				sequence = str(seq_record.seq)
+				quality = seq_record.letter_annotations["phred_quality"]
+				maskedSeq = ""
+				maskedQual = ""
+				for a in range(len(quality)):
+					if quality[a]>int(threshold):
+						maskedSeq+=sequence[a]
+						maskedQual+="G"
+					else:
+						outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+						numSeq+=1
+						maskedSeq=""
+			outfile.close()
+			outfile = open(outputFolder+"/hq.fasta","w")
+			for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
+				if len(str(seq_record.seq))>int(minLen):
+					SeqIO.write(seq_record,outfile,"fasta")
+
+			os.system("rm "+outputFolder+"/masked.fasta")
+			self.logTextEdit.append("\nHigh quality read fragmentation finished\n")
+			self.logTextEdit.repaint()
+			self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+		
+
+
+		#Perform read mapping on reference to extract organisms specific reads
+		if self.readsMappingCheckBox.isChecked() == True:
+			self.readsMappingCheckBox.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
+			self.logTextEdit.append("Read mapping on reference started\n")
+			self.logTextEdit.repaint()
+			if os.path.isfile(outputFolder+"/hq.fasta")==True:
+				inputFile = outputFolder+"/hq.fasta"
+				reference = self.referenceLineEdit.text()
+
+				numSeq = 0
+				os.system("rm -f "+outputFolder+"/lastzOutput.txt")
+				os.system("touch "+outputFolder+"/lastzOutput.txt")
+				for seq_record in SeqIO.parse(inputFile,"fasta"):
+					outfile = open(outputFolder+"/tempFasta.fasta","w")
+					SeqIO.write(seq_record,outfile,"fasta")
+					outfile.close()
+					os.system(installationDirectory+"/src/conda/bin/lastz "+outputFolder+"/tempFasta.fasta "+reference+"  --format=general  >> "+outputFolder+"/lastzOutput.txt")
+					numSeq+=1
+					print(numSeq)
+				os.system("rm "+outputFolder+"/temp.fasta")
+				self.logTextEdit.append("\nRead mapping on reference finished\n")
+				self.logTextEdit.repaint()
+				self.readsMappingCheckBox.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+			else:
+				msg = QMessageBox()
+				msg.setIcon(QMessageBox.Warning)
+				msg.setText("Please run the HQ fragmentation first")
+				msg.setWindowTitle("Warning")
+				msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
+				msg.setStandardButtons(QMessageBox.Ok)
+				msg.exec_()
+				return
+
+		#Perform read mapping on reference to extract organisms specific reads
+		if self.readFilteringCheckBox.isChecked() == True:
+			if os.path.isfile(outputFolder+"/lastzOutput.txt") == True:
+				if os.path.isfile(outputFolder+"/hq.fasta") == True:
+					self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
+					inputFile = outputFolder+"/hq.fasta"
+					lastzOutput = outputFolder+"/lastzOutput.txt"
+					coverage = float(self.coverageLineEdit.text())/100
+
+					self.logTextEdit.append("\nOrganisms specific read filtering started\n")
+					self.logTextEdit.repaint()
+
+
+					sequences = {}
+					self.logTextEdit.append("\nLoading HQ reads in memory\n")
+					self.logTextEdit.repaint()
+
+					for seq_record in SeqIO.parse(inputFile,"fasta"):
+						if not str(seq_record.id) in sequences:
+							sequences[str(seq_record.id)] = seq_record
+
+					self.logTextEdit.append("\nApplying filter\n")
+					self.logTextEdit.repaint()
+					outfile = open(outputFolder+"/hq_specific.fasta","w")
+					infile = open(lastzOutput)
+					numSeq = 0
+					while True:
+						line = infile.readline().rstrip()
+						if not line:
+							break
+						if not "#score" in line:
+							fields = line.split("\t")
+							readName = fields[1]
+							strand = fields[2]
+							length = float(fields[3])
+							start = float(fields[4])
+							end = float(fields[5])
+
+							if abs(end-start)/length> coverage:
+								numSeq +=1
+								if numSeq%1000 == 0:
+									self.logTextEdit.append(str(numSeq)+" reads passed the filter")
+									self.logTextEdit.repaint()
+								SeqIO.write(sequences[readName],outfile,"fasta")
+								print("Read %s comes from Reference!" %readName)
+					self.logTextEdit.append(str(numSeq)+" reads passed the filter")
+					self.logTextEdit.repaint()
+					self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+				else:
+					msg = QMessageBox()
+					msg.setIcon(QMessageBox.Warning)
+					msg.setText("Please run the HQ fragmentation first")
+					msg.setWindowTitle("Warning")
+					msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
+					msg.setStandardButtons(QMessageBox.Ok)
+					msg.setStandardButtons(QMessageBox.Ok)
+					msg.exec_()
+					return
+
+			else:
+				msg = QMessageBox()
+				msg.setIcon(QMessageBox.Warning)
+				msg.setText("Please map the reads to the reference first.")
+				msg.setWindowTitle("Warning")
+				msg.setDetailedText("You should map the reads to the provided reference first. This will generate a file named lastzOutput.txt in your project folder\n ")
+				msg.setStandardButtons(QMessageBox.Ok)
+				msg.exec_()
+				return
+
+			
+		#Perform reference guided de novo assembly
+		if self.readFilteringCheckBox_2.isChecked() == True:
+			reads = ""
+			if os.path.isfile(outputFolder+"/hq_specific.fasta") == True:
+				reads = outputFolder+"/hq_specific.fasta"
+			if os.path.isfile(outputFolder+"/hq.fasta") == True:
+				reads = outputFolder+"/hq.fasta"
+			
+			if reads == "":
+				msg = QMessageBox()
+				msg.setIcon(QMessageBox.Warning)
+				msg.setText("Please run the HQ fragmentation first")
+				msg.setWindowTitle("Warning")
+				msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
+				msg.setStandardButtons(QMessageBox.Ok)
+				msg.setStandardButtons(QMessageBox.Ok)
+				msg.exec_()
+				return
+
+			else:
+				refFile = self.referenceLineEdit.text()
+				readsSeq = {}
+				windowSize = int(self.windowSizeLineEdit.text())
+				windowStep = int(self.windowStepLineEdit.text())
+
+				self.logTextEdit.append("Reference guided de novo assembly started")
+				self.logTextEdit.append("Loading reads in memory")
+
+				self.logTextEdit.repaint()
+				for seq_record in SeqIO.parse(reads,"fasta"):
+					if not str(seq_record.id) in readsSeq:
+						readsSeq[str(seq_record.id)] = str(seq_record.seq)
+
+
+
+				for seq_record in SeqIO.parse(refFile,"fasta"):
+					refSeq = str(seq_record.seq)
+
+				toElong = ""
+				stage_a = open(outputFolder+"/preliminaryContigs.fasta","w")
+				for a in range(0,len(refSeq)-windowSize,+windowStep):
+					self.logTextEdit.append("Assembling region "+str(a)+"-"+str(a+windowSize))
+					self.logTextEdit.repaint()
+					#print("Assembling range %d-%d" %(a,a+windowSize))
+					partSeq = refSeq[a:a+windowSize]
+					tempFasta = open(outputFolder+"/partReference.fasta","w")
+					tempFasta.write(">partReference\n"+partSeq+"\n")
+					tempFasta.close()
+
+					os.system("makeblastdb -dbtype nucl -in "+outputFolder+"/partReference.fasta >null 2>&1")
+					os.system("blastn -query "+reads+" -db "+outputFolder+"/partReference.fasta -outfmt 6 -out "+outputFolder+"/outputBlast.txt >null 2>&1")
+					os.system("sort  -k4rn,4rn "+outputFolder+"/outputBlast.txt > "+outputFolder+"/temp; mv "+outputFolder+"/temp "+outputFolder+"/outputBlast.txt")
+					
+					infile = open(outputFolder+"/outputBlast.txt")
+					
+					outfile = open(outputFolder+"/toAssemble.fasta","w")
+					attemptNum = 0
+					sequenceToAdd = 5
+					while True:
+						numSeq = 0
+						attemptNum +=1
+						self.logTextEdit.append("Attempt number "+str(attemptNum))
+						self.logTextEdit.repaint()
+						for b in range(sequenceToAdd):
+							line = infile.readline().rstrip()
+							if not line:
+								break
+							fields = line.split("\t")
+							
+							numSeq+=1
+							outfile.write(">"+fields[0]+"\n"+readsSeq[fields[0]]+"\n")
+
+						#print("%d sequences will be assembled with cap3...." %numSeq)
+						self.logTextEdit.append(str(numSeq)+" equences will be assembled with cap3")
+						self.logTextEdit.repaint()
+						outfile.close()
+						#print("Assembling reads....")
+						os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
+						longestContigLength = 0
+						longestContig = ""
+						for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
+							if len(str(seq_record.seq)) > longestContigLength:
+								longestContigLength = len(str(seq_record.seq))
+								longestContig = str(seq_record.seq)
+						print("Longest found contig = %d " %longestContigLength)
+						if longestContigLength>=windowSize:
+							break
+						else:
+							outfile.close()
+							outfile = open(outputFolder+"/toAssemble.fasta","w")
+							outfile.write(">previouslyAssembled\n"+longestContig+"\n")
+							sequenceToAdd += 5
+
+						
+
+					stage_a.write(">Range_"+str(a)+"_"+str(a+windowSize)+"\n"+longestContig+"\n")
+
+				stage_a.close()
+				os.system("rm "+outputFolder+"/partReference.fasta* "+outputFolder+"/outputBlast.txt "+outputFolder+"/toAssemble*")
+
+			
+			
+
+			
+
+
+
+
+			
 
 		
-		# Perform HQ read fragmentaiton
-		inputFile = self.readsFileLineEdit.text()
-		threshold = self.qualityLineEdit.text()
-		minLen = self.lengthLineEdit.text()
 
-		numSeq = 0
-		outfile = open(outputFolder+"/masked.fasta","w")
-		for seq_record in SeqIO.parse(inputFile,"fastq"):
-			numSeq+=1
-			if numSeq%1000 == 0:
-				self.plainTextEdit.append(str(numSeq)+" analyzed....")
-				self.plainTextEdit.repaint()
-				print(str(numSeq)+" analyzed....\n")
-			sequence = str(seq_record.seq)
-			quality = seq_record.letter_annotations["phred_quality"]
-			maskedSeq = ""
-			maskedQual = ""
-			for a in range(len(quality)):
-				if quality[a]>int(threshold):
-					maskedSeq+=sequence[a]
-					maskedQual+="G"
-				else:
-					outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
-					numSeq+=1
-					maskedSeq=""
-		outfile.close()
-		outfile = open(outputFolder+"/hq.fasta","w")
-		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
-			if len(str(seq_record.seq))>int(minLen):
-				SeqIO.write(seq_record,outfile,"fasta")
 
-		os.system("rm "+outputFolder+"/masked.fasta")
 
 
 
@@ -263,7 +514,7 @@ class Ui_Form(object):
 		self.label_9.setText(_translate("Form", "Min. quality"))
 		self.lengthLineEdit.setText(_translate("Form", "150"))
 		self.qualityLineEdit.setText(_translate("Form", "30"))
-		self.readFilteringCheckBox.setText(_translate("Form", "Filter arganism specific reads"))
+		self.readsMappingCheckBox.setText(_translate("Form", "Map reads to reference"))
 		self.coverageLineEdit.setText(_translate("Form", "90"))
 		self.label_11.setText(_translate("Form", "Coverage (%)"))
 		self.readFilteringCheckBox_2.setText(_translate("Form", "De novo assembly"))
@@ -275,6 +526,7 @@ class Ui_Form(object):
 		self.runButton.setText(_translate("Form", "Run"))
 		self.exitButton.setText(_translate("Form", "Exit"))
 		self.label_16.setText(_translate("Form", "Log "))
+		self.readFilteringCheckBox.setText(_translate("Form", "Select reference specific reads"))
 
 
 
