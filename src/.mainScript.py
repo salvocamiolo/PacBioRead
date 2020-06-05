@@ -443,9 +443,9 @@ class Ui_Form(object):
 					self.logTextEdit.append("Scanning alignment.... ")
 					self.logTextEdit.repaint()
 					readsToAssemble = set()
-					for a in range(0,19500,+150):
-						print("Analyzing range %d-%d" %(a,a+150))
-						os.system(installationDirectory+"/src/conda/bin/samtools view "+outputFolder+"/bowtie2Mapped_sorted.bam partReference:"+str(a)+"-"+str(a+150)+" > "+outputFolder+"/localAlignment.sam")
+					for b in range(0,19500,+150):
+						print("Analyzing range %d-%d" %(b,b+150))
+						os.system(installationDirectory+"/src/conda/bin/samtools view "+outputFolder+"/bowtie2Mapped_sorted.bam partReference:"+str(b)+"-"+str(b+150)+" > "+outputFolder+"/localAlignment.sam")
 						infile = open(outputFolder+"/localAlignment.sam")
 						longestRead = ""
 						longestReadLength = 0
@@ -470,21 +470,24 @@ class Ui_Form(object):
 							numReadsToAssemble+=1
 					outfile.close()
 					print("Assembling %d reads with cap3" %numReadsToAssemble)
+					self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads with cap3")
+					self.logTextEdit.repaint()
 					os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
-					print("Finito")
-					sys.stdin.read(1)
+					maxScaffoldLength = 0
+					longestContig = ""
+					for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
+						if len(str(seq_record.seq)) > maxScaffoldLength:
+							maxScaffoldLength = len(str(seq_record.seq))
+							longestContig = str(seq_record.seq)
 
-
-
-
-
-
-
+					self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
+					self.logTextEdit.repaint()
+					stage_a.write(">Range_"+str(a)+"_"+str(a+windowSize)+"\n"+longestContig+"\n")
 
 				stage_a.close()
 				os.system("rm "+outputFolder+"/partReference.fasta* "+outputFolder+"/outputBlast.txt "+outputFolder+"/toAssemble*")
 
-			
+				
 			
 
 			
