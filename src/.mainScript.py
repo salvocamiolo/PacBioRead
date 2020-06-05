@@ -429,7 +429,7 @@ class Ui_Form(object):
 
 					self.logTextEdit.append("Aligning reads.... ")
 					self.logTextEdit.repaint()
-					
+
 					with open(reads, "r") as fasta, open(reads+".fastq", "w") as fastq:
 						for record in SeqIO.parse(fasta, "fasta"):
 							record.letter_annotations["phred_quality"] = [40] * len(record)
@@ -468,7 +468,7 @@ class Ui_Form(object):
 							fields = line.split("\t")
 							coverage+=int(fields[1])
 							assembledBases+=int(fields[1])
-							outfile.write(">"+fields[0]+"\n"+sequences[fields[0]]+"\n")
+							outfile.write(">"+fields[0]+"\n"+readsSeq[fields[0]]+"\n")
 
 						outfile.close()
 
