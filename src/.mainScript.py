@@ -352,6 +352,8 @@ class Ui_Form(object):
 					self.logTextEdit.append(str(numSeq)+" reads passed the filter")
 					self.logTextEdit.repaint()
 					self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+					infile.close()
+					outfile.close()
 				else:
 					msg = QMessageBox()
 					msg.setIcon(QMessageBox.Warning)
@@ -377,8 +379,6 @@ class Ui_Form(object):
 			
 		#Perform reference guided de novo assembly
 		if self.readFilteringCheckBox_2.isChecked() == True:
-			infile.close()
-			outfile.close()
 			reads = ""
 			if os.path.isfile(outputFolder+"/hq_specific.fasta") == True:
 				reads = outputFolder+"/hq_specific.fasta"
