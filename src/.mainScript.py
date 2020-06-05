@@ -429,8 +429,13 @@ class Ui_Form(object):
 
 					self.logTextEdit.append("Aligning reads.... ")
 					self.logTextEdit.repaint()
+					
+					with open(reads, "r") as fasta, open(reads+".fastq", "w") as fastq:
+						for record in SeqIO.parse(fasta, "fasta"):
+							record.letter_annotations["phred_quality"] = [40] * len(record)
+							SeqIO.write(record, fastq, "fastq")
 					os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+reference+" bowtie2Ref")
-					os.system(installationDirectory+"/src/conda/bin/bowtie2 -U "+reads+" "+" -x "+outputFolder+"/bowtie2Ref -S "+outputFolder+"/bowtie2Alignment.sam -p 8") #To add num threads
+					os.system(installationDirectory+"/src/conda/bin/bowtie2 -U "+reads+".fastq "+" "+" -x "+outputFolder+"/bowtie2Ref -S "+outputFolder+"/bowtie2Alignment.sam -p 8") #To add num threads
 					os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 "+outputFolder+"/bowtie2Alignment.sam > "+outputFolder+"/bowtie2Mapped.sam")
 
 					infile = open(outputFolder+"/bowtie2Mapped.sam")
