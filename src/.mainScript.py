@@ -412,7 +412,7 @@ class Ui_Form(object):
 
 				reference = outputFolder+"/partReference.fasta"
 				readsFile = "hq_specific.fastq"
-				installationDirectory = "/Users/salvo/Desktop/Github/PacBioRead"
+
 
 				for seq_record in SeqIO.parse(refFile,"fasta"):
 					refSeq = str(seq_record.seq)
