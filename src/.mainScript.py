@@ -458,13 +458,15 @@ class Ui_Form(object):
 								longestReadLength = len(fields[7])
 								longestRead = fields[0]
 						readsToAssemble.add(longestRead)
+						print(longestRead,longestReadLength)
 						print("Selected %d sequences" %len(readsToAssemble))
 
 					outfile = open(outputFolder+"/toAssemble.fasta","w")
 					numReadsToAssemble = 0
 					for item in readsToAssemble:
-						outfile.write(">"+item+"\n"+readsSeq[item]+"\n")
-						numReadsToAssemble+=1
+						if not item == '':
+							outfile.write(">"+item+"\n"+readsSeq[item]+"\n")
+							numReadsToAssemble+=1
 					outfile.close()
 					print("Assembling %d reads with cap3" %numReadsToAssemble)
 					os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
