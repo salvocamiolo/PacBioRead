@@ -15,7 +15,7 @@ parser.add_argument("-x","--outputFolder",required=True,help="The output folder 
 args = vars(parser.parse_args())
 installationDirectory = args['installationDirectory']
 
-readFile = args['readsFile']
+readsFile = args['readsFile']
 firstBit = args['firstBit']
 secondBit = args['secondBit']
 sequenceOutputName = args['sequenceOutputName']
@@ -26,10 +26,10 @@ outputFolder = args['outputFolder']
 randomFolderName = "sc140875_"+str(rd.randint(1,1000))
 os.system("mkdir "+randomFolderName)
 os.chdir(randomFolderName)
-os.system("ln -s "+readFile)
+os.system("ln -s "+readsFile)
 os.system("ln -s "+firstBit)
 os.system("ln -s "+secondBit)
-readFile = (readFile.split("/"))[-1]
+readsFile = (readsFile.split("/"))[-1]
 firstBit = (firstBit.split("/"))[-1]
 secondBit = (secondBit.split("/"))[-1]
 
@@ -37,11 +37,11 @@ secondBit = (secondBit.split("/"))[-1]
 sequences = {}
 #loading read file in memory
 if ".fastq" in readsFile or ".fq" in readsFile: 
-    for seq_record in SeqIO.parse(readFile,"fastq"):
+    for seq_record in SeqIO.parse(readsFile,"fastq"):
         if not str(seq_record.id) in sequences:
             sequences[str(seq_record.id)] = str(seq_record.seq)
 else:
-    for seq_record in SeqIO.parse(readFile,"fasta"):
+    for seq_record in SeqIO.parse(readsFile,"fasta"):
         if not str(seq_record.id) in sequences:
             sequences[str(seq_record.id)] = str(seq_record.seq)
 
@@ -65,7 +65,7 @@ endSeqFile.write(">endSeq\n"+endSeq+"\n")
 endSeqFile.close()
 
 #crearing a blast database out of the reads
-os.system(installationDirectory+"/src/conda/bin/makeblastdb -dbtype nucl -in "+readFile+ ">null 2>&1")
+os.system(installationDirectory+"/src/conda/bin/makeblastdb -dbtype nucl -in "+readsFile+ ">null 2>&1")
 os.system(installationDirectory+"/src/conda/bin/makeblastdb -dbtype nucl -in  endSeq.fasta >null 2>&1")
 
 
@@ -75,7 +75,7 @@ elongNum = 0
 elongedSequence = firstBitSeq
 while gapClosed == False:
     elongNum +=1 
-    os.system(installationDirectory+"/src/conda/bin/blastn -query startSeq.fasta -db "+readFile+" -outfmt 6 >outputBlast.txt")
+    os.system(installationDirectory+"/src/conda/bin/blastn -query startSeq.fasta -db "+readsFile+" -outfmt 6 >outputBlast.txt")
     #Scanning the output file to search best candidates 
     blastOutputFile = open("outputBlast.txt")
     bestWalkingSize = 0
