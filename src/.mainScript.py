@@ -537,7 +537,7 @@ class Ui_Form(object):
 								+installationDirectory+" -i "+outputFolder+"/originalReads.fasta"+" -s "+outputFolder+"/firstBit.fasta -e "+ \
 									outputFolder+"/secondBit.fasta -x "+outputFolder+" -o "+"gap_"+str(gapStart)+"_"+str(gapEnd))
 							os.system("cat "+outputFolder+"/gap_"+str(gapStart)+"_"+str(gapEnd)+" >> " \
-								+outputFolder+"/preliminaryContigs.fasta]")
+								+outputFolder+"/preliminaryContigs.fasta")
 
 
 							
