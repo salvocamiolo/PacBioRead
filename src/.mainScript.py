@@ -496,11 +496,11 @@ class Ui_Form(object):
 				os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/preliminaryContigs.fasta")
 				self.logTextEdit.append("\nScaffolding.... ")
 				self.logTextEdit.repaint()
-				ragoutRecepie = open(outputFolder+"ragout_recepie.rcp","w")
+				ragoutRecepie = open(outputFolder+"/ragout_recepie.rcp","w")
 				ragoutRecepie.write(".references = reference\n.target = scaffolds\n\nreference.fasta = "+refFile+"\nscaffolds.fasta = "+outputFolder+"/preliminaryContigs.fasta.cap.contigs")
 				ragoutRecepie.close()
-				os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"ragoutOutput "+outputFolder+"ragout_recepie.rcp")
-				 
+				os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput "+outputFolder+"/ragout_recepie.rcp")
+
 
 
 
