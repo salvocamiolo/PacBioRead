@@ -491,15 +491,39 @@ class Ui_Form(object):
 				stage_a.close()
 				os.system("rm "+outputFolder+"/partReference.fasta* "+outputFolder+"/outputBlast.txt "+outputFolder+"/toAssemble*")
 
+				#Assembling all the contigs with cap3 to obtain extended contigs
 				self.logTextEdit.append("\nJoining contigs.... ")
 				self.logTextEdit.repaint()
 				os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/preliminaryContigs.fasta")
+
+				
+				
+				#Scaffolding all the extended contigs in the previous step with ragout
 				self.logTextEdit.append("\nScaffolding.... ")
 				self.logTextEdit.repaint()
 				ragoutRecepie = open(outputFolder+"/ragout_recepie.rcp","w")
 				ragoutRecepie.write(".references = reference\n.target = scaffolds\n\nreference.fasta = "+refFile+"\nscaffolds.fasta = "+outputFolder+"/preliminaryContigs.fasta.cap.contigs")
 				ragoutRecepie.close()
 				os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput "+outputFolder+"/ragout_recepie.rcp")
+				os.system("cp "+outputFolder+"/preliminaryContigs.fasta "+outputFolder+"/stage_a.fasta")
+				os.system("cp "+outputFolder+"/ragoutOutput/scaffolds_scaffolds.fasta "+outputFolder+"/stage_b.fasta")
+				os.system("rm -rf preliminary* bowtie2* null local*")
+
+				#Check the present of N and if present close the gaps with lr_gapcloser
+				for seq_record in SeqIO.parse(outputFolder+"/stage_b.fasta","fasta"):
+					scaffoldSseq = str(seq_record.seq)
+					position = -1
+					while position < len(str(seq_record.seq)):
+						position+=1
+						if scaffoldSseq[position] == "N" or scaffoldSseq[position] == "n":
+							gapStart = position
+							while scaffoldSseq[position] == "N" or scaffoldSseq[position] == 'n':
+								position+=1
+							gapEnd = position
+						print("Found gap between position %d and %d " %(gapStart, gapEnd))
+					
+
+	
 
 
 
