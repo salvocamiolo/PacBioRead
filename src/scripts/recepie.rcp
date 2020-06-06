@@ -1,0 +1,5 @@
+.references = reference
+.target = scaffolds
+
+reference.fasta = ./H2_final.fasta
+scaffolds.fasta = ./preliminaryContigs.fasta.cap.contigs
