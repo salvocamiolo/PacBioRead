@@ -531,7 +531,7 @@ class Ui_Form(object):
 							self.logTextEdit.append("Closing gap.... ")
 							self.logTextEdit.repaint()
 							os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/lr_gapCloser.py -p " \
-								+installationDirectory+" -i "+self.readsFileLineEdit.text()+" -s "+outputFolder+"/firstBit.fasta - e "+ \
+								+installationDirectory+" -i "+self.readsFileLineEdit.text()+" -s "+outputFolder+"/firstBit.fasta -e "+ \
 									outputFolder+"/secondBit.fasta -x "+outputFolder+" -o "+"gap_"+str(gapStart)+"_"+str(gapEnd))
 							os.system("cat "+outputFolder+"/gap_"+str(gapStart)+"_"+str(gapEnd)+" >> " \
 								+outputFolder+"/preliminaryContigs.fasta.cap.contigs")
