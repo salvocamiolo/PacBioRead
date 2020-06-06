@@ -139,10 +139,10 @@ while gapClosed == False:
         queryEnd = int(fields[7])
         if (queryEnd -queryStart) > 200:
             gapClosed = True
-outfile = open("gapclosed.fasta","w")
+outfile = open(sequenceOutputName,"w")
 outfile.write(">"+sequenceOutputName+"\n"+elongedSequence+"\n")
 outfile.close()
-os.system("cp gapclosed.fasta "+outputFolder"/")
+os.system("cp "+sequenceOutputName+" "+outputFolder+"/")
 os.chdir("../")
 os.system("rm -rf "+randomFolderName)
 

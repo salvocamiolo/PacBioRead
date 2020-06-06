@@ -507,7 +507,7 @@ class Ui_Form(object):
 				os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput "+outputFolder+"/ragout_recepie.rcp")
 				os.system("cp "+outputFolder+"/preliminaryContigs.fasta "+outputFolder+"/stage_a.fasta")
 				os.system("cp "+outputFolder+"/ragoutOutput/scaffolds_scaffolds.fasta "+outputFolder+"/stage_b.fasta")
-				os.system("rm -rf preliminary* bowtie2* null local*")
+				os.system("rm -rf bowtie2* null local*")
 
 				#Check the present of N and if present close the gaps with lr_gapcloser
 				for seq_record in SeqIO.parse(outputFolder+"/stage_b.fasta","fasta"):
@@ -533,6 +533,12 @@ class Ui_Form(object):
 							os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/lr_gapCloser.py -p " \
 								+installationDirectory+" -i "+self.readsFileLineEdit.text()+" -s "+outputFolder+"/firstBit.fasta - e "+ \
 									outputFolder+"/secondBit.fasta -x "+outputFolder+" -o "+"gap_"+str(gapStart)+"_"+str(gapEnd))
+							os.system("cat "+outputFolder+"/gap_"+str(gapStart)+"_"+str(gapEnd)+" >> " \
+								+outputFolder+"/preliminaryContigs.fasta.cap.contigs")
+
+							os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput_"+str(gapStart)+"_"+str(gapEnd)+" "+outputFolder+"/ragout_recepie.rcp")
+							
+							
 
 
 					
