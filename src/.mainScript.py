@@ -537,11 +537,11 @@ class Ui_Form(object):
 								+installationDirectory+" -i "+outputFolder+"/originalReads.fasta"+" -s "+outputFolder+"/firstBit.fasta -e "+ \
 									outputFolder+"/secondBit.fasta -x "+outputFolder+" -o "+"gap_"+str(gapStart)+"_"+str(gapEnd))
 							os.system("cat "+outputFolder+"/gap_"+str(gapStart)+"_"+str(gapEnd)+" >> " \
-								+outputFolder+"/preliminaryContigs.fasta.cap.contigs")
+								+outputFolder+"/preliminaryContigs.fasta]")
 
 
-							os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput_"+str(gapStart)+"_"+str(gapEnd)+" "+outputFolder+"/ragout_recepie.rcp")
 							
+							os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/preliminaryContigs.fasta")
 							
 
 
