@@ -506,7 +506,7 @@ class Ui_Form(object):
 				#ragoutRecepie.close()
 				#os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput "+outputFolder+"/ragout_recepie.rcp")
 				os.system("cp "+outputFolder+"/preliminaryContigs.fasta "+outputFolder+"/stage_a.fasta")
-				#os.system("cp "+outputFolder+"/ragoutOutput/scaffolds_scaffolds.fasta "+outputFolder+"/stage_b.fasta")
+				os.system("cp "+outputFolder+"/preliminaryContigs.fasta.cap.contigs "+outputFolder+"/stage_b.fasta")
 				os.system("rm -rf  preliminary* bowtie2* null local*")
 
 				numScaffolds = 0
