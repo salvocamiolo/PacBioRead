@@ -15,7 +15,7 @@ parser.add_argument("-x","--outputFolder",required=True,help="The output folder 
 args = vars(parser.parse_args())
 installationDirectory = args['installationDirectory']
 
-readFile = args['readFile']
+readFile = args['readsFile']
 firstBit = args['firstBit']
 secondBit = args['secondBit']
 sequenceOutputName = args['sequenceOutputName']
