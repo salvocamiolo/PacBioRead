@@ -406,7 +406,8 @@ class Ui_Form(object):
 				self.logTextEdit.append("Loading reads in memory")
 
 				self.logTextEdit.repaint()
-				for seq_record in SeqIO.parse(reads,"fasta"):
+				#for seq_record in SeqIO.parse(reads,"fasta"):
+				for seq_record in SeqIO.parse(self.readsFileLineEdit.text(),"fastq"):
 					if not str(seq_record.id) in readsSeq:
 						readsSeq[str(seq_record.id)] = str(seq_record.seq)
 
