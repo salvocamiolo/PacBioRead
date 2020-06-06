@@ -36,14 +36,10 @@ secondBit = (secondBit.split("/"))[-1]
 
 sequences = {}
 #loading read file in memory
-if ".fastq" in readsFile or ".fq" in readsFile: 
-    for seq_record in SeqIO.parse(readsFile,"fastq"):
-        if not str(seq_record.id) in sequences:
-            sequences[str(seq_record.id)] = str(seq_record.seq)
-else:
-    for seq_record in SeqIO.parse(readsFile,"fasta"):
-        if not str(seq_record.id) in sequences:
-            sequences[str(seq_record.id)] = str(seq_record.seq)
+
+for seq_record in SeqIO.parse(readsFile,"fasta"):
+    if not str(seq_record.id) in sequences:
+        sequences[str(seq_record.id)] = str(seq_record.seq)
 
 
 #Collect sequences of the two portion to join

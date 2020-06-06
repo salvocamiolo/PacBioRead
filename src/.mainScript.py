@@ -530,11 +530,15 @@ class Ui_Form(object):
 							#converting original fastq file into fasta file
 							self.logTextEdit.append("Closing gap.... ")
 							self.logTextEdit.repaint()
+							with open(self.readsFileLineEdit.text(), "r") as fastq, open(outputFolder+"/originalReads.fasta", "w") as fast:
+							for record in SeqIO.parse(fastq, "fastq"):
+								SeqIO.write(record, fasta, "fasta")
 							os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/lr_gapCloser.py -p " \
-								+installationDirectory+" -i "+self.readsFileLineEdit.text()+" -s "+outputFolder+"/firstBit.fasta -e "+ \
+								+installationDirectory+" -i "+outputFolder+"/originalReads.fasta"+" -s "+outputFolder+"/firstBit.fasta -e "+ \
 									outputFolder+"/secondBit.fasta -x "+outputFolder+" -o "+"gap_"+str(gapStart)+"_"+str(gapEnd))
 							os.system("cat "+outputFolder+"/gap_"+str(gapStart)+"_"+str(gapEnd)+" >> " \
 								+outputFolder+"/preliminaryContigs.fasta.cap.contigs")
+
 
 							os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput_"+str(gapStart)+"_"+str(gapEnd)+" "+outputFolder+"/ragout_recepie.rcp")
 							
