@@ -33,8 +33,9 @@ cd src
 	cd ../
 	if  test -f "./src/conda2/bin/conda"; then
 	echo "Miniconda2 successfully installed"
+	./src/conda2/bin/conda install -c bioconda -y  ragout=2.2
+	./src/conda2/bin/conda install -c bioconda -y  mummer
 	fi
 fi
 
-./src/conda2/bin/conda install -c bioconda -y  ragout=2.2
-./src/conda2/bin/conda install -c bioconda -y  mummer
+
