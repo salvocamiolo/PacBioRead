@@ -520,7 +520,7 @@ class Ui_Form(object):
 							while scaffoldSseq[position] == "N" or scaffoldSseq[position] == 'n':
 								position+=1
 							gapEnd = position
-						print("Found gap between position %d and %d " %(gapStart, gapEnd))
+							print("Found gap between position %d and %d " %(gapStart, gapEnd))
 					
 
 	
