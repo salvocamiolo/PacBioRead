@@ -513,7 +513,7 @@ class Ui_Form(object):
 				for seq_record in SeqIO.parse(outputFolder+"/stage_b.fasta","fasta"):
 					scaffoldSseq = str(seq_record.seq)
 					position = -1
-					while position < len(str(seq_record.seq)):
+					while position < len(str(seq_record.seq))-1:
 						position+=1
 						if scaffoldSseq[position] == "N" or scaffoldSseq[position] == "n":
 							gapStart = position
