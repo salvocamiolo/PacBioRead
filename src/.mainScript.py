@@ -509,7 +509,7 @@ class Ui_Form(object):
 				#os.system("cp "+outputFolder+"/ragoutOutput/scaffolds_scaffolds.fasta "+outputFolder+"/stage_b.fasta")
 				os.system("rm -rf  preliminary* bowtie2* null local*")
 
-				numScaffolds = 0:
+				numScaffolds = 0
 				for seq_record in SeqIO.parse(outputFolder+"/stage_a.fasta","fasta"):
 					numScaffolds+=1
 				
