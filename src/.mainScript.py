@@ -499,45 +499,54 @@ class Ui_Form(object):
 				
 				
 				#Scaffolding all the extended contigs in the previous step with ragout
-				self.logTextEdit.append("\nScaffolding.... ")
-				self.logTextEdit.repaint()
-				ragoutRecepie = open(outputFolder+"/ragout_recepie.rcp","w")
-				ragoutRecepie.write(".references = reference\n.target = scaffolds\n\nreference.fasta = "+refFile+"\nscaffolds.fasta = "+outputFolder+"/preliminaryContigs.fasta.cap.contigs")
-				ragoutRecepie.close()
-				os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput "+outputFolder+"/ragout_recepie.rcp")
+				#self.logTextEdit.append("\nScaffolding.... ")
+				#self.logTextEdit.repaint()
+				#ragoutRecepie = open(outputFolder+"/ragout_recepie.rcp","w")
+				#ragoutRecepie.write(".references = reference\n.target = scaffolds\n\nreference.fasta = "+refFile+"\nscaffolds.fasta = "+outputFolder+"/preliminaryContigs.fasta.cap.contigs")
+				#ragoutRecepie.close()
+				#os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput "+outputFolder+"/ragout_recepie.rcp")
 				os.system("cp "+outputFolder+"/preliminaryContigs.fasta "+outputFolder+"/stage_a.fasta")
-				os.system("cp "+outputFolder+"/ragoutOutput/scaffolds_scaffolds.fasta "+outputFolder+"/stage_b.fasta")
-				os.system("rm -rf bowtie2* null local*")
+				#os.system("cp "+outputFolder+"/ragoutOutput/scaffolds_scaffolds.fasta "+outputFolder+"/stage_b.fasta")
+				os.system("rm -rf  preliminary* bowtie2* null local*")
+
+				numScaffolds = 0:
+				for seq_record in SeqIO.parse(outputFolder+"/stage_a.fasta","fasta"):
+					numScaffolds+=1
+				
+
+
+
+
 
 				#Check the present of N and if present close the gaps with lr_gapcloser
-				for seq_record in SeqIO.parse(outputFolder+"/stage_b.fasta","fasta"):
-					scaffoldSseq = str(seq_record.seq)
-					position = -1
-					while position < len(str(seq_record.seq))-1:
-						position+=1
-						if scaffoldSseq[position] == "N" or scaffoldSseq[position] == "n":
-							gapStart = position
-							while scaffoldSseq[position] == "N" or scaffoldSseq[position] == 'n':
-								position+=1
-							gapEnd = position
-							print("Found gap between position %d and %d " %(gapStart, gapEnd))
-							bitToJoin = open(outputFolder+"/firstBit.fasta","w")
-							bitToJoin.write(">firstBit\n"+scaffoldSseq[gapStart-2000:gapStart]+"\n")
-							bitToJoin.close()
-							bitToJoin = open(outputFolder+"/secondBit.fasta","w")
-							bitToJoin.write(">secondBit\n"+scaffoldSseq[gapEnd:gapEnd+500]+"\n")
-							bitToJoin.close()
-							#converting original fastq file into fasta file
-							self.logTextEdit.append("Closing gap.... ")
-							self.logTextEdit.repaint()
-							with open(self.readsFileLineEdit.text(), "r") as fastq, open(outputFolder+"/originalReads.fasta", "w") as fasta:
-								for record in SeqIO.parse(fastq, "fastq"):
-									SeqIO.write(record, fasta, "fasta")
-							os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/lr_gapCloser.py -p " \
-								+installationDirectory+" -i "+outputFolder+"/originalReads.fasta"+" -s "+outputFolder+"/firstBit.fasta -e "+ \
-									outputFolder+"/secondBit.fasta -x "+outputFolder+" -o "+"gap_"+str(gapStart)+"_"+str(gapEnd))
-							os.system("cat "+outputFolder+"/gap_"+str(gapStart)+"_"+str(gapEnd)+" >> " \
-								+outputFolder+"/preliminaryContigs.fasta")
+				#for seq_record in SeqIO.parse(outputFolder+"/stage_b.fasta","fasta"):
+				#	scaffoldSseq = str(seq_record.seq)
+				#	position = -1
+				#	while position < len(str(seq_record.seq))-1:
+				#		position+=1
+				#		if scaffoldSseq[position] == "N" or scaffoldSseq[position] == "n":
+				#			gapStart = position
+				#			while scaffoldSseq[position] == "N" or scaffoldSseq[position] == 'n':
+				#				position+=1
+				#			gapEnd = position
+				#			print("Found gap between position %d and %d " %(gapStart, gapEnd))
+				#			bitToJoin = open(outputFolder+"/firstBit.fasta","w")
+				#			bitToJoin.write(">firstBit\n"+scaffoldSseq[gapStart-2000:gapStart]+"\n")
+				#			bitToJoin.close()
+				#			bitToJoin = open(outputFolder+"/secondBit.fasta","w")
+				#			bitToJoin.write(">secondBit\n"+scaffoldSseq[gapEnd:gapEnd+500]+"\n")
+				#			bitToJoin.close()
+				#			#converting original fastq file into fasta file
+				#			self.logTextEdit.append("Closing gap.... ")
+				#			self.logTextEdit.repaint()
+				#			with open(self.readsFileLineEdit.text(), "r") as fastq, open(outputFolder+"/originalReads.fasta", "w") as fasta:
+				#				for record in SeqIO.parse(fastq, "fastq"):
+				#					SeqIO.write(record, fasta, "fasta")
+				#			os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/lr_gapCloser.py -p " \
+				#				+installationDirectory+" -i "+outputFolder+"/originalReads.fasta"+" -s "+outputFolder+"/firstBit.fasta -e "+ \
+				#					outputFolder+"/secondBit.fasta -x "+outputFolder+" -o "+"gap_"+str(gapStart)+"_"+str(gapEnd))
+				#			os.system("cat "+outputFolder+"/gap_"+str(gapStart)+"_"+str(gapEnd)+" >> " \
+				#				+outputFolder+"/preliminaryContigs.fasta")
 
 
 							
