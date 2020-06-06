@@ -25,7 +25,7 @@ else
 	fi
 fi
 
-if  test -f "./src/conda/bin/conda2"; then
+if  test -f "./src/conda2/bin/conda"; then
 	echo "Miniconda2 already installed"
 else
 cd src
