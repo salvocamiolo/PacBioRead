@@ -542,6 +542,7 @@ class Ui_Form(object):
 
 							
 							os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/preliminaryContigs.fasta")
+							os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput_afterGapClosing "+outputFolder+"/ragout_recepie.rcp")
 							
 
 
