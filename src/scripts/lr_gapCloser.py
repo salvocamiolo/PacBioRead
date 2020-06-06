@@ -11,6 +11,7 @@ parser.add_argument("-i","--readsFile",required=True,help="The long read file in
 parser.add_argument("-s","--firstBit",required=True,help="The fasta file containing the first sequence to start from in closing the gap")
 parser.add_argument("-e","--secondBit",required=True,help="The fasta file containing the second sequence to start from in closing the gap")
 parser.add_argument("-o","--sequenceOutputName",required=True,help="The output file name, the .fasta suffix will be added by the program")
+parser.add_argument("-x","--outputFolder",required=True,help="The output folder where to write the output file")
 args = vars(parser.parse_args())
 installationDirectory = args['installationDirectory']
 
@@ -18,6 +19,7 @@ readFile = args['readFile']
 firstBit = args['firstBit']
 secondBit = args['secondBit']
 sequenceOutputName = args['sequenceOutputName']
+outputFolder = args['outputFolder']
 
 
 
@@ -34,9 +36,15 @@ secondBit = (secondBit.split("/"))[-1]
 
 sequences = {}
 #loading read file in memory
-for seq_record in SeqIO.parse(readFile,"fasta"):
-    if not str(seq_record.id) in sequences:
-        sequences[str(seq_record.id)] = str(seq_record.seq)
+if ".fastq" in readsFile or ".fq" in readsFile: 
+    for seq_record in SeqIO.parse(readFile,"fastq"):
+        if not str(seq_record.id) in sequences:
+            sequences[str(seq_record.id)] = str(seq_record.seq)
+else:
+    for seq_record in SeqIO.parse(readFile,"fasta"):
+        if not str(seq_record.id) in sequences:
+            sequences[str(seq_record.id)] = str(seq_record.seq)
+
 
 #Collect sequences of the two portion to join
 for seq_record in SeqIO.parse(firstBit,"fasta"):
@@ -134,7 +142,7 @@ while gapClosed == False:
 outfile = open("gapclosed.fasta","w")
 outfile.write(">"+sequenceOutputName+"\n"+elongedSequence+"\n")
 outfile.close()
-os.system("cp gapclosed.fasta ../")
+os.system("cp gapclosed.fasta "+outputFolder"/")
 os.chdir("../")
 os.system("rm -rf "+randomFolderName)
 

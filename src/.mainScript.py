@@ -521,6 +521,20 @@ class Ui_Form(object):
 								position+=1
 							gapEnd = position
 							print("Found gap between position %d and %d " %(gapStart, gapEnd))
+							bitToJoin = open(outputFolder+"/firstBit.fasta","w")
+							bitToJoin.write(">firstBit\n"+scaffoldSseq[gapStart-2000:gapStart]+"\n")
+							bitToJoin.close()
+							bitToJoin = open(outputFolder+"/secondBit.fasta","w")
+							bitToJoin.write(">secondBit\n"+scaffoldSseq[gapEnd:gapEnd+500]+"\n")
+							bitToJoin.close()
+							#converting original fastq file into fasta file
+							self.logTextEdit.append("Closing gap.... ")
+							self.logTextEdit.repaint()
+							os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/lr_gapCloser.py -p " \
+								+installationDirectory+" -i "+self.readsFileLineEdit.text()+" -s "+outputFolder+"/firstBit.fasta - e "+ \
+									outputFolder+"/secondBit.fasta -x "+outputFolder+" -o "+"gap_"+str(gapStart)+"_"+str(gapEnd))
+
+
 					
 
 	
