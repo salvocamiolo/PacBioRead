@@ -53,13 +53,12 @@ while True:
         break
     fields = line.split("\t")
     if not fields[6] in scaffoldInfo:
-        scaffoldInfo[fields[6]] = [0,""]
+        scaffoldInfo[fields[6]] = [0,"",""]
     if int(fields[0]) > scaffoldInfo[fields[6]][0]:
-        scaffoldInfo[fields[6]] = [int(fields[0]),fields[7]]
+        scaffoldInfo[fields[6]] = [int(fields[0]),fields[4],fields[7]]
 
 for item in scaffoldInfo:
     print(item,scaffoldInfo[item])
-    
 
 
 
