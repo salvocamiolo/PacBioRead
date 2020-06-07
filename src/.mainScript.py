@@ -485,10 +485,14 @@ class Ui_Form(object):
 						print("Assembling %d reads with cap3" %numReadsToAssemble)
 						self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads with cap3")
 						self.logTextEdit.repaint()
-						os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
+						os.system("art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 10 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+						os.system("fq2fa --merge "+outputFolder+"/simulatedReads1.fq  "+outputFolder+"/simulatedReads2.fq  "+outputFolder+"/allSim.fa")
+						os.system("idba_hybrid --reference "+outputFolder+"/partReference.fasta "+outputFolder+"/allSim.fa --num_threads 8 -o "+outputFolder+"/outputIdba")
+						#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
 						maxScaffoldLength = 0
 						longestContig = ""
-						for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
+						#for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
+						for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
 							if len(str(seq_record.seq)) > maxScaffoldLength:
 								maxScaffoldLength = len(str(seq_record.seq))
 								longestContig = str(seq_record.seq)
