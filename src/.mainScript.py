@@ -446,7 +446,7 @@ class Ui_Form(object):
 					os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/bowtie2Alignment.sam > "+outputFolder+"/bowtie2Mapped.bam")
 					os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/bowtie2Mapped_sorted.bam "+outputFolder+"/bowtie2Mapped.bam") 
 					os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/bowtie2Mapped_sorted.bam")
-					sys.stdin.read(1)
+
 					self.logTextEdit.append("Scanning alignment.... ")
 					self.logTextEdit.repaint()
 					readsToAssemble = set()
@@ -492,7 +492,7 @@ class Ui_Form(object):
 					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 				stage_a.close()
-				os.system("rm "+outputFolder+"/partReference.fasta* "+outputFolder+"/outputBlast.txt "+outputFolder+"/toAssemble*")
+				#os.system("rm "+outputFolder+"/partReference.fasta* "+outputFolder+"/outputBlast.txt "+outputFolder+"/toAssemble*")
 
 				#Assembling all the contigs with cap3 to obtain extended contigs
 				self.logTextEdit.append("\nJoining contigs.... ")
