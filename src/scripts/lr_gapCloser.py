@@ -13,14 +13,14 @@ parser.add_argument("-i","--readsFile",required=True,help="The long read file in
 parser.add_argument("-o","--sequenceOutputName",required=True,help="The output file name, the .fasta suffix will be added by the program")
 parser.add_argument("-x","--outputFolder",required=True,help="The output folder where to write the output file")
 parser.add_argument("-ref","--reference",required=True,help="The reference file used during the de novo assembly")
-parser.add_argument("-s","-scaffolds",required=True,help="Scaffolds obtained during the de novo assembly step")
+parser.add_argument("-s","--scaffolds",required=True,help="Scaffolds obtained during the de novo assembly step")
 
 
 args = vars(parser.parse_args())
 installationDirectory = args['installationDirectory']
 
 readsFile = args['readsFile']
-#firstBit = args['firstBit']
+#firstBit = args['firstBit']o
 #secondBit = args['secondBit']
 sequenceOutputName = args['sequenceOutputName']
 outputFolder = args['outputFolder']
