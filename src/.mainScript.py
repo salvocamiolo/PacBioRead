@@ -471,7 +471,9 @@ class Ui_Form(object):
 							
 							
 							for attempt in range(numAttempt): #Add a number of reads for each 150 interval equal to the number of tried attempts
-								readsToAssemble.add(mappedReads[rd.randint(0,len(mappedReads))])
+								randomNumber = rd.randint(0,len(mappedReads)-1)
+								print(randomNumber)
+								readsToAssemble.add(mappedReads[randomNumber])
 
 		
 							infile.close()
