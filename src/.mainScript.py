@@ -455,7 +455,7 @@ class Ui_Form(object):
 					numAttempt = 1
 					maxScaffoldLength = 0
 					while float(maxScaffoldLength) < float(windowSize)*0.9:
-						for b in range(0,19500,+150):
+						for b in range(0,19500,+150-25*numAttempt):
 							print("Analyzing range %d-%d" %(b,b+150))
 							os.system(installationDirectory+"/src/conda/bin/samtools view "+outputFolder+"/bowtie2Mapped_sorted.bam partReference:"+str(b)+"-"+str(b+150)+" > "+outputFolder+"/localAlignment.sam")
 							infile = open(outputFolder+"/localAlignment.sam")
@@ -469,8 +469,8 @@ class Ui_Form(object):
 							mappedReads.sort(key=len)
 							
 							
-							for attempt in range(numAttempt): #Add a number of reads for each 150 interval equal to the number of tried attempts
-								readsToAssemble.add(mappedReads[-1-attempt])
+							#for attempt in range(numAttempt): #Add a number of reads for each 150 interval equal to the number of tried attempts
+							readsToAssemble.add(mappedReads[-1])
 
 		
 							infile.close()
@@ -496,6 +496,8 @@ class Ui_Form(object):
 						self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
 						self.logTextEdit.repaint()
 						numAttempt+=1
+						if numAttempt == 5:
+							break
 
 
 					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
