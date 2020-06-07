@@ -478,6 +478,9 @@ class Ui_Form(object):
 		
 							infile.close()
 
+						if len(mappedReads) == 0:
+							break
+
 						outfile = open(outputFolder+"/toAssemble.fasta","w")
 						numReadsToAssemble = 0
 						for item in readsToAssemble:
