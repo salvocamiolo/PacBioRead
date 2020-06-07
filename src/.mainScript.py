@@ -490,11 +490,7 @@ class Ui_Form(object):
 						self.logTextEdit.repaint()
 						os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
 						toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
-						nr = 0
-						for seq_record in SeqIO.parse(outputFolder+"/simulatedReads1.fq","fastq"):
-							nr+=1
-							toAssembleFile.write(">Sequence_"+str(nr)+"\n"+str(seq_record.seq)+"\n")
-						toAssembleFile.close()
+						os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
 						os.system("rm -rf "+outputFolder+"/outputIdba/")
 						os.system(installationDirectory+"/src/conda/bin/idba_hybrid --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads 8 -o "+outputFolder+"/outputIdba")
 						#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
