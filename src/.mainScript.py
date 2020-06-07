@@ -273,7 +273,7 @@ class Ui_Form(object):
 
 		#Perform read mapping on reference to extract organisms specific reads
 		if self.readsMappingCheckBox.isChecked() == True:
-			self.readsMappingCheckBox.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
+			self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
 			self.logTextEdit.append("Read mapping on reference started\n")
 			self.logTextEdit.repaint()
 			if os.path.isfile(outputFolder+"/hq.fasta")==True:
@@ -293,7 +293,7 @@ class Ui_Form(object):
 				os.system("rm "+outputFolder+"/temp.fasta")
 				self.logTextEdit.append("\nRead mapping on reference finished\n")
 				self.logTextEdit.repaint()
-				self.readsMappingCheckBox.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
+				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 			else:
 				msg = QMessageBox()
 				msg.setIcon(QMessageBox.Warning)
@@ -379,6 +379,7 @@ class Ui_Form(object):
 			
 		#Perform reference guided de novo assembly
 		if self.readFilteringCheckBox_2.isChecked() == True:
+			self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
 			reads = ""
 			if os.path.isfile(outputFolder+"/hq_specific.fasta") == True:
 				reads = outputFolder+"/hq_specific.fasta"
@@ -516,7 +517,7 @@ class Ui_Form(object):
 					numScaffolds+=1
 				
 
-
+				self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 
 
 
