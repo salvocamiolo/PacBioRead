@@ -103,113 +103,113 @@ for a in range(len(scaffoldPositionOrdered)-1):
 
 
 
-sequences = {}
-#loading read file in memory
+    sequences = {}
+    #loading read file in memory
 
-for seq_record in SeqIO.parse(readsFile,"fasta"):
-    if not str(seq_record.id) in sequences:
-        sequences[str(seq_record.id)] = str(seq_record.seq)
-
-
-#Collect sequences of the two portion to join
-for seq_record in SeqIO.parse("firstBitFile.fasta","fasta"):
-    firstBitSeq = str(seq_record.seq)
-for seq_record in SeqIO.parse("secondBitFile.fasta","fasta"):
-    secondBitSeq = str(seq_record.seq)
+    for seq_record in SeqIO.parse(readsFile,"fasta"):
+        if not str(seq_record.id) in sequences:
+            sequences[str(seq_record.id)] = str(seq_record.seq)
 
 
-#get subsequences to join
-startSeq = firstBitSeq[-500:]
-startSeqFile = open("startSeq.fasta","w")
-startSeqFile.write(">startSeq\n"+startSeq+"\n")
-startSeqFile.close()
-
-endSeq = secondBitSeq[:500]
-endSeqFile = open("endSeq.fasta","w")
-endSeqFile.write(">endSeq\n"+endSeq+"\n")
-endSeqFile.close()
-
-#crearing a blast database out of the reads
-os.system(installationDirectory+"/src/conda/bin/makeblastdb -dbtype nucl -in "+readsFile+ ">null 2>&1")
-os.system(installationDirectory+"/src/conda/bin/makeblastdb -dbtype nucl -in  endSeq.fasta >null 2>&1")
+    #Collect sequences of the two portion to join
+    for seq_record in SeqIO.parse("firstBitFile.fasta","fasta"):
+        firstBitSeq = str(seq_record.seq)
+    for seq_record in SeqIO.parse("secondBitFile.fasta","fasta"):
+        secondBitSeq = str(seq_record.seq)
 
 
-#Searching reads mapping the last portion of the first bit
-gapClosed = False
-elongNum = 0
-elongedSequence = firstBitSeq
-while gapClosed == False:
-    elongNum +=1 
-    os.system(installationDirectory+"/src/conda/bin/blastn -query startSeq.fasta -db "+readsFile+" -outfmt 6 >outputBlast.txt")
-    #Scanning the output file to search best candidates 
-    blastOutputFile = open("outputBlast.txt")
-    bestWalkingSize = 0
-    strandWalking = ""
-    walkingSeq = ""
-    bestQueryEnd = 0
-    bestElongingRead = ""
-    while True: #read the first 10 lines only
-        line = blastOutputFile.readline().rstrip()
-        if not line:
-            break
-        fields = line.split("\t")
-        queryStart = int(fields[6])
-        queryEnd = int(fields[7])
-        subjectStart = int(fields[8])
-        subjectEnd = int(fields[9])
-
-        if (queryEnd - queryStart)> 200:
-            if subjectStart < subjectEnd: #alignment plus   
-                walkingSize = len(sequences[fields[1]]) - subjectEnd
-                if walkingSize > bestWalkingSize:
-                    bestWalkingSize = walkingSize
-                    strandWalking = "+"
-                    walkingSeq = sequences[fields[1]][subjectEnd:]
-                    bestQueryEnd = queryEnd
-                    bestElongingRead = fields[1]
-            else: #The alignment is minus
-                walkingSize = subjectEnd
-                if walkingSize > bestWalkingSize:
-                    bestWalkingSize = walkingSize
-                    strandWalking = "-"
-                    walkingSeq = Seq.reverse_complement(sequences[fields[1]][:subjectEnd])
-                    bestQueryEnd = queryEnd
-                    bestElongingRead = fields[1]
-    
-    #print(elongedSequence[:-500]+"\n\n")
-    #print(startSeq[:bestQueryEnd]+"\n\n")
-    #print(walkingSeq)
-    
-    #print(bestWalkingSize,strandWalking,bestElongingRead)
-    elongedSequence = elongedSequence[:-500]+startSeq[:bestQueryEnd]+walkingSeq
-    #print(elongedSequence)
-    #print(elongedSequence)
-    print("Sequence length is now %d" %len(elongedSequence))
-    startSeq = elongedSequence[-500:]
+    #get subsequences to join
+    startSeq = firstBitSeq[-500:]
     startSeqFile = open("startSeq.fasta","w")
-    startSeqFile.write(">startSeq elongation number "+str(elongNum)+"\n"+startSeq+"\n")
+    startSeqFile.write(">startSeq\n"+startSeq+"\n")
     startSeqFile.close()
-    blastOutputFile.close()
 
-    #Check if the end of the gap has been reached
-    elongedSeqFile = open("elongedSeq.fasta","w")
-    elongedSeqFile.write(">elonged\n"+elongedSequence+"\n")
-    elongedSeqFile.close()
-    os.system(installationDirectory+"/src/conda/bin/blastn -query elongedSeq.fasta -db endSeq.fasta -outfmt 6 >outputBlast.txt")
-    blastOutputFile = open("outputBlast.txt")
-    line = blastOutputFile.readline().rstrip()
-    if not line == "":
-        fields = line.split("\t")
-        queryStart = int(fields[6])
-        queryEnd = int(fields[7])
-        if (queryEnd -queryStart) > 200:
-            gapClosed = True
-outfile = open(sequenceOutputName,"w")
-outfile.write(">"+sequenceOutputName+"\n"+elongedSequence+"\n")
-outfile.close()
-os.system("cp "+sequenceOutputName+" "+outputFolder+"/")
-os.chdir("../")
-os.system("rm -rf "+randomFolderName)
+    endSeq = secondBitSeq[:500]
+    endSeqFile = open("endSeq.fasta","w")
+    endSeqFile.write(">endSeq\n"+endSeq+"\n")
+    endSeqFile.close()
+
+    #crearing a blast database out of the reads
+    os.system(installationDirectory+"/src/conda/bin/makeblastdb -dbtype nucl -in "+readsFile+ ">null 2>&1")
+    os.system(installationDirectory+"/src/conda/bin/makeblastdb -dbtype nucl -in  endSeq.fasta >null 2>&1")
+
+
+    #Searching reads mapping the last portion of the first bit
+    gapClosed = False
+    elongNum = 0
+    elongedSequence = firstBitSeq
+    while gapClosed == False:
+        elongNum +=1 
+        os.system(installationDirectory+"/src/conda/bin/blastn -query startSeq.fasta -db "+readsFile+" -outfmt 6 >outputBlast.txt")
+        #Scanning the output file to search best candidates 
+        blastOutputFile = open("outputBlast.txt")
+        bestWalkingSize = 0
+        strandWalking = ""
+        walkingSeq = ""
+        bestQueryEnd = 0
+        bestElongingRead = ""
+        while True: #read the first 10 lines only
+            line = blastOutputFile.readline().rstrip()
+            if not line:
+                break
+            fields = line.split("\t")
+            queryStart = int(fields[6])
+            queryEnd = int(fields[7])
+            subjectStart = int(fields[8])
+            subjectEnd = int(fields[9])
+
+            if (queryEnd - queryStart)> 200:
+                if subjectStart < subjectEnd: #alignment plus   
+                    walkingSize = len(sequences[fields[1]]) - subjectEnd
+                    if walkingSize > bestWalkingSize:
+                        bestWalkingSize = walkingSize
+                        strandWalking = "+"
+                        walkingSeq = sequences[fields[1]][subjectEnd:]
+                        bestQueryEnd = queryEnd
+                        bestElongingRead = fields[1]
+                else: #The alignment is minus
+                    walkingSize = subjectEnd
+                    if walkingSize > bestWalkingSize:
+                        bestWalkingSize = walkingSize
+                        strandWalking = "-"
+                        walkingSeq = Seq.reverse_complement(sequences[fields[1]][:subjectEnd])
+                        bestQueryEnd = queryEnd
+                        bestElongingRead = fields[1]
+        
+        #print(elongedSequence[:-500]+"\n\n")
+        #print(startSeq[:bestQueryEnd]+"\n\n")
+        #print(walkingSeq)
+        
+        #print(bestWalkingSize,strandWalking,bestElongingRead)
+        elongedSequence = elongedSequence[:-500]+startSeq[:bestQueryEnd]+walkingSeq
+        #print(elongedSequence)
+        #print(elongedSequence)
+        print("Sequence length is now %d" %len(elongedSequence))
+        startSeq = elongedSequence[-500:]
+        startSeqFile = open("startSeq.fasta","w")
+        startSeqFile.write(">startSeq elongation number "+str(elongNum)+"\n"+startSeq+"\n")
+        startSeqFile.close()
+        blastOutputFile.close()
+
+        #Check if the end of the gap has been reached
+        elongedSeqFile = open("elongedSeq.fasta","w")
+        elongedSeqFile.write(">elonged\n"+elongedSequence+"\n")
+        elongedSeqFile.close()
+        os.system(installationDirectory+"/src/conda/bin/blastn -query elongedSeq.fasta -db endSeq.fasta -outfmt 6 >outputBlast.txt")
+        blastOutputFile = open("outputBlast.txt")
+        line = blastOutputFile.readline().rstrip()
+        if not line == "":
+            fields = line.split("\t")
+            queryStart = int(fields[6])
+            queryEnd = int(fields[7])
+            if (queryEnd -queryStart) > 200:
+                gapClosed = True
+    outfile = open(sequenceOutputName,"w")
+    outfile.write(">"+sequenceOutputName+"\n"+elongedSequence+"\n")
+    outfile.close()
+    os.system("cp "+sequenceOutputName+" "+outputFolder+"/")
+    os.chdir("../")
+    os.system("rm -rf "+randomFolderName)
 
 
 
