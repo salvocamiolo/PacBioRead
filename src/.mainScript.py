@@ -468,10 +468,13 @@ class Ui_Form(object):
 								mappedReads.append(fields[9])
 							mappedReads.sort(key=len)
 							
-							
-							for attempt in range(numAttempt): #Add a number of reads for each 150 interval equal to the number of tried attempts
-								readsToAssemble.add(mappedReads[-1-attempt])
+							if len(mappedReads)>0: #No reads mapped the sub-sequence
+								for attempt in range(numAttempt): #Add a number of reads for each 150 interval equal to the number of tried attempts
+									readsToAssemble.add(mappedReads[-1-attempt])
 
+							else:
+								infile.close()
+								break
 		
 							infile.close()
 
@@ -485,9 +488,15 @@ class Ui_Form(object):
 						print("Assembling %d reads with cap3" %numReadsToAssemble)
 						self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads with cap3")
 						self.logTextEdit.repaint()
-						os.system("art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 10 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
-						os.system("fq2fa --merge "+outputFolder+"/simulatedReads1.fq  "+outputFolder+"/simulatedReads2.fq  "+outputFolder+"/allSim.fa")
-						os.system("idba_hybrid --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSim.fa --num_threads 8 -o "+outputFolder+"/outputIdba")
+						os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 10 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+						toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
+						for seq_record in SeqIO.parse(outputFolder+"/simulatedReads1.fq","fastq"):
+							SeqIO.write(seq_record,toAssembleFile,"fasta")
+						for seq_record in SeqIO.parse(outputFolder+"/simulatedReads2.fq","fastq"):
+							SeqIO.write(seq_record,toAssembleFile,"fasta")
+						toAssembleFile.close()
+
+						os.system(installationDirectory+"/src/conda/bin/idba_hybrid --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads 8 -o "+outputFolder+"/outputIdba")
 						#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
 						maxScaffoldLength = 0
 						longestContig = ""
@@ -500,7 +509,7 @@ class Ui_Form(object):
 						self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
 						self.logTextEdit.repaint()
 						numAttempt+=1
-						if numAttempt==5:
+						if numAttempt==10:
 							break
 
 
