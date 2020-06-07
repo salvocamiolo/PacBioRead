@@ -487,7 +487,7 @@ class Ui_Form(object):
 						self.logTextEdit.repaint()
 						os.system("art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 10 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
 						os.system("fq2fa --merge "+outputFolder+"/simulatedReads1.fq  "+outputFolder+"/simulatedReads2.fq  "+outputFolder+"/allSim.fa")
-						os.system("idba_hybrid --reference "+outputFolder+"/partReference.fasta "+outputFolder+"/allSim.fa --num_threads 8 -o "+outputFolder+"/outputIdba")
+						os.system("idba_hybrid --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSim.fa --num_threads 8 -o "+outputFolder+"/outputIdba")
 						#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
 						maxScaffoldLength = 0
 						longestContig = ""
