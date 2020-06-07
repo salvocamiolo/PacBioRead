@@ -8,30 +8,47 @@ import argparse
 parser = argparse.ArgumentParser(description="Join two sequences using long reads and an overlap layaout consensus approach")
 parser.add_argument("-p","--installationDirectory",required=True,help="Full path to the folder containing the executables (e.g. conda)")
 parser.add_argument("-i","--readsFile",required=True,help="The long read file in fasta format")
-parser.add_argument("-s","--firstBit",required=True,help="The fasta file containing the first sequence to start from in closing the gap")
-parser.add_argument("-e","--secondBit",required=True,help="The fasta file containing the second sequence to start from in closing the gap")
+#parser.add_argument("-s","--firstBit",required=True,help="The fasta file containing the first sequence to start from in closing the gap")
+#parser.add_argument("-e","--secondBit",required=True,help="The fasta file containing the second sequence to start from in closing the gap")
 parser.add_argument("-o","--sequenceOutputName",required=True,help="The output file name, the .fasta suffix will be added by the program")
 parser.add_argument("-x","--outputFolder",required=True,help="The output folder where to write the output file")
+parser.add_argument("-ref","--reference",required=True,help="The reference file used during the de novo assembly")
+parser.add_argument("-s","-scaffolds",required=True,help="Scaffolds obtained during the de novo assembly step")
+
+
 args = vars(parser.parse_args())
 installationDirectory = args['installationDirectory']
 
 readsFile = args['readsFile']
-firstBit = args['firstBit']
-secondBit = args['secondBit']
+#firstBit = args['firstBit']
+#secondBit = args['secondBit']
 sequenceOutputName = args['sequenceOutputName']
 outputFolder = args['outputFolder']
-
+reference = args['reference']
+scaffolds = args['scaffolds']
 
 
 randomFolderName = "sc140875_"+str(rd.randint(1,1000))
 os.system("mkdir "+randomFolderName)
 os.chdir(randomFolderName)
 os.system("ln -s "+readsFile)
-os.system("ln -s "+firstBit)
-os.system("ln -s "+secondBit)
+#os.system("ln -s "+firstBit)
+#os.system("ln -s "+secondBit)
+os.system("ln -s "+reference)
+os.system("ln -s "+scaffolds)
 readsFile = (readsFile.split("/"))[-1]
-firstBit = (firstBit.split("/"))[-1]
-secondBit = (secondBit.split("/"))[-1]
+#firstBit = (firstBit.split("/"))[-1]
+#secondBit = (secondBit.split("/"))[-1]
+reference = (reference.split("/"))[-1]
+
+#Mapping the reads
+os.system(installationDirectory+"/src/conda/bin/lastz "+reference+" "+scaffolds+" --format=general > scaffoldMapping.txt")
+
+
+
+
+
+
 
 
 sequences = {}

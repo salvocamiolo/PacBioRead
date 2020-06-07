@@ -536,7 +536,7 @@ class Ui_Form(object):
 				os.system("rm -rf  preliminary* bowtie2* null local*")
 
 				numScaffolds = 0
-				for seq_record in SeqIO.parse(outputFolder+"/stage_a.fasta","fasta"):
+				for seq_record in SeqIO.parse(outputFolder+"/stage_b.fasta","fasta"):
 					numScaffolds+=1
 				
 
