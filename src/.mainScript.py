@@ -466,14 +466,11 @@ class Ui_Form(object):
 									break
 								fields = line.split("\t")
 								mappedReads.append(fields[9])
-							mappedReadsSorted = mappedReads.sort(key=len)
-							print(len(mappedReads))
-							print(len(mappedReadsSorted))
+							mappedReads.sort(key=len)
 							
 							
 							for attempt in range(numAttempt): #Add a number of reads for each 150 interval equal to the number of tried attempts
-								print(-1-attempt)
-								readsToAssemble.add(mappedReadsSorted[-1-attempt])
+								readsToAssemble.add(mappedReads[-1-attempt])
 
 		
 							infile.close()
