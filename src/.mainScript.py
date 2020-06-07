@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import QMessageBox
 
 import os,sys
 from Bio import SeqIO
+import random as rd
 
 
 
@@ -470,7 +471,7 @@ class Ui_Form(object):
 							
 							
 							for attempt in range(numAttempt): #Add a number of reads for each 150 interval equal to the number of tried attempts
-								readsToAssemble.add(mappedReads[-1-attempt])
+								readsToAssemble.add(mappedReads[rd.randint(0,len(mappedReads))])
 
 		
 							infile.close()
