@@ -69,7 +69,7 @@ scaffoldPositionOrdered = sorted(scaffoldPosition)
 print(scaffoldPosition)
 print(scaffoldPositionOrdered)
 print(scaffoldPosition.index(scaffoldPositionOrdered[0]))
-for item in range(len(scaffoldPositionOrdered)-1):
+for a in range(len(scaffoldPositionOrdered)-1):
     print("Joining scaffold "+scaffoldName[scaffoldPositionOrdered[a]]+" and "+scaffoldName[scaffoldPositionOrdered[a-1]])
 
 
