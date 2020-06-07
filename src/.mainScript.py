@@ -493,7 +493,7 @@ class Ui_Form(object):
 						for seq_record in SeqIO.parse(outputFolder+"/simulatedReads1.fq","fastq"):
 							SeqIO.write(seq_record,toAssembleFile,"fasta")
 						toAssembleFile.close()
-						os.system("rm -rf "+outputFolder+"/outputIdba/)
+						os.system("rm -rf "+outputFolder+"/outputIdba/")
 						os.system(installationDirectory+"/src/conda/bin/idba_hybrid --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads 8 -o "+outputFolder+"/outputIdba")
 						#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
 						maxScaffoldLength = 0
