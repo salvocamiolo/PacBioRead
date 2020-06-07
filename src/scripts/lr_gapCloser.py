@@ -57,8 +57,19 @@ while True:
     if int(fields[0]) > scaffoldInfo[fields[6]][0]:
         scaffoldInfo[fields[6]] = [int(fields[0]),fields[4],fields[7]]
 
+scaffoldName = []
+scaffoldPosition = []
+scaffoldOrientation = []
 for item in scaffoldInfo:
     print(item,scaffoldInfo[item])
+    scaffoldName.append(item)
+    scaffoldPosition.append(scaffoldInfo[item][1])
+    scaffoldOrientation.append(scaffoldInfo[item][2])
+scaffoldPositionOrdered = sorted(scaffoldPosition)
+print(scaffoldPosition)
+print(scaffoldPositionOrdered)
+print(scaffoldPosition.index(scaffoldPositionOrdered[0]))
+
 
 
 
