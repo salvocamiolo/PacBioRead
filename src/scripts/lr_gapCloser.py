@@ -41,6 +41,12 @@ readsFile = (readsFile.split("/"))[-1]
 #secondBit = (secondBit.split("/"))[-1]
 reference = (reference.split("/"))[-1]
 
+#Load scaffold sequences in memory
+scaffoldSequences = {}
+for seq_record in SeqIO.parse(scaffolds,"fasta"):
+    if not str(seq_record.id) in scaffoldSequences:
+        scaffoldSequences[str(seq_record.id)] = str(seq_record.seq)
+
 #Mapping the reads
 os.system(installationDirectory+"/src/conda/bin/lastz "+reference+" "+scaffolds+" --format=general > scaffoldMapping.txt")
 #Getting position and strand for best alignment
@@ -72,7 +78,24 @@ print(scaffoldPosition.index(scaffoldPositionOrdered[0]))
 for a in range(len(scaffoldPositionOrdered)-1):
     print("Joining scaffold "+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+" and "+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a+1])])
 
+    firstScaffoldToJoin = scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]
+    secondScaffoldToJoin = scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a+1])]
+    firstScaffoldOrientation = scaffoldOrientation[scaffoldPosition.index(scaffoldPositionOrdered[a])]
+    secondScaffoldOrientation = scaffoldOrientation[scaffoldPosition.index(scaffoldPositionOrdered[a+1])]
+    firstBitFile = open("firstBitFile.fasta","w")
+    if firstScaffoldOrientation == "+":
+        firstBitFile.write(">firstBit\n"+scaffoldSequences[firstScaffoldToJoin]+"\n")
+    else:
+        firstBitFile.write(">firstBit\n"+Seq.reverse_complement(scaffoldSequences[firstScaffoldToJoin])+"\n")
+    firstBitFile.close()
 
+    secondBitFile = open("secondBitFile.fasta","w")
+    if secondScaffoldOrientation == "+":
+        secondBitFile.write(">firstBit\n"+scaffoldSequences[secondScaffoldToJoin]+"\n")
+    else:
+        secondBitFile.write(">firstBit\n"+Seq.reverse_complement(scaffoldSequences[secondScaffoldToJoin])+"\n")
+    secondBitFile.close()
+    
 
 
 
@@ -89,9 +112,9 @@ for seq_record in SeqIO.parse(readsFile,"fasta"):
 
 
 #Collect sequences of the two portion to join
-for seq_record in SeqIO.parse(firstBit,"fasta"):
+for seq_record in SeqIO.parse("firstBitFile.fasta","fasta"):
     firstBitSeq = str(seq_record.seq)
-for seq_record in SeqIO.parse(secondBit,"fasta"):
+for seq_record in SeqIO.parse("secondBitFile.fasta","fasta"):
     secondBitSeq = str(seq_record.seq)
 
 
