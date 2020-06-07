@@ -55,7 +55,7 @@ while True:
     if not fields[6] in scaffoldInfo:
         scaffoldInfo[fields[6]] = [0,"",""]
     if int(fields[0]) > scaffoldInfo[fields[6]][0]:
-        scaffoldInfo[fields[6]] = [int(fields[0]),fields[4],fields[7]]
+        scaffoldInfo[fields[6]] = [int(fields[0]),int(fields[4]),fields[7]]
 
 scaffoldName = []
 scaffoldPosition = []
