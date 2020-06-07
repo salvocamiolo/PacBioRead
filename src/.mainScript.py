@@ -488,14 +488,12 @@ class Ui_Form(object):
 						print("Assembling %d reads with cap3" %numReadsToAssemble)
 						self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads with cap3")
 						self.logTextEdit.repaint()
-						os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 10 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+						os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
 						toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
 						for seq_record in SeqIO.parse(outputFolder+"/simulatedReads1.fq","fastq"):
 							SeqIO.write(seq_record,toAssembleFile,"fasta")
-						for seq_record in SeqIO.parse(outputFolder+"/simulatedReads2.fq","fastq"):
-							SeqIO.write(seq_record,toAssembleFile,"fasta")
 						toAssembleFile.close()
-
+						os.system("rm -rf "+outputFolder+"/outputIdba/)
 						os.system(installationDirectory+"/src/conda/bin/idba_hybrid --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads 8 -o "+outputFolder+"/outputIdba")
 						#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
 						maxScaffoldLength = 0
