@@ -453,6 +453,7 @@ class Ui_Form(object):
 					self.logTextEdit.repaint()
 					readsToAssemble = set()
 					numAttempt = 1
+					maxScaffoldLength = 0
 					while float(maxScaffoldLength) < float(windowSize)*0.9:
 						for b in range(0,19500,+150):
 							print("Analyzing range %d-%d" %(b,b+150))
