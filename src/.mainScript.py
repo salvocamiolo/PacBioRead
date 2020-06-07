@@ -420,7 +420,9 @@ class Ui_Form(object):
 					refSeq = str(seq_record.seq)
 
 				stage_a = open(outputFolder+"/preliminaryContigs.fasta","w")
-				for a in range(0,len(refSeq),+windowStep):
+				
+				#for a in range(0,len(refSeq),+windowStep):
+				for a in range(1):
 					endPos = a+windowSize
 					if endPos>len(refSeq):
 						endPos=len(refSeq)
