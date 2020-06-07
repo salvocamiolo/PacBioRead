@@ -70,7 +70,7 @@ print(scaffoldPosition)
 print(scaffoldPositionOrdered)
 print(scaffoldPosition.index(scaffoldPositionOrdered[0]))
 for a in range(len(scaffoldPositionOrdered)-1):
-    print("Joining scaffold "+scaffoldName[scaffoldPositionOrdered[a]]+" and "+scaffoldName[scaffoldPositionOrdered[a+1]])
+    print("Joining scaffold "+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+" and "+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a+1])])
 
 
 
