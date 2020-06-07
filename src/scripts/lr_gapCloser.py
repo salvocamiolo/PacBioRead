@@ -43,7 +43,23 @@ reference = (reference.split("/"))[-1]
 
 #Mapping the reads
 os.system(installationDirectory+"/src/conda/bin/lastz "+reference+" "+scaffolds+" --format=general > scaffoldMapping.txt")
+#Getting position and strand for best alignment
+infile = open("scaffoldMapping.txt")
+infile.readline().rstrip()
+scaffoldInfo = {}
+while True:
+    line = infile.readline().rstrip()
+    if not line:
+        break
+    fields = line.split("\t")
+    if not fields[6] in scaffoldInfo:
+        scaffoldInfo[fields[6]] = [0,""]
+    if int(fields[0]) > scaffoldInfo[fields[6]][0]:
+        scaffoldInfo[fields[6]] = [int(fields[0]),fields[7]]
 
+for item in scaffoldInfo:
+    print(item,scaffoldInfo[item])
+    
 
 
 
