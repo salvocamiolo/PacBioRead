@@ -91,9 +91,9 @@ for a in range(len(scaffoldPositionOrdered)-1):
 
     secondBitFile = open("secondBitFile.fasta","w")
     if secondScaffoldOrientation == "+":
-        secondBitFile.write(">firstBit\n"+scaffoldSequences[secondScaffoldToJoin]+"\n")
+        secondBitFile.write(">secondBit\n"+scaffoldSequences[secondScaffoldToJoin]+"\n")
     else:
-        secondBitFile.write(">firstBit\n"+Seq.reverse_complement(scaffoldSequences[secondScaffoldToJoin])+"\n")
+        secondBitFile.write(">secondBit\n"+Seq.reverse_complement(scaffoldSequences[secondScaffoldToJoin])+"\n")
     secondBitFile.close()
     
 
@@ -207,9 +207,11 @@ for a in range(len(scaffoldPositionOrdered)-1):
     outfile = open(sequenceOutputName,"w")
     outfile.write(">"+sequenceOutputName+"\n"+elongedSequence+"\n")
     outfile.close()
-    os.system("cp "+sequenceOutputName+" "+outputFolder+"/")
-    os.chdir("../")
-    os.system("rm -rf "+randomFolderName)
+    print("Finito")
+    sys.stdin.read(1)
+os.system("cp "+sequenceOutputName+" "+outputFolder+"/")
+os.chdir("../")
+os.system("rm -rf "+randomFolderName)
 
 
 
