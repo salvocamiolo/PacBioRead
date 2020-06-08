@@ -207,7 +207,7 @@ for a in range(len(scaffoldPositionOrdered)-1):
                 gapClosed = True
     
     outfile.write(">"+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+"_elonged\n"+elongedSequence+"\n")
-
+outfile.write(">lastContig\n"+secondBitSeq+"\n")
 outfile.close()    
 os.system("cp "+sequenceOutputName+" "+outputFolder+"/")
 os.chdir("../")
