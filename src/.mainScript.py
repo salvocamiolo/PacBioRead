@@ -546,7 +546,7 @@ class Ui_Form(object):
 					self.logTextEdit.append("Attempting closure of "+str(numScaffolds-1)+" gaps")
 					self.logTextEdit.repaint()
 					os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/lr_gapCloser.py -s " \
-						+outputFolder+"/stage_b.fasta -r "+self.referenceLineEdit.txt()+" -p "+installationDirectory+" -i " \
+						+outputFolder+"/stage_b.fasta -r "+self.referenceLineEdit.text()+" -p "+installationDirectory+" -i " \
 							+outputFolder+"/originalReads.fasta -o elongedScaffolds -x "+outputFolder)  
 
 					self.logTextEdit.append("Assembling extended scaffolds....")
