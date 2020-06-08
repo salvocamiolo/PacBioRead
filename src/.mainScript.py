@@ -225,8 +225,10 @@ class Ui_Form(object):
 			msg.exec_()
 			return
 
-		#Create project folder if it does not exist
+		#Convert the input fastq file in fast format
 		outputFolder = self.projectFolderLineEdit.text()
+		os.system(installationDirectory+"/src/conda/bin/fq2fa "+self.readsFileLineEdit.text()+" "+outputFolder+'/originalReads.fasta')
+
 
 		# Perform HQ read fragmentaiton
 		if self.hqFragmentationCheckBox.isChecked() == True:
@@ -539,7 +541,24 @@ class Ui_Form(object):
 				for seq_record in SeqIO.parse(outputFolder+"/stage_b.fasta","fasta"):
 					numScaffolds+=1
 				
+				if numScaffolds>1:
+					self.logTextEdit.append("Assembled genome is fragmented.")
+					self.logTextEdit.append("Attempting closure of "+str(numScaffolds-1)+" gaps")
+					self.logTextEdit.repaint()
+					os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/lr_gapCloser.py -s " \
+						+outputFolder+"/stage_b.fasta -r "+self.referenceLineEdit.txt()+" -p "+installationDirectory+" -i " \
+							+outputFolder+"/originalReads.fasta -o elongedScaffolds -x "+outputFolder)  
 
+					self.logTextEdit.append("Assembling extended scaffolds....")
+					self.logTextEdit.repaint()
+					os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/elongedScaffolds")
+
+
+				numScaffolds = 0
+				for seq_record in SeqIO.parse(outputFolder+"/elongedScaffolds.cap.contigs","fasta"):
+					numScaffolds+=1
+				self.logTextEdit.append("The assembly is not composed of "+str(numScaffolds)+" scaffolds")
+				self.logTextEdit.repaint()
 				self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 
 
