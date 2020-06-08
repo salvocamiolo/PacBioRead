@@ -75,6 +75,7 @@ scaffoldPositionOrdered = sorted(scaffoldPosition)
 print(scaffoldPosition)
 print(scaffoldPositionOrdered)
 print(scaffoldPosition.index(scaffoldPositionOrdered[0]))
+outfile = open(sequenceOutputName,"w")
 for a in range(len(scaffoldPositionOrdered)-1):
     print("Joining scaffold "+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+" and "+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a+1])])
 
@@ -204,11 +205,9 @@ for a in range(len(scaffoldPositionOrdered)-1):
             queryEnd = int(fields[7])
             if (queryEnd -queryStart) > 200:
                 gapClosed = True
-    outfile = open(sequenceOutputName,"w")
-    outfile.write(">"+sequenceOutputName+"\n"+elongedSequence+"\n")
+    
+    outfile.write(">"+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+"_elonged\n"+elongedSequence+"\n")
     outfile.close()
-    print("Finito")
-    sys.stdin.read(1)
 os.system("cp "+sequenceOutputName+" "+outputFolder+"/")
 os.chdir("../")
 os.system("rm -rf "+randomFolderName)
