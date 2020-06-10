@@ -96,11 +96,18 @@ for a in range(len(orderedContigs)-1):
             elongingSequence = elongingSequence[:queryEnd]+contigsSeq[orderedContigs[a+1]][subjectEnd:]
         else:
             print("Too short overlap")
+            print(str(queryEnd - queryStart))
+            numElongedSequences +=1
+            outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
+            elongingSequence = ""
+
+
         
         print("elonged sequence has length"+str(len(elongingSequence)))
         sys.stdin.read(1)
 
-
+numElongedSequences +=1
+outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
 
 
 
