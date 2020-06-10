@@ -94,10 +94,10 @@ for a in range(len(orderedContigs)-1):
         queryEnd = int(fields[7])
         subjectStart = int(fields[8])
         subjectEnd = int(fields[9])
-        if queryEnd - queryStart >500:
+        if queryEnd - queryStart >500 and float(queryEnd)>0.95*len(elongingSequence):
             elongingSequence = elongingSequence[:queryEnd]+contigsSeq[orderedContigs[a+1]][subjectEnd:]
         else:
-            print("Too short overlap")
+            print("Too short overlap or wrong overlap")
             print(str(queryEnd - queryStart))
             numElongedSequences +=1
             outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
