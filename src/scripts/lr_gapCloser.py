@@ -222,9 +222,9 @@ for a in range(len(scaffoldPositionOrdered)-1):
             if (queryEnd -queryStart) > 200:
                 gapClosed = True
                 joinedScaffold = elongedSequence[:queryEnd]+secondBitSeq[subjectEnd:]
-                print(joinedScaffold)
-                print("Finito")
-                sys.stdin.read(1)
+                #print(joinedScaffold)
+                #print("Finito")
+                #sys.stdin.read(1)
 
     
     #outfile.write(">"+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+"_elonged\n"+elongedSequence+"\n")
