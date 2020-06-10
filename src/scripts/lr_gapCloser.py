@@ -83,23 +83,25 @@ outfile = open(sequenceOutputName,"w")
 joinedScaffold = ""
 for a in range(len(scaffoldPositionOrdered)-1):
     print("Joining scaffold "+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+" and "+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a+1])])
-
+    
+    #Load the first scaffold to join. If the previous pair was joinen, then use the previous joining as first scaffold
+    firstBitFile = open("firstBitFile.fasta","w")
     if joinedScaffold == "":
         firstScaffoldToJoin = scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]
         firstScaffoldOrientation = scaffoldOrientation[scaffoldPosition.index(scaffoldPositionOrdered[a])]
+        if firstScaffoldOrientation == "+":
+            firstBitFile.write(">firstBit\n"+scaffoldSequences[firstScaffoldToJoin]+"\n")
+        else:
+            firstBitFile.write(">firstBit\n"+Seq.reverse_complement(scaffoldSequences[firstScaffoldToJoin])+"\n")
+        firstBitFile.close()
     else:
-        firstScaffoldToJoin = joinedScaffold
-        firstScaffoldOrientation = "+"
+        firstBitFile.write(">firstBit\n"+joinedScaffold+"\n")
 
     
+
+
     secondScaffoldToJoin = scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a+1])]
     secondScaffoldOrientation = scaffoldOrientation[scaffoldPosition.index(scaffoldPositionOrdered[a+1])]
-    firstBitFile = open("firstBitFile.fasta","w")
-    if firstScaffoldOrientation == "+":
-        firstBitFile.write(">firstBit\n"+scaffoldSequences[firstScaffoldToJoin]+"\n")
-    else:
-        firstBitFile.write(">firstBit\n"+Seq.reverse_complement(scaffoldSequences[firstScaffoldToJoin])+"\n")
-    firstBitFile.close()
 
     secondBitFile = open("secondBitFile.fasta","w")
     if secondScaffoldOrientation == "+":
@@ -219,8 +221,6 @@ for a in range(len(scaffoldPositionOrdered)-1):
 
             if (queryEnd -queryStart) > 200:
                 gapClosed = True
-                print("Chiuso")
-                sys.stdin.read(1)
                 joinedScaffold = elongedSequence[:queryEnd]+secondBitSeq[subjectEnd:]
 
     
