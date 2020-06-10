@@ -469,7 +469,7 @@ class Ui_Form(object):
 								break
 							tfields = tline.split("\t")
 							if int(tfields[7]) >b and int(tfields[7]) <(b+150):
-								readsToAssemble.add(fields[0])
+								readsToAssemble.add(tfields[0])
 								break
 						tfile.close()
 
