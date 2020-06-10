@@ -82,6 +82,7 @@ for a in range(len(orderedContigs)-1):
 
     blastOutputFile = open("outputBlast.txt")
     line = blastOutputFile.readline().rstrip()
+    print(line)
     if not line:
         numElongedSequences +=1
         outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
