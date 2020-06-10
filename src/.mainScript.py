@@ -450,7 +450,8 @@ class Ui_Form(object):
 					os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/bowtie2Alignment.sam > "+outputFolder+"/bowtie2Mapped.bam")
 					os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/bowtie2Mapped_sorted.bam "+outputFolder+"/bowtie2Mapped.bam") 
 					os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/bowtie2Mapped_sorted.bam")
-
+					print("Mi fermo")
+					sys.stdin.read(1)
 					self.logTextEdit.append("Scanning alignment.... ")
 					self.logTextEdit.repaint()
 					readsToAssemble = set()
