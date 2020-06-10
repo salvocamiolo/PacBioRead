@@ -454,20 +454,20 @@ class Ui_Form(object):
 					numAttempt = 1
 					maxScaffoldLength = 0
 
-					while float(maxScaffoldLength) < float(windowSize)*0.9:
-						for b in range(0,19500,+150):
-							print("Analyzing range %d-%d" %(b,b+150))
-							tfile = open(outputFolder+"/outputMinimap_filtered")
-							refPos = -1
-							while True:
-								tline = tfile.readline().rstrip()
-								if not tline:
-									break
-								tfields = tline.split("\t")
-								if int(tfields[7]) >b and int(tfields[7]) <(b+150):
-									readsToAssemble.add(fields[0])
-									break
-							tfile.close()
+					
+					for b in range(0,19500,+150):
+						print("Analyzing range %d-%d" %(b,b+150))
+						tfile = open(outputFolder+"/outputMinimap_filtered")
+						refPos = -1
+						while True:
+							tline = tfile.readline().rstrip()
+							if not tline:
+								break
+							tfields = tline.split("\t")
+							if int(tfields[7]) >b and int(tfields[7]) <(b+150):
+								readsToAssemble.add(fields[0])
+								break
+						tfile.close()
 
 					outfile = open(outputFolder+"/toAssemble.fasta","w")
 					numReadsToAssemble = 0
