@@ -8,7 +8,7 @@ import argparse
 parser = argparse.ArgumentParser(description="Join contiguous contigs together")
 parser.add_argument("-p","--installationDirectory",required=True,help="Full path to the folder containing the executables (e.g. conda)")
 parser.add_argument("-c","--contigs",required=True,help="Scaffolds obtained during the de novo assembly step")
-parser.add_argument("-ref","--reference",required=True,help="The reference file used during the de novo assembly")
+parser.add_argument("-r","--reference",required=True,help="The reference file used during the de novo assembly")
 
 args = vars(parser.parse_args())
 installationDirectory = args['installationDirectory']
@@ -19,7 +19,7 @@ reference = args['reference']
 
 
 #Mapping the reads
-os.system(installationDirectory+"/src/conda/bin/lastz "+reference+" "+scaffolds+" --format=general > scaffoldMapping.txt")
+os.system(installationDirectory+"/src/conda/bin/lastz "+reference+" "+contigs+" --format=general > scaffoldMapping.txt")
 #Getting position and strand for best alignment
 infile = open("scaffoldMapping.txt")
 infile.readline().rstrip()
