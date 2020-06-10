@@ -444,6 +444,59 @@ class Ui_Form(object):
 						for record in SeqIO.parse(fasta, "fasta"):
 							record.letter_annotations["phred_quality"] = [40] * len(record)
 							SeqIO.write(record, fastq, "fastq")
+
+
+					os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/partReference.fasta "+outputFolder+"/"+reads+".fastq > outputMinimap")
+					os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+					self.logTextEdit.append("Scanning alignment.... ")
+					self.logTextEdit.repaint()
+					readsToAssemble = set()
+					numAttempt = 1
+					maxScaffoldLength = 0
+
+					while float(maxScaffoldLength) < float(windowSize)*0.9:
+						for b in range(0,19500,+150):
+							print("Analyzing range %d-%d" %(b,b+150))
+							tfile = open(outputFolder+"/outputMinimap_filtered")
+							refPos = -1
+							while True:
+								tline = tfile.readline().rstrip()
+								if not tline:
+									break
+								tfields = tline.split("\t")
+								if int(tfields[7]) >b and int(tfields[7]) <(b+150):
+									readsToAssemble.add(fields[0])
+									break
+							tfile.close()
+
+					outfile = open(outputFolder+"/toAssemble.fasta","w")
+					numReadsToAssemble = 0
+					for item in readsToAssemble:
+						if not item == '':
+							numReadsToAssemble+=1
+							outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+item+"\n")
+					outfile.close()
+
+					print("Assembling %d reads with cap3" %numReadsToAssemble)
+					self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads with cap3")
+					self.logTextEdit.repaint()
+					os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
+
+					maxScaffoldLength = 0
+					longestContig = ""
+					
+					for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
+						if len(str(seq_record.seq)) > maxScaffoldLength:
+							maxScaffoldLength = len(str(seq_record.seq))
+							longestContig = str(seq_record.seq)
+
+					self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
+					self.logTextEdit.repaint()
+					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
+
+""" 
+
+
 					os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+reference+" "+outputFolder+"/bowtie2Ref")
 					#os.system(installationDirectory+"/src/conda/bin/bowtie2 --very-sensitive-local -U "+self.readsFileLineEdit.text()+" -x "+outputFolder+"/bowtie2Ref -S "+outputFolder+"/bowtie2Alignment.sam -p 8") #To add num threads
 					os.system(installationDirectory+"/src/conda/bin/bowtie2 --end-to-end --very-sensitive-local -U "+reads+".fastq"+" -x "+outputFolder+"/bowtie2Ref -S "+outputFolder+"/bowtie2Alignment.sam -p 8") #To add num threads
@@ -490,7 +543,7 @@ class Ui_Form(object):
 							if not item == '':
 								numReadsToAssemble+=1
 								outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+item+"\n")
-						outfile.close()
+						outfile.close() 
 						print("Assembling %d reads with cap3" %numReadsToAssemble)
 						self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads with cap3")
 						self.logTextEdit.repaint()
@@ -525,7 +578,7 @@ class Ui_Form(object):
 						self.logTextEdit.repaint()
 
 
-					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
+					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")"""
 
 				stage_a.close()
 				#os.system("rm "+outputFolder+"/partReference.fasta* "+outputFolder+"/outputBlast.txt "+outputFolder+"/toAssemble*")
