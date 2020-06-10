@@ -447,20 +447,19 @@ class Ui_Form(object):
 
 
 					os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/partReference.fasta "+reads+".fastq > "+outputFolder+"/outputMinimap")
-					print("Mi fermo1")
-					sys.stdin.read(1)
+
 					os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
-					print("Mi fermo2")
-					sys.stdin.read(1)
+
 					self.logTextEdit.append("Scanning alignment.... ")
 					self.logTextEdit.repaint()
 					readsToAssemble = set()
 					numAttempt = 0
 					maxScaffoldLength = 0
 
-					tfile = open(outputFolder+"/outputMinimap_filtered")
+					
 					while float(maxScaffoldLength) < float(windowSize)*0.9:
 						numAttempt +=1
+						tfile = open(outputFolder+"/outputMinimap_filtered")
 						for b in range(0,19500,+150):
 							print("Analyzing range %d-%d" %(b,b+150))
 							
@@ -476,7 +475,7 @@ class Ui_Form(object):
 									collectedReads+=1
 									if collectedReads == numAttempt:
 										break
-							tfile.close()
+						tfile.close()
 
 						outfile = open(outputFolder+"/toAssemble.fasta","w")
 						numReadsToAssemble = 0
