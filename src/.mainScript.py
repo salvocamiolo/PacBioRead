@@ -422,6 +422,11 @@ class Ui_Form(object):
 					refSeq = str(seq_record.seq)
 
 				stage_a = open(outputFolder+"/preliminaryContigs.fasta","w")
+
+				with open(reads, "r") as fasta, open(reads+".fastq", "w") as fastq:
+					for record in SeqIO.parse(fasta, "fasta"):
+						record.letter_annotations["phred_quality"] = [40] * len(record)
+						SeqIO.write(record, fastq, "fastq")
 				
 				for a in range(0,len(refSeq),+windowStep):
 				#for a in range(1):
@@ -440,10 +445,7 @@ class Ui_Form(object):
 					self.logTextEdit.append("Aligning reads.... ")
 					self.logTextEdit.repaint()
 
-					with open(reads, "r") as fasta, open(reads+".fastq", "w") as fastq:
-						for record in SeqIO.parse(fasta, "fasta"):
-							record.letter_annotations["phred_quality"] = [40] * len(record)
-							SeqIO.write(record, fastq, "fastq")
+					
 
 
 					os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/partReference.fasta "+reads+".fastq > "+outputFolder+"/outputMinimap")
@@ -477,7 +479,8 @@ class Ui_Form(object):
 									if collectedReads == numAttempt:
 										break
 						tfile.close()
-
+						print("Mi fermo")
+						sys.stdin.read(1)
 						outfile = open(outputFolder+"/toAssemble.fasta","w")
 						numReadsToAssemble = 0
 						for item in readsToAssemble:
