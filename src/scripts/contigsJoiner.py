@@ -52,6 +52,7 @@ while True:
     title = infile.readline().rstrip()
     if not title:
         break
+    infile.readline().rstrip()
     title = title.replace(">","")
     orderedContigs.append(title)
 
@@ -59,7 +60,7 @@ while True:
 #Join adjacent contigs
 for a in range(len(orderedContigs)-1):
     print("joining "+orderedContigs[a]+" and "+orderedContigs[a+1])
-    
+
 
 
     
