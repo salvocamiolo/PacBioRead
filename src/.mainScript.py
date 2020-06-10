@@ -461,6 +461,8 @@ class Ui_Form(object):
 					
 					while float(maxScaffoldLength) < float(windowSize)*0.9:
 						numAttempt +=1
+						if numAttempt == 5:
+							break
 						
 						for b in range(0,19500,+150):
 							tfile = open(outputFolder+"/outputMinimap_filtered")
@@ -480,8 +482,7 @@ class Ui_Form(object):
 									if collectedReads == numAttempt:
 										break
 						tfile.close()
-						print("Mi fermo")
-						sys.stdin.read(1)
+
 						outfile = open(outputFolder+"/toAssemble.fasta","w")
 						numReadsToAssemble = 0
 						for item in readsToAssemble:
