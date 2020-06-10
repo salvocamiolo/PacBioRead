@@ -513,6 +513,16 @@ class Ui_Form(object):
 						if numAttempt==10:
 							break
 
+					#if the range was not reconstructed completely a scaffolding is attempted with scaffold_builder
+					if float(maxScaffoldLength) < float(windowSize)*0.9:
+						os.system("rm -rf "+outputFolder+"/sb*")
+						os.system("scaffold_builder_v2.py -q "+outputFolder+"/outputIdba/scaffold.fa -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
+						sb_file = open(outputFolder+"/sb_Scaffold.fasta")
+						sb_file.readline()
+						longestContig = sb_file.readline().rstrip()
+						self.logTextEdit.append("Refines scaffold size: "+str(len(longestContig)))
+						self.logTextEdit.repaint()
+
 
 					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
