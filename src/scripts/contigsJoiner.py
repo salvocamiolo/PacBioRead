@@ -87,6 +87,7 @@ for a in range(len(orderedContigs)-1):
         numElongedSequences +=1
         outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
         elongingSequence = ""
+        print("No blast!")
     else:
         fields = line.split("\t")
         queryStart = int(fields[6])
