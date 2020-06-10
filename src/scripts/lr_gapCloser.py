@@ -76,12 +76,23 @@ print(scaffoldPosition)
 print(scaffoldPositionOrdered)
 print(scaffoldPosition.index(scaffoldPositionOrdered[0]))
 outfile = open(sequenceOutputName,"w")
+
+# ***************************************************
+# ********** Starting joining scaffolds *************
+# ***************************************************
+joinedScaffold = ""
 for a in range(len(scaffoldPositionOrdered)-1):
     print("Joining scaffold "+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+" and "+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a+1])])
 
-    firstScaffoldToJoin = scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]
+    if joinedScaffold == "":
+        firstScaffoldToJoin = scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]
+        firstScaffoldOrientation = scaffoldOrientation[scaffoldPosition.index(scaffoldPositionOrdered[a])]
+    else:
+        firstScaffoldToJoin = joinedScaffold
+        firstScaffoldOrientation = "+"
+
+    
     secondScaffoldToJoin = scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a+1])]
-    firstScaffoldOrientation = scaffoldOrientation[scaffoldPosition.index(scaffoldPositionOrdered[a])]
     secondScaffoldOrientation = scaffoldOrientation[scaffoldPosition.index(scaffoldPositionOrdered[a+1])]
     firstBitFile = open("firstBitFile.fasta","w")
     if firstScaffoldOrientation == "+":
@@ -203,14 +214,20 @@ for a in range(len(scaffoldPositionOrdered)-1):
             fields = line.split("\t")
             queryStart = int(fields[6])
             queryEnd = int(fields[7])
+            subjectStart = int(fields[8])
+            subjectEnd = int(fields[9])
+
             if (queryEnd -queryStart) > 200:
                 gapClosed = True
                 print("Chiuso")
                 sys.stdin.read(1)
-                #joinedScaffold = elongedSequence+
+                joinedScaffold = elongedSequence[:queryEnd]+secondBitSeq[subjectEnd:]
+
     
-    outfile.write(">"+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+"_elonged\n"+elongedSequence+"\n")
-outfile.write(">lastContig\n"+secondBitSeq+"\n")
+    #outfile.write(">"+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+"_elonged\n"+elongedSequence+"\n")
+
+#outfile.write(">lastContig\n"+secondBitSeq+"\n")
+outfile.write(">finalScaffold\n"+joinedScaffold+"\n")
 outfile.close()    
 os.system("cp "+sequenceOutputName+" "+outputFolder+"/")
 os.chdir("../")
