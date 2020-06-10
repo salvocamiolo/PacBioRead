@@ -455,47 +455,52 @@ class Ui_Form(object):
 					self.logTextEdit.append("Scanning alignment.... ")
 					self.logTextEdit.repaint()
 					readsToAssemble = set()
-					numAttempt = 1
+					numAttempt = 0
 					maxScaffoldLength = 0
 
 					
-					for b in range(0,19500,+150):
-						print("Analyzing range %d-%d" %(b,b+150))
-						tfile = open(outputFolder+"/outputMinimap_filtered")
-						refPos = -1
-						while True:
-							tline = tfile.readline().rstrip()
-							if not tline:
-								break
-							tfields = tline.split("\t")
-							if int(tfields[7]) >b and int(tfields[7]) <(b+150):
-								readsToAssemble.add(tfields[0])
-								break
-						tfile.close()
+					while float(maxScaffoldLength) < float(windowSize)*0.9:
+						numAttempt +=1
+						for b in range(0,19500,+150):
+							print("Analyzing range %d-%d" %(b,b+150))
+							tfile = open(outputFolder+"/outputMinimap_filtered")
+							refPos = -1
+							collectedReads = 0
+							while True:
+								tline = tfile.readline().rstrip()
+								if not tline:
+									break
+								tfields = tline.split("\t")
+								if int(tfields[7]) >b and int(tfields[7]) <(b+150):
+									readsToAssemble.add(tfields[0])
+									collectedReads+=1
+									if collectedReads == numAttempt:
+										break
+							tfile.close()
 
-					outfile = open(outputFolder+"/toAssemble.fasta","w")
-					numReadsToAssemble = 0
-					for item in readsToAssemble:
-						if not item == '':
-							numReadsToAssemble+=1
-							outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
-					outfile.close()
+						outfile = open(outputFolder+"/toAssemble.fasta","w")
+						numReadsToAssemble = 0
+						for item in readsToAssemble:
+							if not item == '':
+								numReadsToAssemble+=1
+								outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
+						outfile.close()
 
-					print("Assembling %d reads with cap3" %numReadsToAssemble)
-					self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads with cap3")
-					self.logTextEdit.repaint()
-					os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
+						print("Assembling %d reads with cap3" %numReadsToAssemble)
+						self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads with cap3")
+						self.logTextEdit.repaint()
+						os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
 
-					maxScaffoldLength = 0
-					longestContig = ""
-					
-					for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
-						if len(str(seq_record.seq)) > maxScaffoldLength:
-							maxScaffoldLength = len(str(seq_record.seq))
-							longestContig = str(seq_record.seq)
+						maxScaffoldLength = 0
+						longestContig = ""
+						
+						for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta.cap.contigs","fasta"):
+							if len(str(seq_record.seq)) > maxScaffoldLength:
+								maxScaffoldLength = len(str(seq_record.seq))
+								longestContig = str(seq_record.seq)
 
-					self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
-					self.logTextEdit.repaint()
+						self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
+						self.logTextEdit.repaint()
 					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 				stage_a.close()
