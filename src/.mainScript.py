@@ -458,12 +458,12 @@ class Ui_Form(object):
 					numAttempt = 0
 					maxScaffoldLength = 0
 
-					
+					tfile = open(outputFolder+"/outputMinimap_filtered")
 					while float(maxScaffoldLength) < float(windowSize)*0.9:
 						numAttempt +=1
 						for b in range(0,19500,+150):
 							print("Analyzing range %d-%d" %(b,b+150))
-							tfile = open(outputFolder+"/outputMinimap_filtered")
+							
 							refPos = -1
 							collectedReads = 0
 							while True:
