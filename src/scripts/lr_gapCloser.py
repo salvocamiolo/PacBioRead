@@ -234,7 +234,7 @@ outfile.write(">finalScaffold\n"+joinedScaffold+"\n")
 outfile.close()    
 os.system("cp "+sequenceOutputName+" "+outputFolder+"/")
 os.chdir("../")
-os.system("rm -rf "+randomFolderName)
+#os.system("rm -rf "+randomFolderName)
 
 
 
