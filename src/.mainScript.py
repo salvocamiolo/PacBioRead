@@ -472,6 +472,7 @@ class Ui_Form(object):
 								tfields = tline.split("\t")
 								if int(tfields[7]) >b and int(tfields[7]) <(b+150):
 									readsToAssemble.add(tfields[0])
+									print(fields[0])
 									collectedReads+=1
 									if collectedReads == numAttempt:
 										break
