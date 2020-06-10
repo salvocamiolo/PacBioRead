@@ -97,6 +97,7 @@ for a in range(len(orderedContigs)-1):
             print("Too short overlap")
         
         print("elonged sequence has length"+str(len(elongingSequence)))
+        sys.stdin.read(1)
 
 
 
