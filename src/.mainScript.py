@@ -446,7 +446,7 @@ class Ui_Form(object):
 							SeqIO.write(record, fastq, "fastq")
 
 
-					os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/partReference.fasta "+outputFolder+"/"+reads+".fastq > outputMinimap")
+					os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/partReference.fasta "+outputFolder+"/"+reads+".fastq > "+outputFolder+"/outputMinimap")
 					os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 					self.logTextEdit.append("Scanning alignment.... ")
 					self.logTextEdit.repaint()
