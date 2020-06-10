@@ -67,6 +67,7 @@ for a in range(len(orderedContigs)-1):
     if elongingSequence == "":
         startSeqFile.write(">start\n"+contigsSeq[orderedContigs[a]]+"\n")
         startSeq = contigsSeq[orderedContigs[a]]
+        elongingSequence = startSeq
     else:
         startSeqFile.write(">start\n"+elongingSequence+"\n")
         startSeq = elongingSequence
