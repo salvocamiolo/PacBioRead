@@ -205,6 +205,9 @@ for a in range(len(scaffoldPositionOrdered)-1):
             queryEnd = int(fields[7])
             if (queryEnd -queryStart) > 200:
                 gapClosed = True
+                print("Chiuso")
+                sys.stdin.read(1)
+                #joinedScaffold = elongedSequence+
     
     outfile.write(">"+scaffoldName[scaffoldPosition.index(scaffoldPositionOrdered[a])]+"_elonged\n"+elongedSequence+"\n")
 outfile.write(">lastContig\n"+secondBitSeq+"\n")
