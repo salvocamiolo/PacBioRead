@@ -58,8 +58,50 @@ while True:
 
 
 #Join adjacent contigs
+elongingSequence = ""
+numElongedSequences = 0
+outfile = open("stage_c.fasta","w")
 for a in range(len(orderedContigs)-1):
     print("joining "+orderedContigs[a]+" and "+orderedContigs[a+1])
+    startSeqFile = open("startSeq.fasta","w")
+    if elongingSequence == "":
+        startSeqFile.write(">start\n"+contigsSeq[orderedContigs[a]]+"\n")
+        startSeq = contigsSeq[orderedContigs[a]]
+    else:
+        startSeqFile.write(">start\n"+elongingSequence+"\n")
+        startSeq = elongingSequence
+    startSeqFile.close()
+
+    endSeqFile = open("endSeq.fasta","w")
+    endSeqFile.write(">end\n"+contigsSeq[orderedContigs[a+1]]+"\n")
+    endSeqFile.close()
+
+    os.system(installationDirectory+"/src/conda/bin/makeblastdb -dbtype nucl -in  endSeq.fasta >null 2>&1")
+    os.system(installationDirectory+"/src/conda/bin/blastn -query startSeq.fasta -db endSeq.fasta -outfmt 6 >outputBlast.txt")
+
+    blastOutputFile = open("outputBlast.txt")
+    line = blastOutputFile.readline().rstrip()
+    if not line:
+        numElongedSequences +=1
+        outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
+        elongingSequence = ""
+    else:
+        fields = line.split("\t")
+        queryStart = int(fields[6])
+        queryEnd = int(fields[7])
+        subjectStart = int(fields[8])
+        subjectEnd = int(fields[9])
+        if queryEnd - queryStart >500:
+            elongingSequence = elongingSequence[:queryEnd]+contigsSeq[orderedContigs[a+1]][subjectEnd:]
+        else:
+            print("Too short overlap")
+        
+        print("elonged sequence has length"+str(len(elongingSequence)))
+
+
+
+
+
 
 
 
