@@ -447,7 +447,11 @@ class Ui_Form(object):
 
 
 					os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/partReference.fasta "+outputFolder+"/"+reads+".fastq > "+outputFolder+"/outputMinimap")
+					print("Mi fermo1")
+					sys.stdin.read(1)
 					os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+					print("Mi fermo2")
+					sys.stdin.read(1)
 					self.logTextEdit.append("Scanning alignment.... ")
 					self.logTextEdit.repaint()
 					readsToAssemble = set()
