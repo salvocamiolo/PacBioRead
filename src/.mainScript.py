@@ -478,7 +478,7 @@ class Ui_Form(object):
 					for item in readsToAssemble:
 						if not item == '':
 							numReadsToAssemble+=1
-							outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+item+"\n")
+							outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
 					outfile.close()
 
 					print("Assembling %d reads with cap3" %numReadsToAssemble)
