@@ -523,35 +523,7 @@ class Ui_Form(object):
 				self.logTextEdit.repaint()
 				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
 					 -p "+installationDirectory+ " -c "+outputFolder+"/stage_b.fasta -r "+refFile+" -x " + \
-						 outputFolder+" -s "+ reads+" -o stage_c.fasta"
-
-				
-
-
-				
-				
-
-
-
-			
-
-			
-
-			
-
-
-
-
-			
-
-		
-
-
-
-
-
-			
-
+						 outputFolder+" -s "+ reads+" -o stage_c.fasta")
 
 
 	def retranslateUi(self, Form):
