@@ -86,17 +86,22 @@ for a in range(len(orderedContigs)-1):
     #Scanning minimap2 output to search useful reads
     infile = open(outputFolder+"/minimapBit1")
     usefulReads1 = set()
-    alnLen1 = {}
+    aln1_info = {}
     while True:
         line = infile.readline().rstrip()
         if not line:
             break
         fields = line.split("\t")
+        subjectStart = float(fields[7])
         subjectEnd = float(fields[8])
-        if subjectEnd > 0.9*float(fields[6]) and (int(fields[8])-int(fields[7])) >200:
+        queryStart = float(fields[2])
+        queryEnd = float(fields[3])
+        orientation = float(fields[4]) 
+        alignmentLen = subjectEnd-subjectStart
+        if subjectEnd > 0.9*float(fields[6]) and (alignmentLen) >200:
             usefulReads1.add(fields[0])
-            if not fields[0] in alnLen1:
-                alnLen1[fields[0]] = int(fields[8])-int(fields[7])
+            if not fields[0] in aln1_info:
+                aln1_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
     infile.close()
 
         
@@ -104,24 +109,39 @@ for a in range(len(orderedContigs)-1):
     os.system(installationDirectory+"/src/conda/bin/minimap2  endSeq.fasta "+reads+" > "+outputFolder+"/minimapBit2")
     infile = open(outputFolder+"/minimapBit2")
     usefulReads2 = set()
-    alnLen2 = {}
+    aln1_info = {}
     while True:
         line = infile.readline().rstrip()
         if not line:
             break
         fields = line.split("\t")
         subjectStart = float(fields[7])
-        if subjectStart < 5000 and (int(fields[8])-int(fields[7])) >200 :
+        subjectEnd = float(fields[8])
+        queryStart = float(fields[2])
+        queryEnd = float(fields[3])
+        orientation = float(fields[4]) 
+        alignmentLen = subjectEnd-subjectStart
+        if subjectStart < 5000 and (alignmentLen) >200 :
             usefulReads2.add(fields[0])
-            if not fields[0] in alnLen2:
-                alnLen2[fields[0]] = int(fields[8])-int(fields[7])
+            if not fields[0] in aln2_info:
+                aln2_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
+
+
+
     infile.close()
     print(len(usefulReads1))
     print(len(usefulReads2))
     print(len(usefulReads1 & usefulReads2))
 
+    #Get best read candidate
+    bestRead = ""
+    bestAvLen = 0
     for item in (usefulReads1 & usefulReads2):
-        print(item,alnLen1[item],alnLen2[item])
+        avLen = (aln1_info[item][0] + aln2_info[item][0])/2
+        if avLen > bestAvLen:
+            bestAvLen = avLen
+            bestRead = item
+    print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
 
 
     print("mi fermo")
