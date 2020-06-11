@@ -476,7 +476,7 @@ class Ui_Form(object):
 							outputFolder+" -s "+ self.readsFileLineEdit.text()+" -o stage_c.fasta")
 
 		#Align original reads and create consensus
-		if self.readFilteringCheckBox_3.isChecked() == True:
+		#if self.readFilteringCheckBox_3.isChecked() == True:
 
 
 
