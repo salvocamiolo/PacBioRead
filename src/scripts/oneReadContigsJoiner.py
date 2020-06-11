@@ -35,6 +35,17 @@ while True:
         scaffoldInfo[fields[6]] = [int(fields[0]),int(fields[4]),fields[7]]
 
 
+#GEnerating a new fasta file with the contigs in the correct orientation
+contigsSeq = {}
+outfile = open(contigs+"_oriented.fasta","w")
+for seq_record in SeqIO.parse(contigs,"fasta"):
+    if not str(seq_record.id) in contigsSeq:
+        if scaffoldInfo[str(seq_record.id)][2]=="+":    
+            contigsSeq[str(seq_record.id)] = str(seq_record.seq)
+        else:
+            contigsSeq[str(seq_record.id)] = Seq.reverse_complement(str(seq_record.seq))
+            
+
 #Get the contigs names in the righ order
 infile = open(contigs)
 orderedContigs = []
@@ -45,6 +56,9 @@ while True:
     infile.readline().rstrip()
     title = title.replace(">","")
     orderedContigs.append(title)
+
+
+
 
 #Join adjacent contigs
 elongingSequence = ""
