@@ -166,8 +166,8 @@ for a in range(len(orderedContigs)-1):
             Seq.reverse_complement(readSequences[bestRead][aln2_info[bestRead][3]:aln1_info[bestRead][2]]) +\
                 contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][4]:]
 
-    #print(elongingSequence)
-    #print(len(elongingSequence))
+    print(elongingSequence)
+    print(len(elongingSequence))
     if len(usefulReads1 & usefulReads2) == 0: #No reads was found
         numElongedSequences+=1
         outfile.write(">Sequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
