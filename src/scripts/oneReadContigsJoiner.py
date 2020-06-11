@@ -18,6 +18,14 @@ reference = args['reference']
 outputFolder = args['outputFolder']
 reads = args['reads']
 
+#Loading the reads in memory
+readSequences = {}
+for seq_record in SeqIO.parse(reads,"fastq"):
+    if not str(seq_record.id) in readSequences:
+        readSequences[str(seq_record.id)] str(seq_record.seq)
+
+
+
 #Mapping the reads
 os.system(installationDirectory+"/src/conda/bin/lastz "+reference+" "+contigs+" --format=general > scaffoldMapping.txt")
 #Getting position and strand for best alignment
@@ -45,7 +53,7 @@ for seq_record in SeqIO.parse(contigs,"fasta"):
         else:
             contigsSeq[str(seq_record.id)] = Seq.reverse_complement(str(seq_record.seq))
 
-
+outfile.close()
 #Get the contigs names in the righ order
 infile = open(contigs)
 orderedContigs = []
@@ -142,6 +150,28 @@ for a in range(len(orderedContigs)-1):
             bestAvLen = avLen
             bestRead = item
     print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
+    if aln1_info[bestRead][0] == "+" and aln2_info[bestRead][0] == "+":
+        elongingSequence = elongingSequence[:aln1_info[bestRead][5]] + \
+            readSequences[bestRead][aln1_info[bestRead][3]:aln2_info[bestRead][3]] + \
+                contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][5]:]
+    
+        
+        
+    if aln1_info[bestRead][0] == "-" and aln2_info[bestRead][0] == "-":
+        elongingSequence = elongingSequence[:aln1_info[bestRead][5]]+\
+            Seq.reverse_complement(readSequences[bestRead][aln2_info[bestRead][3]:aln1_info[bestRead][2]]) +\
+                contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][4]:]
+
+    print(elongingSequence)
+    print(len(elongingSequence))
+    if len(usefulReads1 & usefulReads2) == 0: #No reads was found
+        numElongedSequences+=1
+        outfile.write(">Sequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
+        elongingSequence = ""
+        
+
+        
+
 
 
     print("mi fermo")
