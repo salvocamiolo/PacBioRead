@@ -150,15 +150,15 @@ for a in range(len(orderedContigs)-1):
             bestAvLen = avLen
             bestRead = item
     print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
-    if aln1_info[bestRead][0] == "+" and aln2_info[bestRead][0] == "+":
+    if aln1_info[bestRead][1] == "+" and aln2_info[bestRead][1] == "+":
         elongingSequence = elongingSequence[:aln1_info[bestRead][5]] + \
             readSequences[bestRead][aln1_info[bestRead][3]:aln2_info[bestRead][3]] + \
                 contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][5]:]
     
         
         
-    if aln1_info[bestRead][0] == "-" and aln2_info[bestRead][0] == "-":
-        print("Lengths")
+    if aln1_info[bestRead][1] == "-" and aln2_info[bestRead][1] == "-":
+        print("Lengths reverse")
         print(len(elongingSequence[:aln1_info[bestRead][5]]))
         print(len(Seq.reverse_complement(readSequences[bestRead][aln2_info[bestRead][3]:aln1_info[bestRead][2]])))
         print(len(contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][4]:]))
