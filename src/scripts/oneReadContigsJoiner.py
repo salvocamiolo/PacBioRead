@@ -86,6 +86,7 @@ for a in range(len(orderedContigs)-1):
     #Scanning minimap2 output to search useful reads
     infile = open(outputFolder+"/minimapBit1")
     usefulReads1 = set()
+    alnLen1 = {}
     while True:
         line = infile.readline().rstrip()
         if not line:
@@ -94,6 +95,8 @@ for a in range(len(orderedContigs)-1):
         subjectEnd = float(fields[8])
         if subjectEnd > 0.9*float(fields[6]):
             usefulReads1.add(fields[0])
+            if not fields[0] in alnLen1:
+                alnLen1[fields[0]] = int(fields[8]-fields[7])
     infile.close()
 
         
@@ -101,6 +104,7 @@ for a in range(len(orderedContigs)-1):
     os.system(installationDirectory+"/src/conda/bin/minimap2  endSeq.fasta "+reads+" > "+outputFolder+"/minimapBit2")
     infile = open(outputFolder+"/minimapBit2")
     usefulReads2 = set()
+    alnLen2 = {}
     while True:
         line = infile.readline().rstrip()
         if not line:
@@ -109,10 +113,15 @@ for a in range(len(orderedContigs)-1):
         subjectStart = float(fields[7])
         if subjectStart < 5000:
             usefulReads2.add(fields[0])
+            if not fields[0] in alnLen2:
+                alnLen2[fields[0]] = int(fields[8]-fields[7])
     infile.close()
     print(len(usefulReads1))
     print(len(usefulReads2))
     print(len(usefulReads1 & usefulReads2))
+
+    for item in (usefulReads1 & usefulReads2):
+        print(item,alnLen1[item],alnLen2[item])
 
 
     print("mi fermo")
