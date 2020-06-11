@@ -212,6 +212,8 @@ for a in range(len(scaffoldPositionOrdered)-1):
         elongedSeqFile.close()
         os.system(installationDirectory+"/src/conda/bin/blastn -query elongedSeq.fasta -db endSeq.fasta -outfmt 6 >outputBlast.txt")
         blastOutputFile = open("outputBlast.txt")
+        print("Mi fermo 2")
+        sys.stdin.read(1)
         line = blastOutputFile.readline().rstrip()
         if not line == "":
             fields = line.split("\t")
