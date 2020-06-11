@@ -102,6 +102,8 @@ for a in range(len(orderedContigs)-1):
             numElongedSequences +=1
             outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
             elongingSequence = ""
+            print("Mi fermo")
+            sys.stdin.read(1)
 
 
         
