@@ -37,10 +37,8 @@ os.system("ln -s "+readsFile)
 os.system("ln -s "+reference)
 os.system("ln -s "+scaffolds)
 readsFile = (readsFile.split("/"))[-1]
-#firstBit = (firstBit.split("/"))[-1]
-#secondBit = (secondBit.split("/"))[-1]
 reference = (reference.split("/"))[-1]
-
+scaffolds = (scaffolds.split("/"))[-1]
 #Load scaffold sequences in memory
 scaffoldSequences = {}
 for seq_record in SeqIO.parse(scaffolds,"fasta"):
