@@ -96,7 +96,7 @@ for a in range(len(orderedContigs)-1):
         if subjectEnd > 0.9*float(fields[6]):
             usefulReads1.add(fields[0])
             if not fields[0] in alnLen1:
-                alnLen1[fields[0]] = int(fields[8]-fields[7])
+                alnLen1[fields[0]] = int(fields[8])-int(fields[7])
     infile.close()
 
         
@@ -114,7 +114,7 @@ for a in range(len(orderedContigs)-1):
         if subjectStart < 5000:
             usefulReads2.add(fields[0])
             if not fields[0] in alnLen2:
-                alnLen2[fields[0]] = int(fields[8]-fields[7])
+                alnLen2[fields[0]] = int(fields[8])-int(fields[7])
     infile.close()
     print(len(usefulReads1))
     print(len(usefulReads2))
