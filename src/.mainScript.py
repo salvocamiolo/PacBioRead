@@ -18,7 +18,7 @@ from Bio import SeqIO
 class Ui_Form(object):
 	def setupUi(self, Form,installationDirectory):
 		Form.setObjectName("Form")
-		Form.resize(846, 536)
+		Form.resize(846, 520)
 		self.label = QtWidgets.QLabel(Form)
 		self.label.setGeometry(QtCore.QRect(10, 10, 101, 16))
 		self.label.setObjectName("label")
@@ -26,10 +26,10 @@ class Ui_Form(object):
 		self.projectFolderLineEdit.setGeometry(QtCore.QRect(10, 30, 361, 21))
 		self.projectFolderLineEdit.setObjectName("projectFolderLineEdit")
 		self.projectFolderButton = QtWidgets.QPushButton(Form)
-		self.projectFolderButton.setGeometry(QtCore.QRect(390, 27, 113, 30))
+		self.projectFolderButton.setGeometry(QtCore.QRect(390, 30, 113, 21))
 		self.projectFolderButton.setObjectName("projectFolderButton")
 		self.readsFileButton = QtWidgets.QPushButton(Form)
-		self.readsFileButton.setGeometry(QtCore.QRect(390, 78, 113, 30))
+		self.readsFileButton.setGeometry(QtCore.QRect(390, 80, 113, 21))
 		self.readsFileButton.setObjectName("readsFileButton")
 		self.label_2 = QtWidgets.QLabel(Form)
 		self.label_2.setGeometry(QtCore.QRect(10, 60, 101, 16))
@@ -38,7 +38,7 @@ class Ui_Form(object):
 		self.readsFileLineEdit.setGeometry(QtCore.QRect(10, 80, 361, 21))
 		self.readsFileLineEdit.setObjectName("readsFileLineEdit")
 		self.referenceButton = QtWidgets.QPushButton(Form)
-		self.referenceButton.setGeometry(QtCore.QRect(390, 127, 113, 30))
+		self.referenceButton.setGeometry(QtCore.QRect(390, 130, 113, 21))
 		self.referenceButton.setObjectName("referenceButton")
 		self.label_3 = QtWidgets.QLabel(Form)
 		self.label_3.setGeometry(QtCore.QRect(10, 110, 101, 16))
@@ -68,10 +68,10 @@ class Ui_Form(object):
 		self.label_14.setGeometry(QtCore.QRect(140, 170, 101, 16))
 		self.label_14.setObjectName("label_14")
 		self.runButton = QtWidgets.QPushButton(Form)
-		self.runButton.setGeometry(QtCore.QRect(600, 490, 113, 32))
+		self.runButton.setGeometry(QtCore.QRect(600, 490, 113, 21))
 		self.runButton.setObjectName("runButton")
 		self.exitButton = QtWidgets.QPushButton(Form)
-		self.exitButton.setGeometry(QtCore.QRect(720, 490, 113, 32))
+		self.exitButton.setGeometry(QtCore.QRect(720, 490, 113, 21))
 		self.exitButton.setObjectName("exitButton")
 		self.label_16 = QtWidgets.QLabel(Form)
 		self.label_16.setGeometry(QtCore.QRect(20, 290, 111, 16))
@@ -80,7 +80,7 @@ class Ui_Form(object):
 		self.logTextEdit.setGeometry(QtCore.QRect(10, 310, 821, 161))
 		self.logTextEdit.setObjectName("logTextEdit")
 		self.qualityStatsButton = QtWidgets.QPushButton(Form)
-		self.qualityStatsButton.setGeometry(QtCore.QRect(136, 247, 111, 30))
+		self.qualityStatsButton.setGeometry(QtCore.QRect(140, 250, 101, 21))
 		self.qualityStatsButton.setObjectName("qualityStatsButton")
 		self.label_17 = QtWidgets.QLabel(Form)
 		self.label_17.setGeometry(QtCore.QRect(540, 10, 111, 16))
@@ -88,7 +88,7 @@ class Ui_Form(object):
 		self.textEdit = QtWidgets.QTextEdit(Form)
 		self.textEdit.setGeometry(QtCore.QRect(540, 30, 291, 241))
 		font = QtGui.QFont()
-		font.setPointSize(10)
+		font.setPointSize(8)
 		self.textEdit.setFont(font)
 		self.textEdit.setObjectName("textEdit")
 
@@ -484,7 +484,6 @@ class Ui_Form(object):
 
 
 
-
 	def retranslateUi(self, Form):
 		_translate = QtCore.QCoreApplication.translate
 		Form.setWindowTitle(_translate("Form", "Form"))
@@ -508,21 +507,21 @@ class Ui_Form(object):
 		self.textEdit.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Original reads</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Number:   --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Average quality:  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;30):  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;20):  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;20):  --</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:13pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Reference homologue</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Number:  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Average quality:  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;30):  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;20):  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;20):  --</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:13pt;\"><br /></p></body></html>"))
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Original reads</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Number:   --</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Average quality:  --</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Bases (Q&gt;30):  --</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Bases (Q&gt;20):  --</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Bases (Q&gt;20):  --</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'.AppleSystemUIFont\'; font-size:10pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Reference homologous</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Number:  --</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Average quality:  --</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Bases (Q&gt;30):  --</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Bases (Q&gt;20):  --</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Bases (Q&gt;20):  --</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'.AppleSystemUIFont\'; font-size:10pt;\"><br /></p></body></html>"))
 
 
 	
