@@ -96,7 +96,7 @@ for a in range(len(orderedContigs)-1):
         subjectEnd = float(fields[8])
         queryStart = float(fields[2])
         queryEnd = float(fields[3])
-        orientation = float(fields[4]) 
+        orientation = fields[4]
         alignmentLen = subjectEnd-subjectStart
         if subjectEnd > 0.9*float(fields[6]) and (alignmentLen) >200:
             usefulReads1.add(fields[0])
@@ -119,7 +119,7 @@ for a in range(len(orderedContigs)-1):
         subjectEnd = float(fields[8])
         queryStart = float(fields[2])
         queryEnd = float(fields[3])
-        orientation = float(fields[4]) 
+        orientation = fields[4]
         alignmentLen = subjectEnd-subjectStart
         if subjectStart < 5000 and (alignmentLen) >200 :
             usefulReads2.add(fields[0])
