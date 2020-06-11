@@ -100,13 +100,13 @@ for a in range(len(orderedContigs)-1):
         if not line:
             break
         fields = line.split("\t")
-        subjectStart = float(fields[7])
-        subjectEnd = float(fields[8])
-        queryStart = float(fields[2])
-        queryEnd = float(fields[3])
+        subjectStart = int(fields[7])
+        subjectEnd = int(fields[8])
+        queryStart = int(fields[2])
+        queryEnd = int(fields[3])
         orientation = fields[4]
         alignmentLen = subjectEnd-subjectStart
-        if subjectEnd > 0.9*float(fields[6]) and (alignmentLen) >200:
+        if float(subjectEnd) > 0.9*float(fields[6]) and (alignmentLen) >200:
             usefulReads1.add(fields[0])
             if not fields[0] in aln1_info:
                 aln1_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
@@ -123,10 +123,10 @@ for a in range(len(orderedContigs)-1):
         if not line:
             break
         fields = line.split("\t")
-        subjectStart = float(fields[7])
-        subjectEnd = float(fields[8])
-        queryStart = float(fields[2])
-        queryEnd = float(fields[3])
+        subjectStart = int(fields[7])
+        subjectEnd = int(fields[8])
+        queryStart = int(fields[2])
+        queryEnd = int(fields[3])
         orientation = fields[4]
         alignmentLen = subjectEnd-subjectStart
         if subjectStart < 5000 and (alignmentLen) >200 :
