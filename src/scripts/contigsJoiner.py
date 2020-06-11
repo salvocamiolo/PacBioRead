@@ -110,10 +110,11 @@ for a in range(len(orderedContigs)-1):
 
         
         print("elonged sequence has length"+str(len(elongingSequence)))
-        sys.stdin.read(1)
+
 
 numElongedSequences +=1
-outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
+if len(elongingSequence)>0:
+    outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
 
 
 

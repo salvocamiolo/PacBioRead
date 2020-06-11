@@ -8,8 +8,10 @@ parser = argparse.ArgumentParser(description="Join contiguous contigs together")
 parser.add_argument("-p","--installationDirectory",required=True,help="Full path to the folder containing the executables (e.g. conda)")
 parser.add_argument("-c","--contigs",required=True,help="Scaffolds obtained during the de novo assembly step")
 parser.add_argument("-r","--reference",required=True,help="The reference file used during the de novo assembly")
-parser.add_argument("-o","--outputFolder",required=True,help="TThe output folder of the produced joined scaffold")
+parser.add_argument("-x","--outputFolder",required=True,help="TThe output folder of the produced joined scaffold")
+parser.add_argument("-o","--outputFfile",required=True,help="TThe output file name")
 parser.add_argument("-s","--reads",required=True,help="TThe PacBio reads to use for closing the gap")
+
 
 args = vars(parser.parse_args())
 installationDirectory = args['installationDirectory']
@@ -17,6 +19,7 @@ contigs = args['contigs']
 reference = args['reference']
 outputFolder = args['outputFolder']
 reads = args['reads']
+outputFfile = args['outputFfile']
 
 #Loading the reads in memory
 readSequences = {}
@@ -71,7 +74,7 @@ while True:
 #Join adjacent contigs
 elongingSequence = ""
 numElongedSequences = 0
-outfile = open(outputFolder+"/test.fasta","w")
+outfile = open(outputFolder+"/"+outputFfile,"w")
 for a in range(len(orderedContigs)-1):
     print("joining "+orderedContigs[a]+" and "+orderedContigs[a+1])
     startSeqFile = open("startSeq.fasta","w")
@@ -166,8 +169,6 @@ for a in range(len(orderedContigs)-1):
             Seq.reverse_complement(readSequences[bestRead][aln2_info[bestRead][3]:aln1_info[bestRead][2]]) +\
                 contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][4]:]
 
-    print(elongingSequence)
-    print(len(elongingSequence))
     if len(usefulReads1 & usefulReads2) == 0: #No reads was found
         numElongedSequences+=1
         outfile.write(">Sequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
