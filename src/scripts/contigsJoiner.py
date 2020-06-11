@@ -78,7 +78,7 @@ for a in range(len(orderedContigs)-1):
     endSeqFile.close()
 
     os.system(installationDirectory+"/src/conda/bin/makeblastdb -dbtype nucl -in  endSeq.fasta >null 2>&1")
-    os.system(installationDirectory+"/src/conda/bin/blastn -query startSeq.fasta -db endSeq.fasta -outfmt 6 >outputBlast.txt")
+    os.system(installationDirectory+"/src/conda/bin/blastn -query startSeq.fasta -db endSeq.fasta -outfmt 6 | awk '$9<$10' >outputBlast.txt")
 
     blastOutputFile = open("outputBlast.txt")
     line = blastOutputFile.readline().rstrip()
@@ -94,6 +94,7 @@ for a in range(len(orderedContigs)-1):
         queryEnd = int(fields[7])
         subjectStart = int(fields[8])
         subjectEnd = int(fields[9])
+        
         if queryEnd - queryStart >500 and float(queryEnd)>0.95*len(elongingSequence):
             elongingSequence = elongingSequence[:queryEnd]+contigsSeq[orderedContigs[a+1]][subjectEnd:]
         else:
