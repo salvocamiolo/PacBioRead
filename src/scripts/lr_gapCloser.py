@@ -198,7 +198,7 @@ for a in range(len(scaffoldPositionOrdered)-1):
         sys.stdin.read(1)
         
         #print(bestWalkingSize,strandWalking,bestElongingRead)
-        elongedSequence = elongedSequence[-2500:-2000]+startSeq[:bestQueryEnd]+walkingSeq
+        elongedSequence = elongedSequence[:-2000]+startSeq[:bestQueryEnd]+walkingSeq
         #print(elongedSequence)
         #print(elongedSequence)
         print("Sequence length is now %d" %len(elongedSequence))
