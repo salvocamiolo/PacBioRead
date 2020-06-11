@@ -516,7 +516,7 @@ class Ui_Form(object):
 				#Assembling all the contigs with cap3 to obtain extended contigs
 				self.logTextEdit.append("\nJoining contigs.... ")
 				self.logTextEdit.repaint()
-				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/stage_a.fasta -r "+refFile+" -p "+installationDirectory)
+				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/stage_a.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
 
 				#Attempt gap closure
 				self.logTextEdit.append("\nAttempting gap closure.... ")
