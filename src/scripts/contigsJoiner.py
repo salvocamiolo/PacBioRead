@@ -9,11 +9,13 @@ parser = argparse.ArgumentParser(description="Join contiguous contigs together")
 parser.add_argument("-p","--installationDirectory",required=True,help="Full path to the folder containing the executables (e.g. conda)")
 parser.add_argument("-c","--contigs",required=True,help="Scaffolds obtained during the de novo assembly step")
 parser.add_argument("-r","--reference",required=True,help="The reference file used during the de novo assembly")
+parser.add_argument("-o","--outputFolder",required=True,help="TThe output folder of the produced joined scaffold")
 
 args = vars(parser.parse_args())
 installationDirectory = args['installationDirectory']
 contigs = args['contigs']
 reference = args['reference']
+outputFolder = args['outputFolder']
 
 
 
@@ -60,7 +62,7 @@ while True:
 #Join adjacent contigs
 elongingSequence = ""
 numElongedSequences = 0
-outfile = open("stage_c.fasta","w")
+outfile = open(outputFolder+"/stage_b.fasta","w")
 for a in range(len(orderedContigs)-1):
     print("joining "+orderedContigs[a]+" and "+orderedContigs[a+1])
     startSeqFile = open("startSeq.fasta","w")
@@ -103,8 +105,7 @@ for a in range(len(orderedContigs)-1):
             numElongedSequences +=1
             outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
             elongingSequence = ""
-            print("Mi fermo")
-            sys.stdin.read(1)
+
 
 
         

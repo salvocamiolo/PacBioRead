@@ -191,6 +191,8 @@ for a in range(len(scaffoldPositionOrdered)-1):
                         bestQueryEnd = queryEnd
                         bestElongingRead = fields[1]
         
+        print("Mi fermo")
+        sys.stdin.read(1)
         #print(elongedSequence[:-500]+"\n\n")
         #print(startSeq[:bestQueryEnd]+"\n\n")
         #print(walkingSeq)

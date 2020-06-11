@@ -421,7 +421,7 @@ class Ui_Form(object):
 				for seq_record in SeqIO.parse(refFile,"fasta"):
 					refSeq = str(seq_record.seq)
 
-				stage_a = open(outputFolder+"/preliminaryContigs.fasta","w")
+				stage_a = open(outputFolder+"/stage_a.fasta","w")
 
 				with open(reads, "r") as fasta, open(reads+".fastq", "w") as fastq:
 					for record in SeqIO.parse(fasta, "fasta"):
@@ -492,7 +492,7 @@ class Ui_Form(object):
 						outfile.close()
 
 						print("Assembling %d reads with cap3" %numReadsToAssemble)
-						self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads with cap3")
+						self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads")
 						self.logTextEdit.repaint()
 						#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
 						os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
@@ -513,94 +513,14 @@ class Ui_Form(object):
 					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 				stage_a.close()
-				#os.system("rm "+outputFolder+"/partReference.fasta* "+outputFolder+"/outputBlast.txt "+outputFolder+"/toAssemble*")
-
 				#Assembling all the contigs with cap3 to obtain extended contigs
 				self.logTextEdit.append("\nJoining contigs.... ")
 				self.logTextEdit.repaint()
-				os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/preliminaryContigs.fasta")
+				os.system(installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/stage_a.fasta -r "+refFile+" -p "+installationDirectory)
 
 				
 				
-				#Scaffolding all the extended contigs in the previous step with ragout
-				#self.logTextEdit.append("\nScaffolding.... ")
-				#self.logTextEdit.repaint()
-				#ragoutRecepie = open(outputFolder+"/ragout_recepie.rcp","w")
-				#ragoutRecepie.write(".references = reference\n.target = scaffolds\n\nreference.fasta = "+refFile+"\nscaffolds.fasta = "+outputFolder+"/preliminaryContigs.fasta.cap.contigs")
-				#ragoutRecepie.close()
-				#os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput "+outputFolder+"/ragout_recepie.rcp")
-				os.system("cp "+outputFolder+"/preliminaryContigs.fasta "+outputFolder+"/stage_a.fasta")
-				os.system("cp "+outputFolder+"/preliminaryContigs.fasta.cap.contigs "+outputFolder+"/stage_b.fasta")
-				os.system("rm -rf  preliminary* bowtie2* null local*")
-
-				numScaffolds = 0
-				for seq_record in SeqIO.parse(outputFolder+"/stage_b.fasta","fasta"):
-					numScaffolds+=1
 				
-				if numScaffolds>1:
-					self.logTextEdit.append("Assembled genome is fragmented.")
-					self.logTextEdit.append("Attempting closure of "+str(numScaffolds-1)+" gaps")
-					self.logTextEdit.repaint()
-					os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/lr_gapCloser.py -s " \
-						+outputFolder+"/stage_b.fasta -r "+self.referenceLineEdit.text()+" -p "+installationDirectory+" -i " \
-							+outputFolder+"/originalReads.fasta -o elongedScaffolds -x "+outputFolder)  
-
-					self.logTextEdit.append("Assembling extended scaffolds....")
-					self.logTextEdit.repaint()
-					os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/elongedScaffolds")
-
-
-				numScaffolds = 0
-				for seq_record in SeqIO.parse(outputFolder+"/elongedScaffolds.cap.contigs","fasta"):
-					numScaffolds+=1
-				self.logTextEdit.append("The assembly is not composed of "+str(numScaffolds)+" scaffolds")
-				self.logTextEdit.repaint()
-				self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-
-
-
-				#Check the present of N and if present close the gaps with lr_gapcloser
-				#for seq_record in SeqIO.parse(outputFolder+"/stage_b.fasta","fasta"):
-				#	scaffoldSseq = str(seq_record.seq)
-				#	position = -1
-				#	while position < len(str(seq_record.seq))-1:
-				#		position+=1
-				#		if scaffoldSseq[position] == "N" or scaffoldSseq[position] == "n":
-				#			gapStart = position
-				#			while scaffoldSseq[position] == "N" or scaffoldSseq[position] == 'n':
-				#				position+=1
-				#			gapEnd = position
-				#			print("Found gap between position %d and %d " %(gapStart, gapEnd))
-				#			bitToJoin = open(outputFolder+"/firstBit.fasta","w")
-				#			bitToJoin.write(">firstBit\n"+scaffoldSseq[gapStart-2000:gapStart]+"\n")
-				#			bitToJoin.close()
-				#			bitToJoin = open(outputFolder+"/secondBit.fasta","w")
-				#			bitToJoin.write(">secondBit\n"+scaffoldSseq[gapEnd:gapEnd+500]+"\n")
-				#			bitToJoin.close()
-				#			#converting original fastq file into fasta file
-				#			self.logTextEdit.append("Closing gap.... ")
-				#			self.logTextEdit.repaint()
-				#			with open(self.readsFileLineEdit.text(), "r") as fastq, open(outputFolder+"/originalReads.fasta", "w") as fasta:
-				#				for record in SeqIO.parse(fastq, "fastq"):
-				#					SeqIO.write(record, fasta, "fasta")
-				#			os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/lr_gapCloser.py -p " \
-				#				+installationDirectory+" -i "+outputFolder+"/originalReads.fasta"+" -s "+outputFolder+"/firstBit.fasta -e "+ \
-				#					outputFolder+"/secondBit.fasta -x "+outputFolder+" -o "+"gap_"+str(gapStart)+"_"+str(gapEnd))
-				#			os.system("cat "+outputFolder+"/gap_"+str(gapStart)+"_"+str(gapEnd)+" >> " \
-				#				+outputFolder+"/preliminaryContigs.fasta")
-
-
-							
-				#			os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/preliminaryContigs.fasta")
-				#			os.system(installationDirectory+"/src/conda2/bin/ragout -o "+outputFolder+"/ragoutOutput_afterGapClosing "+outputFolder+"/ragout_recepie.rcp")
-							
-
-
-					
-
-	
-
-
 
 
 
