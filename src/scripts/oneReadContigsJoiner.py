@@ -93,7 +93,7 @@ for a in range(len(orderedContigs)-1):
             break
         fields = line.split("\t")
         subjectEnd = float(fields[8])
-        if subjectEnd > 0.9*float(fields[6]):
+        if subjectEnd > 0.9*float(fields[6]) and (int(fields[8])-int(fields[7])) >200:
             usefulReads1.add(fields[0])
             if not fields[0] in alnLen1:
                 alnLen1[fields[0]] = int(fields[8])-int(fields[7])
@@ -111,7 +111,7 @@ for a in range(len(orderedContigs)-1):
             break
         fields = line.split("\t")
         subjectStart = float(fields[7])
-        if subjectStart < 5000:
+        if subjectStart < 5000 and (int(fields[8])-int(fields[7])) >200 :
             usefulReads2.add(fields[0])
             if not fields[0] in alnLen2:
                 alnLen2[fields[0]] = int(fields[8])-int(fields[7])
