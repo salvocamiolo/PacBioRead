@@ -83,8 +83,37 @@ for a in range(len(orderedContigs)-1):
     #Mapping the reads on the two scaffolds
     print("Mapping reads on %s" %orderedContigs[a])
     os.system(installationDirectory+"/src/conda/bin/minimap2 startSeq.fasta "+reads+" > "+outputFolder+"/minimapBit1")
+    #Scanning minimap2 output to search useful reads
+    infile = open(outputFolder+"/minimapBit1")
+    usefulReads1 = set()
+    while True:
+        line = infile.readline().rstrip()
+        if not line:
+            break
+        fields = line.split("\t")
+        subjectEnd = float(fields[8])
+        if subjectEnd > 0.9*float(fields[6]):
+            usefulReads1.add(fields[0])
+    infile.close()
+
+        
     print("Mapping reads on %s" %orderedContigs[a+1])
     os.system(installationDirectory+"/src/conda/bin/minimap2  endSeq.fasta "+reads+" > "+outputFolder+"/minimapBit2")
+    infile = open(outputFolder+"/minimapBit2")
+    usefulReads2 = set()
+    while True:
+        line = infile.readline().rstrip()
+        if not line:
+            break
+        fields = line.split("\t")
+        subjectStart = float(fields[7])
+        if subjectStart < 5000:
+            usefulReads2.add(fields[0])
+    infile.close()
+    print(len(usefulReads1))
+    print(len(usefulReads2))
+    print(len(usefulReads1 & usefulReads2))
+
 
     print("mi fermo")
     sys.stdin.read(1)
