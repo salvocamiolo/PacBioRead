@@ -132,12 +132,12 @@ for a in range(len(scaffoldPositionOrdered)-1):
 
 
     #get subsequences to join
-    startSeq = firstBitSeq[-2000:]
+    startSeq = firstBitSeq[-500:]
     startSeqFile = open("startSeq.fasta","w")
     startSeqFile.write(">startSeq\n"+startSeq+"\n")
     startSeqFile.close()
 
-    endSeq = secondBitSeq[:2000]
+    endSeq = secondBitSeq[:500]
     endSeqFile = open("endSeq.fasta","w")
     endSeqFile.write(">endSeq\n"+endSeq+"\n")
     endSeqFile.close()
@@ -189,18 +189,20 @@ for a in range(len(scaffoldPositionOrdered)-1):
                         bestQueryEnd = queryEnd
                         bestElongingRead = fields[1]
         
+        
+        print(elongedSequence[:-500]+"\n\n")
+        print(startSeq[:bestQueryEnd]+"\n\n")
+        print(walkingSeq)
+
         print("Mi fermo")
         sys.stdin.read(1)
-        #print(elongedSequence[:-2000]+"\n\n")
-        #print(startSeq[:bestQueryEnd]+"\n\n")
-        #print(walkingSeq)
         
         #print(bestWalkingSize,strandWalking,bestElongingRead)
-        elongedSequence = elongedSequence[:-2000]+startSeq[:bestQueryEnd]+walkingSeq
+        elongedSequence = elongedSequence[:-500]+startSeq[:bestQueryEnd]+walkingSeq
         #print(elongedSequence)
         #print(elongedSequence)
         print("Sequence length is now %d" %len(elongedSequence))
-        startSeq = elongedSequence[-2000:]
+        startSeq = elongedSequence[-500:]
         startSeqFile = open("startSeq.fasta","w")
         startSeqFile.write(">startSeq elongation number "+str(elongNum)+"\n"+startSeq+"\n")
         startSeqFile.close()
