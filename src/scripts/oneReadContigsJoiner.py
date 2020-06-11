@@ -44,7 +44,7 @@ for seq_record in SeqIO.parse(contigs,"fasta"):
             contigsSeq[str(seq_record.id)] = str(seq_record.seq)
         else:
             contigsSeq[str(seq_record.id)] = Seq.reverse_complement(str(seq_record.seq))
-            
+
 
 #Get the contigs names in the righ order
 infile = open(contigs)
@@ -82,9 +82,9 @@ for a in range(len(orderedContigs)-1):
 
     #Mapping the reads on the two scaffolds
     print("Mapping reads on %s" %orderedContigs[a])
-    os.system(installationDirectory+"/src/conda/bin/minimap2 "+reference+" startSeq.fasta > "+outputFolder+"/minimapBit1")
+    os.system(installationDirectory+"/src/conda/bin/minimap2 startSeq.fasta "+reads+" > "+outputFolder+"/minimapBit1")
     print("Mapping reads on %s" %orderedContigs[a+1])
-    os.system(installationDirectory+"/src/conda/bin/minimap2 "+reference+"  endSeq.fasta > "+outputFolder+"/minimapBit2")
+    os.system(installationDirectory+"/src/conda/bin/minimap2  endSeq.fasta "+reads+" > "+outputFolder+"/minimapBit2")
 
     print("mi fermo")
     sys.stdin.read(1)
