@@ -109,7 +109,7 @@ for a in range(len(orderedContigs)-1):
     os.system(installationDirectory+"/src/conda/bin/minimap2  endSeq.fasta "+reads+" > "+outputFolder+"/minimapBit2")
     infile = open(outputFolder+"/minimapBit2")
     usefulReads2 = set()
-    aln1_info = {}
+    aln2_info = {}
     while True:
         line = infile.readline().rstrip()
         if not line:
