@@ -22,7 +22,7 @@ reads = args['reads']
 readSequences = {}
 for seq_record in SeqIO.parse(reads,"fastq"):
     if not str(seq_record.id) in readSequences:
-        readSequences[str(seq_record.id)] str(seq_record.seq)
+        readSequences[str(seq_record.id)] = str(seq_record.seq)
 
 
 
