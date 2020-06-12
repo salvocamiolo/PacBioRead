@@ -183,22 +183,35 @@ class Ui_Form(object):
 
 	
 	def calculateStatistics(self):
+
+		self.logTextEdit.append("Read statistics calculation started")
+		self.logTextEdit.repaint()
+
+
 		#Load reference genome in memory
+		self.logTextEdit.append("Loading reference....")
+		self.logTextEdit.repaint()
 		refFile = self.referenceLineEdit.text()
 		for seq_record in SeqIO.parse(refFile,"fasta"):
 			refSeq = str(seq_record.seq)
 		
 		#Load the reads in memory
+		self.logTextEdit.append("Loading reads....")
+		self.logTextEdit.repaint()
 		totSequences = 0
 		qualityValues = []
 		totNumBases = 0
 		inputFile = self.readsFileLineEdit.text()
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
+			self.logTextEdit.append(str(seq_record.seq)+"\b")
+			self.logTextEdit.repaint()
 			totSequences+=1
 			totNumBases+=len(str(seq_record.seq))
 			quality = seq_record.letter_annotations["phred_quality"]
 			for a in range(len(quality)):
 				qualityValues.append(float(quality[a]))
+		
+
 
 		self.o_numReadsLineEdit.setText(str(totSequences))
 		self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
