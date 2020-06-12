@@ -299,7 +299,7 @@ class Ui_Form(object):
 
 		self.logTextEdit.append("Calculating stats....")
 		self.logTextEdit.repaint()
-		self.r_numReadsLineEdit.setText(str(totSequences))
+		self.r_numReadsLineEdit_3.setText(str(totSequences))
 		self.r_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
 		self.r_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
 	
