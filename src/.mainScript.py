@@ -172,14 +172,14 @@ class Ui_Form(object):
 
 		#Convert the input fastq file in fast format
 		self.logTextEdit.append("* Reads preprocessing\n")
-		self.logTextEdit.append("* Converting input file from fastq to fasta....\n")
+		self.logTextEdit.append("* * Converting input file from fastq to fasta....\n")
 		self.logTextEdit.repaint()
 		outputFolder = self.projectFolderLineEdit.text()
 		os.system(installationDirectory+"/src/conda/bin/fq2fa "+self.readsFileLineEdit.text()+" "+outputFolder+'/originalReads.fasta')
 
 
 		# Perform HQ read fragmentaiton
-		self.logTextEdit.append("Extracting high quality read portions....\n")
+		self.logTextEdit.append("* * Extracting high quality read portions....\n")
 		self.logTextEdit.repaint()
 
 		inputFile = self.readsFileLineEdit.text()
@@ -191,7 +191,7 @@ class Ui_Form(object):
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
 			numSeq+=1
 			if numSeq%1000 == 0:
-				self.logTextEdit.append("* * "+str(numSeq)+" reads analyzed....")
+				self.logTextEdit.append("* * * "+str(numSeq)+" reads analyzed....")
 				self.logTextEdit.repaint()
 			sequence = str(seq_record.seq)
 			quality = seq_record.letter_annotations["phred_quality"]
@@ -264,10 +264,10 @@ class Ui_Form(object):
 				endPos = a+windowSize
 				if endPos>len(refSeq):
 					endPos=len(refSeq)
+					windowSize = len(refSeq) - a
 
 				self.logTextEdit.append("* * * Assembling region "+str(a)+"-"+str(endPos))
 				self.logTextEdit.repaint()
-				#print("Assembling range %d-%d" %(a,a+windowSize))
 				partSeq = refSeq[a:endPos]
 				tempFasta = open(outputFolder+"/partReference.fasta","w")
 				tempFasta.write(">partReference\n"+partSeq+"\n")
@@ -313,7 +313,7 @@ class Ui_Form(object):
 					outfile.close()
 
 					print("Assembling %d reads" %numReadsToAssemble)
-					self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads")
+					self.logTextEdit.append("* * * Using "+str(numReadsToAssemble)+" reads....")
 					self.logTextEdit.repaint()
 					#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
 					os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
@@ -329,14 +329,14 @@ class Ui_Form(object):
 							maxScaffoldLength = len(str(seq_record.seq))
 							longestContig = str(seq_record.seq)
 
-					self.logTextEdit.append("Contig size: "+str(maxScaffoldLength))
+					self.logTextEdit.append("* * * Contig size: "+str(maxScaffoldLength))
 					self.logTextEdit.repaint()
 				stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 			stage_a.close()
-			os.system("rm -rf "+outputFolder+"/outputMinimap* "+outputFolder+"/partReference.fasta" +\
+			os.system("rm -rf "+outputFolder+"/outputMinimap* "+outputFolder+"/partReference.fasta " +\
 				outputFolder+"/toAssemble.fasta "+outputFolder+"/simulatedReads* "+outputFolder+\
-					"/allSimulated.fasta "+outputFolder+"/outputIdba/" +outputFolder+"/null")
+					"/allSimulated.fasta "+outputFolder+"/outputIdba/ " +outputFolder+"/null")
 
 			#Joining contigs
 			self.logTextEdit.append("* * Joining contigs.... ")
@@ -354,9 +354,36 @@ class Ui_Form(object):
 				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
 					-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
 						outputFolder+" -s "+ self.readsFileLineEdit.text()+" -o scaffolds_gapClosed.fasta")
-
+			else:
+				os.system("mv "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
 			#Final alignment and consensus calling
 			self.logTextEdit.append("* * Calling consensus.... ")
+			self.logTextEdit.append("* * * Mapping original reads.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/minimap2 -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/scaffolds_gapClosed.fasta "+self.readsFileLineEdit.text()+" > "+outputFolder+"/alignment.sam")
+			self.logTextEdit.append("* * * Converting sam to bam.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
+			self.logTextEdit.append("* * * Sorting.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
+			self.logTextEdit.append("* * * Indexing.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/alignment_sorted.bam")
+			self.logTextEdit.append("* * * Creating pilleup.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
+				"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted.bam "+outputFolder+ \
+					"/pileup.txt")
+
+			self.logTextEdit.append("* * * Calling variants.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-var-freq 0.5 > "+outputFolder+"/output.vcf_filtered.vcf") 
+			os.system(installationDirectory+"/src/conda/bin/bgzip -c "+outputFolder+"/output.vcf_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
+			os.system(installationDirectory+"/src/conda/bin/tabix "+outputFolder+"/output.vcf_filtered.vcf.gz")
+			os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly.fasta")
+
+			self.logTextEdit.append("\n\n De novo assembly finished!")
 			self.logTextEdit.repaint()
 
 

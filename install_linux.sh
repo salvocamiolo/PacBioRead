@@ -25,6 +25,9 @@ else
 	./src/conda/bin/conda install -c bioconda -y art
 	./src/conda/bin/conda install -c bioconda -y idba
 	./src/conda/bin/conda install -c bioconda -y minimap2
+	./src/conda/bin/conda install -c bioconda -y varscan
+	./src/conda/bin/conda install -c bioconda -y tabix
+	./src/conda/bin/conda install -c bioconda -y bcftools
 	
 	fi
 fi
