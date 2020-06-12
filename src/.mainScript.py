@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import QMessageBox
 
 import os,sys
 from Bio import SeqIO
+import numpy as np
 
 
 
@@ -246,6 +247,9 @@ class Ui_Form(object):
 		outputFolder = self.projectFolderLineEdit.text()
 		os.system(installationDirectory+"/src/conda/bin/fq2fa "+self.readsFileLineEdit.text()+" "+outputFolder+'/originalReads.fasta')
 
+		#Load reference genome in memory
+		for seq_record in SeqIO.parse(refFile,"fasta"):
+			refSeq = str(seq_record.seq)
 
 		# Perform HQ read fragmentaiton
 		self.logTextEdit.append("* * Extracting high quality read portions....\n")
@@ -256,16 +260,23 @@ class Ui_Form(object):
 		minLen = 150
 
 		numSeq = 0
+		totSequences = 0
+		qualityValues = []
+		totNumBases = 0
 		outfile = open(outputFolder+"/masked.fasta","w")
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
 			numSeq+=1
+			totSequences+=1
 			if numSeq%1000 == 0:
 				self.logTextEdit.append("* * * "+str(numSeq)+" reads analyzed....")
 				self.logTextEdit.repaint()
 			sequence = str(seq_record.seq)
+			totNumBases+=len(sequence)
+
 			quality = seq_record.letter_annotations["phred_quality"]
 			maskedSeq = ""
 			for a in range(len(quality)):
+				qualityValues.append(float(quality[a]))
 				if quality[a]>int(threshold):
 					maskedSeq+=sequence[a]
 				else:
@@ -273,13 +284,19 @@ class Ui_Form(object):
 					numSeq+=1
 					maskedSeq=""
 		outfile.close()
-		self.o_numReadsLineEdit.setText(str(numSeq))
+		self.o_numReadsLineEdit.setText(str(totSequences))
+		self.o_avQualLineEdit.setText(str(np.mean(qualityValues)))
+		self.o_estCoverageLineEdit.setText(str(float(totNumBases) / float(len(refSeq))  )+"X")
+
 		outfile = open(outputFolder+"/hq_reads.fasta","w")
 		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
+			totNumHQBases = 0
 			if len(str(seq_record.seq))>int(minLen):
 				SeqIO.write(seq_record,outfile,"fasta")
+				totNumHQBases+= len(str(seq_record.seq))
 
 		os.system("rm "+outputFolder+"/masked.fasta")
+		self.o_estCoverageLineEdit.setText(str(float(totNumHQBases) / float(len(refSeq))  )+"X")
 		
 	
 		#Perform reference guided de novo assembly
@@ -313,9 +330,7 @@ class Ui_Form(object):
 				if not str(seq_record.id) in readsSeq:
 					readsSeq[str(seq_record.id)] = str(seq_record.seq)
 
-			#Load reference genome in memory
-			for seq_record in SeqIO.parse(refFile,"fasta"):
-				refSeq = str(seq_record.seq)
+			
 
 			stage_a = open(outputFolder+"/local_assemblies.fasta","w")
 
