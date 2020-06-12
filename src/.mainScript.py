@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import QMessageBox
 import os,sys
 from Bio import SeqIO
 import numpy as np
+import time
 
 
 
@@ -286,19 +287,21 @@ class Ui_Form(object):
 					maskedSeq=""
 		outfile.close()
 		self.o_numReadsLineEdit.setText(str(totSequences))
-		self.o_avQualLineEdit.setText(str(np.mean(qualityValues)))
-		self.o_estCoverageLineEdit.setText(str(float(totNumBases) / float(len(refSeq))  )+"X")
+		self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
+		self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+		time.sleep(2)
+
 
 		outfile = open(outputFolder+"/hq_reads.fasta","w")
+		totNumHQBases = 0
 		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
-			totNumHQBases = 0
 			if len(str(seq_record.seq))>int(minLen):
 				SeqIO.write(seq_record,outfile,"fasta")
 				totNumHQBases+= len(str(seq_record.seq))
 
 		os.system("rm "+outputFolder+"/masked.fasta")
-		self.o_estCoverageLineEdit.setText(str(float(totNumHQBases) / float(len(refSeq))  )+"X")
-		
+		self.o_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
+		time.sleep(2)
 	
 		#Perform reference guided de novo assembly
 		reads = outputFolder+"/hq_reads.fasta"
