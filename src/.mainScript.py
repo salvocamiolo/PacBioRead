@@ -380,7 +380,7 @@ class Ui_Form(object):
 
 			self.logTextEdit.append("* * * Calling variants.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-var-freq 0.5 > "+outputFolder+"/output.vcf_filtered.vcf") 
+			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5  --min-var-freq 0.5 > "+outputFolder+"/output.vcf_filtered.vcf") 
 			os.system(installationDirectory+"/src/conda/bin/bgzip -c "+outputFolder+"/output.vcf_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system(installationDirectory+"/src/conda/bin/tabix "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly.fasta")
