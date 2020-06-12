@@ -248,6 +248,7 @@ class Ui_Form(object):
 		os.system(installationDirectory+"/src/conda/bin/fq2fa "+self.readsFileLineEdit.text()+" "+outputFolder+'/originalReads.fasta')
 
 		#Load reference genome in memory
+		refFile = self.referenceLineEdit.text()
 		for seq_record in SeqIO.parse(refFile,"fasta"):
 			refSeq = str(seq_record.seq)
 
@@ -316,7 +317,7 @@ class Ui_Form(object):
 			return
 
 		else:
-			refFile = self.referenceLineEdit.text()
+			
 			readsSeq = {}
 			windowSize = int(self.windowSizeLineEdit.text())
 			windowStep = int(self.windowStepLineEdit.text())
