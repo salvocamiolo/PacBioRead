@@ -212,7 +212,7 @@ class Ui_Form(object):
 			quality = seq_record.letter_annotations["phred_quality"]
 			for a in range(len(quality)):
 				qualityValues.append(float(quality[a]))
-				if int(quality[a])> str(self.qualityLineEdit.text()):
+				if int(quality[a])> int(self.qualityLineEdit.text()):
 					totNumHQBases+=1
 
 		self.o_numReadsLineEdit.setText(str(totSequences))
