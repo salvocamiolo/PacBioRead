@@ -201,21 +201,24 @@ class Ui_Form(object):
 		totSequences = 0
 		qualityValues = []
 		totNumBases = 0
+		totNumHQBases = 0
 		inputFile = self.readsFileLineEdit.text()
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
-			self.logTextEdit.append(str(seq_record.id)+"\r")
-			self.logTextEdit.repaint()
 			totSequences+=1
+			if totNumBases%1000 == 0:
+				self.logTextEdit.append("Analyzed "+str(totSequences)+" reads")
+				self.logTextEdit.repaint()
 			totNumBases+=len(str(seq_record.seq))
 			quality = seq_record.letter_annotations["phred_quality"]
 			for a in range(len(quality)):
 				qualityValues.append(float(quality[a]))
-		
-
+				if int(quality[a])> str(self.qualityLineEdit.text()):
+					totNumHQBases+=1
 
 		self.o_numReadsLineEdit.setText(str(totSequences))
 		self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
 		self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+		self.o_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
 
 		
 			
