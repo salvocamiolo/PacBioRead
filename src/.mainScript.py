@@ -273,6 +273,7 @@ class Ui_Form(object):
 					numSeq+=1
 					maskedSeq=""
 		outfile.close()
+		self.o_numReadsLineEdit.setText(str(numSeq))
 		outfile = open(outputFolder+"/hq_reads.fasta","w")
 		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
 			if len(str(seq_record.seq))>int(minLen):
