@@ -84,6 +84,13 @@ class Ui_Form(object):
         font.setPointSize(8)
         self.textEdit.setFont(font)
         self.textEdit.setObjectName("textEdit")
+        self.numThreadsLineEdit = QtWidgets.QLineEdit(Form)
+        self.numThreadsLineEdit.setGeometry(QtCore.QRect(270, 190, 101, 21))
+        self.numThreadsLineEdit.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.numThreadsLineEdit.setObjectName("numThreadsLineEdit")
+        self.numThreadsLabel = QtWidgets.QLabel(Form)
+        self.numThreadsLabel.setGeometry(QtCore.QRect(270, 170, 101, 16))
+        self.numThreadsLabel.setObjectName("numThreadsLabel")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -126,4 +133,6 @@ class Ui_Form(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Bases (Q&gt;20):  --</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt;\">Bases (Q&gt;20):  --</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'.AppleSystemUIFont\'; font-size:10pt;\"><br /></p></body></html>"))
+        self.numThreadsLineEdit.setText(_translate("Form", "8"))
+        self.numThreadsLabel.setText(_translate("Form", "Num. threads"))
 
