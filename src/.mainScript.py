@@ -179,6 +179,35 @@ class Ui_Form(object):
 		self.referenceButton.clicked.connect(self.selectReferenceFile)
 		self.runButton.clicked.connect(self.runAssembly)
 		self.exitButton.clicked.connect(self.exitProgram)
+		self.qualityStatsButton.clicked.connect(self.calculateStatistics)
+
+	
+	def calculateStatistics(self):
+		#Load reference genome in memory
+		refFile = self.referenceLineEdit.text()
+		for seq_record in SeqIO.parse(refFile,"fasta"):
+			refSeq = str(seq_record.seq)
+		
+		#Load the reads in memory
+		totSequences = 0
+		qualityValues = []
+		totNumBases = 0
+		inputFile = self.readsFileLineEdit.text()
+		for seq_record in SeqIO.parse(inputFile,"fastq"):
+			totSequences+=1
+			totNumBases+=len(str(seq_record.seq))
+			quality = seq_record.letter_annotations["phred_quality"]
+			for a in range(len(quality)):
+				qualityValues.append(float(quality[a]))
+
+		self.o_numReadsLineEdit.setText(str(totSequences))
+		self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
+		self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+
+		
+			
+
+
 
 
 	def selectProjectFolder(self):
@@ -289,7 +318,7 @@ class Ui_Form(object):
 		self.o_numReadsLineEdit.setText(str(totSequences))
 		self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
 		self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
-		time.sleep(2)
+	
 
 
 		outfile = open(outputFolder+"/hq_reads.fasta","w")
