@@ -186,7 +186,7 @@ class Ui_Form(object):
 		inputFile = self.readsFileLineEdit.text()
 		threshold = self.qualityLineEdit.text()
 		minLen = 150
-		
+
 		self.logTextEdit.append("Read statistics calculation started")
 		self.logTextEdit.repaint()
 		outputFolder = self.projectFolderLineEdit.text()
@@ -199,19 +199,22 @@ class Ui_Form(object):
 			refSeq = str(seq_record.seq)
 		
 		#Load the reads in memory
-		self.logTextEdit.append("Loading reads....")
+		self.logTextEdit.append("Calculating original read stats....")
 		self.logTextEdit.repaint()
 		
 		numSeq = 0
 		totSequences = 0
 		qualityValues = []
 		totNumBases = 0
+		inputSequences = {}
 		outfile = open(outputFolder+"/masked.fasta","w")
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
+			if not str(seq_record.id) in inputSequences:
+				inputSequences[str(seq_record.id)] = seq_record
 			numSeq+=1
 			totSequences+=1
 			if totSequences%3000 == 0:
-				self.logTextEdit.append("* * * "+str(totSequences)+" reads analyzed....")
+				self.logTextEdit.append("* "+str(totSequences)+" reads analyzed....")
 				self.logTextEdit.repaint()
 			sequence = str(seq_record.seq)
 			totNumBases+=len(sequence)
@@ -227,11 +230,14 @@ class Ui_Form(object):
 					numSeq+=1
 					maskedSeq=""
 		outfile.close()
+
+		self.logTextEdit.append("Calculating stats....")
+		self.logTextEdit.repaint()
 		self.o_numReadsLineEdit.setText(str(totSequences))
 		self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
 		self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
 	
-
+		
 
 		outfile = open(outputFolder+"/hq_reads.fasta","w")
 		totNumHQBases = 0
@@ -243,7 +249,76 @@ class Ui_Form(object):
 		os.system("rm "+outputFolder+"/masked.fasta "+outputFolder+"/hq_reads.fasta")
 		self.o_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
 
+		self.logTextEdit.append("Calculating reference homologous read stats....")
+		self.logTextEdit.append("* Aligning reads....")
+		self.logTextEdit.repaint()
+
+		os.system(installationDirectory+"/src/conda/bin/minimap2 -t "+self.numThreadsLineEdit.text()+" "+refFile+" "+inputFile+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
+		outfile.close()
+
+		outfile = open(outputFolder+"/refSpecificReads.fastq","w")
+		infile = open(outputFolder+"/outputMinimap")
+		while True:
+			line = infile.readline().rstrip()
+			if not line:
+				break
+			fields = line.split("\t")
+			if (float(fields[3])-float(fields[2]))/fields[1] >0.7:
+				outfile.write(inputSequences[fields[0]],outfile,"fastq")
+		outfile.close()
+
+		inputFile = outputFolder+"/refSpecificReads.fastq"
+		numSeq = 0
+		totSequences = 0
+		qualityValues = []
+		totNumBases = 0
+		inputSequences = {}
+		outfile = open(outputFolder+"/masked.fasta","w")
+		for seq_record in SeqIO.parse(inputFile,"fastq"):
+			if not str(seq_record.id) in inputSequences:
+				inputSequences[str(seq_record.id)] = seq_record
+			numSeq+=1
+			totSequences+=1
+			if totSequences%3000 == 0:
+				self.logTextEdit.append("* "+str(totSequences)+" reads analyzed....")
+				self.logTextEdit.repaint()
+			sequence = str(seq_record.seq)
+			totNumBases+=len(sequence)
+
+			quality = seq_record.letter_annotations["phred_quality"]
+			maskedSeq = ""
+			for a in range(len(quality)):
+				qualityValues.append(float(quality[a]))
+				if quality[a]>int(threshold):
+					maskedSeq+=sequence[a]
+				else:
+					outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+					numSeq+=1
+					maskedSeq=""
+		outfile.close()
+
+		self.logTextEdit.append("Calculating stats....")
+		self.logTextEdit.repaint()
+		self.r_numReadsLineEdit.setText(str(totSequences))
+		self.r_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
+		self.r_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+	
 		
+
+		outfile = open(outputFolder+"/hq_reads.fasta","w")
+		totNumHQBases = 0
+		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
+			if len(str(seq_record.seq))>int(minLen):
+				SeqIO.write(seq_record,outfile,"fasta")
+				totNumHQBases+= len(str(seq_record.seq))
+
+		os.system("rm "+outputFolder+"/masked.fasta "+outputFolder+"/hq_reads.fasta")
+		self.r_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
+
+
+
+				
+
 			
 
 
