@@ -253,7 +253,7 @@ class Ui_Form(object):
 		self.logTextEdit.append("* Aligning reads....")
 		self.logTextEdit.repaint()
 
-		os.system(installationDirectory+"/src/conda/bin/minimap2 -t "+self.numThreadsLineEdit.text()+" "+refFile+" "+inputFile+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
+		os.system(installationDirectory+"/src/conda/bin/minimap2 -t "+self.numThreadsLineEdit.text()+" "+refFile+" "+inputFile+" > "+outputFolder+"/outputMinimap")
 		outfile.close()
 
 		outfile = open(outputFolder+"/refSpecificReads.fastq","w")
