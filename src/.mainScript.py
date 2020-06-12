@@ -375,7 +375,7 @@ class Ui_Form(object):
 			self.logTextEdit.append("* * * Creating pilleup.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
-				"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted.bam "+outputFolder+ \
+				"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
 					"/pileup.txt")
 
 			self.logTextEdit.append("* * * Calling variants.... ")
