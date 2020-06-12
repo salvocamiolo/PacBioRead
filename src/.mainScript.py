@@ -273,7 +273,7 @@ class Ui_Form(object):
 				tempFasta.write(">partReference\n"+partSeq+"\n")
 				tempFasta.close()
 
-				os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
+				os.system(installationDirectory+"/src/conda/bin/minimap2 -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
 
 				os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 
@@ -320,7 +320,7 @@ class Ui_Form(object):
 					toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
 					os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
 					os.system("rm -rf "+outputFolder+"/outputIdba/")
-					os.system(installationDirectory+"/src/conda/bin/idba_hybrid --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+self.numThreadsLineEdit.text()+" -o "+outputFolder+"/outputIdba")
+					os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+self.numThreadsLineEdit.text()+" -o "+outputFolder+"/outputIdba > "outputFolder+"/null 2>&1")
 					maxScaffoldLength = 0
 					longestContig = ""
 					
@@ -329,14 +329,14 @@ class Ui_Form(object):
 							maxScaffoldLength = len(str(seq_record.seq))
 							longestContig = str(seq_record.seq)
 
-					self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
+					self.logTextEdit.append("Contig size: "+str(maxScaffoldLength))
 					self.logTextEdit.repaint()
 				stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 			stage_a.close()
 			os.system("rm -rf "+outputFolder+"/outputMinimap* "+outputFolder+"/partReference.fasta" +\
 				outputFolder+"/toAssemble.fasta "+outputFolder+"/simulatedReads* "+outputFolder+\
-					"/allSimulated.fasta "+outputFolder+"/outputIdba/")
+					"/allSimulated.fasta "+outputFolder+"/outputIdba/" +outputFolder+"/null")
 
 			#Joining contigs
 			self.logTextEdit.append("* * Joining contigs.... ")
@@ -346,7 +346,7 @@ class Ui_Form(object):
 			#Check final number of scaffold and attempt gap closure if > 1
 			self.logTextEdit.append("* * Attempting gap closure.... ")
 			self.logTextEdit.repaint()
-			finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta"))
+			finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta","fasta"))
 
 			if len(finalScaffols)>1:
 				self.logTextEdit.append("\nAttempting gap closure.... ")
