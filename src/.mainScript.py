@@ -264,7 +264,7 @@ class Ui_Form(object):
 				break
 			fields = line.split("\t")
 			if (float(fields[3])-float(fields[2]))/float(fields[1]) >0.7:
-				outfile.write(inputSequences[fields[0]],outfile,"fastq")
+				SeqIO.write(inputSequences[fields[0]],outfile,"fastq")
 		outfile.close()
 
 		inputFile = outputFolder+"/refSpecificReads.fastq"
