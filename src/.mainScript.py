@@ -113,24 +113,10 @@ class Ui_Form(object):
 	def selectProjectFolder(self):
 		folderName = QFileDialog.getExistingDirectory(None, "Select project folder","./")
 		self.projectFolderLineEdit.setText(folderName)
-		self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
-		self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
-		self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
-		self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
-		self.consensusCorrectionLaebl.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
 
 		if os.path.isdir(folderName) == False:
 			os.system("mkdir "+folderName)
 
-		else:
-			if os.path.isfile(folderName+"/hq.fasta") == True:
-				self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-			
-			if os.path.isfile(folderName+"/lastzOutput.txt") == True:
-				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-			
-			if os.path.isfile(folderName+"/hq_specific.fasta") == True:
-				self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 
 	def selectReadFile(self):
 		filename, __ = QFileDialog.getOpenFileName(None,"Select read file","./")
@@ -188,7 +174,6 @@ class Ui_Form(object):
 
 		# Perform HQ read fragmentaiton
 		if self.hqFragmentationCheckBox.isChecked() == True:
-			self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
 			self.logTextEdit.append("High quality read fragmentation started\n")
 			self.logTextEdit.repaint()
 
