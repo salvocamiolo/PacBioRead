@@ -177,3 +177,6 @@ numElongedSequences+=1
 outfile.write(">Sequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
 outfile.close()        
 
+os.system("rm -rf "+outputFolder+"/scaffoldMapping.txt "+outputFolder+"/"+contigs+"_oriented.fasta " +\
+    outputFolder+"/startSeq* "+outputFolder+"/endSeq* "+outputFolder+"/outputBlast.txt" +\
+        outputFolder+"/minimapBit*")

@@ -22,9 +22,9 @@ outputFolder = args['outputFolder']
 
 
 #Mapping the reads
-os.system(installationDirectory+"/src/conda/bin/lastz "+reference+" "+contigs+" --format=general > scaffoldMapping.txt")
+os.system(installationDirectory+"/src/conda/bin/lastz "+reference+" "+contigs+" --format=general > "+outputFolder+"/scaffoldMapping.txt")
 #Getting position and strand for best alignment
-infile = open("scaffoldMapping.txt")
+infile = open(outputFolder+"/scaffoldMapping.txt")
 infile.readline().rstrip()
 scaffoldInfo = {}
 while True:
@@ -62,7 +62,7 @@ while True:
 #Join adjacent contigs
 elongingSequence = ""
 numElongedSequences = 0
-outfile = open(outputFolder+"/stage_b.fasta","w")
+outfile = open(outputFolder+"/scaffolds.fasta","w")
 for a in range(len(orderedContigs)-1):
     print("joining "+orderedContigs[a]+" and "+orderedContigs[a+1])
     startSeqFile = open("startSeq.fasta","w")
@@ -117,6 +117,8 @@ if len(elongingSequence)>0:
     outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
 
 
+os.system("rm -rf "+outputFolder+"/scaffoldMapping.txt "+outputFolder+"/"+contigs+"_oriented.fasta " +\
+    outputFolder+"/startSeq* "+outputFolder+"/endSeq* "+outputFolder+"/outputBlast.txt")
 
 
 

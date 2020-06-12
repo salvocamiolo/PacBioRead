@@ -137,6 +137,9 @@ class Ui_Form(object):
 	#Check required fields
 	def runAssembly(self):
 
+		self.logTextEdit.append("Reference guided de novo assembly started\n")
+		self.logTextEdit.repaint()
+
 		if os.path.isdir(self.projectFolderLineEdit.text()) == "":
 			msg = QMessageBox()
 			msg.setIcon(QMessageBox.Warning)
@@ -168,310 +171,193 @@ class Ui_Form(object):
 			return
 
 		#Convert the input fastq file in fast format
+		self.logTextEdit.append("* Reads preprocessing\n")
+		self.logTextEdit.append("* Converting input file from fastq to fasta....\n")
+		self.logTextEdit.repaint()
 		outputFolder = self.projectFolderLineEdit.text()
 		os.system(installationDirectory+"/src/conda/bin/fq2fa "+self.readsFileLineEdit.text()+" "+outputFolder+'/originalReads.fasta')
 
 
 		# Perform HQ read fragmentaiton
-		if self.hqFragmentationCheckBox.isChecked() == True:
-			self.logTextEdit.append("High quality read fragmentation started\n")
-			self.logTextEdit.repaint()
+		self.logTextEdit.append("Extracting high quality read portions....\n")
+		self.logTextEdit.repaint()
 
-			inputFile = self.readsFileLineEdit.text()
-			threshold = self.qualityLineEdit.text()
-			minLen = self.lengthLineEdit.text()
+		inputFile = self.readsFileLineEdit.text()
+		threshold = self.qualityLineEdit.text()
+		minLen = 150
 
-			numSeq = 0
-			outfile = open(outputFolder+"/masked.fasta","w")
-			for seq_record in SeqIO.parse(inputFile,"fastq"):
-				numSeq+=1
-				if numSeq%1000 == 0:
-					self.logTextEdit.append(str(numSeq)+" analyzed....")
-					self.logTextEdit.repaint()
-					print(str(numSeq)+" analyzed....\n")
-				sequence = str(seq_record.seq)
-				quality = seq_record.letter_annotations["phred_quality"]
-				maskedSeq = ""
-				maskedQual = ""
-				for a in range(len(quality)):
-					if quality[a]>int(threshold):
-						maskedSeq+=sequence[a]
-						maskedQual+="G"
-					else:
-						outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
-						numSeq+=1
-						maskedSeq=""
-			outfile.close()
-			outfile = open(outputFolder+"/hq.fasta","w")
-			for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
-				if len(str(seq_record.seq))>int(minLen):
-					SeqIO.write(seq_record,outfile,"fasta")
-
-			os.system("rm "+outputFolder+"/masked.fasta")
-			self.logTextEdit.append("\nHigh quality read fragmentation finished\n")
-			self.logTextEdit.repaint()
-			self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-		
-
-
-		#Perform read mapping on reference to extract organisms specific reads
-		if self.readsMappingCheckBox.isChecked() == True:
-			self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
-			self.logTextEdit.append("Read mapping on reference started\n")
-			self.logTextEdit.repaint()
-			if os.path.isfile(outputFolder+"/hq.fasta")==True:
-				inputFile = outputFolder+"/hq.fasta"
-				reference = self.referenceLineEdit.text()
-
-				numSeq = 0
-				os.system("rm -f "+outputFolder+"/lastzOutput.txt")
-				os.system("touch "+outputFolder+"/lastzOutput.txt")
-				for seq_record in SeqIO.parse(inputFile,"fasta"):
-					outfile = open(outputFolder+"/tempFasta.fasta","w")
-					SeqIO.write(seq_record,outfile,"fasta")
-					outfile.close()
-					os.system(installationDirectory+"/src/conda/bin/lastz "+outputFolder+"/tempFasta.fasta "+reference+"  --format=general  >> "+outputFolder+"/lastzOutput.txt")
-					numSeq+=1
-					print(numSeq)
-				os.system("rm "+outputFolder+"/temp.fasta")
-				self.logTextEdit.append("\nRead mapping on reference finished\n")
+		numSeq = 0
+		outfile = open(outputFolder+"/masked.fasta","w")
+		for seq_record in SeqIO.parse(inputFile,"fastq"):
+			numSeq+=1
+			if numSeq%1000 == 0:
+				self.logTextEdit.append("* * "+str(numSeq)+" reads analyzed....")
 				self.logTextEdit.repaint()
-				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-			else:
-				msg = QMessageBox()
-				msg.setIcon(QMessageBox.Warning)
-				msg.setText("Please run the HQ fragmentation first")
-				msg.setWindowTitle("Warning")
-				msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
-				msg.setStandardButtons(QMessageBox.Ok)
-				msg.exec_()
-				return
-
-		#Perform read mapping on reference to extract organisms specific reads
-		if self.readFilteringCheckBox.isChecked() == True:
-			if os.path.isfile(outputFolder+"/lastzOutput.txt") == True:
-				if os.path.isfile(outputFolder+"/hq.fasta") == True:
-					self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
-					inputFile = outputFolder+"/hq.fasta"
-					lastzOutput = outputFolder+"/lastzOutput.txt"
-					coverage = float(self.coverageLineEdit.text())/100
-
-					self.logTextEdit.append("\nOrganisms specific read filtering started\n")
-					self.logTextEdit.repaint()
-
-
-					sequences = {}
-					self.logTextEdit.append("\nLoading HQ reads in memory\n")
-					self.logTextEdit.repaint()
-
-					for seq_record in SeqIO.parse(inputFile,"fasta"):
-						if not str(seq_record.id) in sequences:
-							sequences[str(seq_record.id)] = seq_record
-
-					self.logTextEdit.append("\nApplying filter\n")
-					self.logTextEdit.repaint()
-					outfile = open(outputFolder+"/hq_specific.fasta","w")
-					infile = open(lastzOutput)
-					numSeq = 0
-					while True:
-						line = infile.readline().rstrip()
-						if not line:
-							break
-						if not "#score" in line:
-							fields = line.split("\t")
-							readName = fields[1]
-							strand = fields[2]
-							length = float(fields[3])
-							start = float(fields[4])
-							end = float(fields[5])
-
-							if abs(end-start)/length> coverage:
-								numSeq +=1
-								if numSeq%1000 == 0:
-									self.logTextEdit.append(str(numSeq)+" reads passed the filter")
-									self.logTextEdit.repaint()
-								SeqIO.write(sequences[readName],outfile,"fasta")
-								print("Read %s comes from Reference!" %readName)
-					self.logTextEdit.append(str(numSeq)+" reads passed the filter")
-					self.logTextEdit.repaint()
-					self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-					infile.close()
-					outfile.close()
+			sequence = str(seq_record.seq)
+			quality = seq_record.letter_annotations["phred_quality"]
+			maskedSeq = ""
+			for a in range(len(quality)):
+				if quality[a]>int(threshold):
+					maskedSeq+=sequence[a]
 				else:
-					msg = QMessageBox()
-					msg.setIcon(QMessageBox.Warning)
-					msg.setText("Please run the HQ fragmentation first")
-					msg.setWindowTitle("Warning")
-					msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
-					msg.setStandardButtons(QMessageBox.Ok)
-					msg.setStandardButtons(QMessageBox.Ok)
-					msg.exec_()
-					return
+					outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+					numSeq+=1
+					maskedSeq=""
+		outfile.close()
+		outfile = open(outputFolder+"/hq_reads.fasta","w")
+		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
+			if len(str(seq_record.seq))>int(minLen):
+				SeqIO.write(seq_record,outfile,"fasta")
 
-			else:
-				msg = QMessageBox()
-				msg.setIcon(QMessageBox.Warning)
-				msg.setText("Please map the reads to the reference first.")
-				msg.setWindowTitle("Warning")
-				msg.setDetailedText("You should map the reads to the provided reference first. This will generate a file named lastzOutput.txt in your project folder\n ")
-				msg.setStandardButtons(QMessageBox.Ok)
-				msg.exec_()
-				return
+		os.system("rm "+outputFolder+"/masked.fasta")
 		
-
-			
+	
 		#Perform reference guided de novo assembly
-		if self.readFilteringCheckBox_2.isChecked() == True:
-			self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
-			reads = ""
-			if os.path.isfile(outputFolder+"/hq_specific.fasta") == True:
-				reads = outputFolder+"/hq_specific.fasta"
-			if os.path.isfile(outputFolder+"/hq.fasta") == True:
-				reads = outputFolder+"/hq.fasta"
+		reads = outputFolder+"/hq_reads.fasta"
+		
 			
-			if reads == "":
-				msg = QMessageBox()
-				msg.setIcon(QMessageBox.Warning)
-				msg.setText("Please run the HQ fragmentation first")
-				msg.setWindowTitle("Warning")
-				msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
-				msg.setStandardButtons(QMessageBox.Ok)
-				msg.setStandardButtons(QMessageBox.Ok)
-				msg.exec_()
-				return
+		
+		if reads == "":
+			msg = QMessageBox()
+			msg.setIcon(QMessageBox.Warning)
+			msg.setText("Something did not work with the quality filtering step!")
+			msg.setWindowTitle("Warning")
+			msg.setDetailedText("The quality filtering step did not produce the expected hq_reads.fasta file in the output folder\n ")
+			msg.setStandardButtons(QMessageBox.Ok)
+			msg.setStandardButtons(QMessageBox.Ok)
+			msg.exec_()
+			return
 
-			else:
-				refFile = self.referenceLineEdit.text()
-				readsSeq = {}
-				windowSize = int(self.windowSizeLineEdit.text())
-				windowStep = int(self.windowStepLineEdit.text())
+		else:
+			refFile = self.referenceLineEdit.text()
+			readsSeq = {}
+			windowSize = int(self.windowSizeLineEdit.text())
+			windowStep = int(self.windowStepLineEdit.text())
 
-				self.logTextEdit.append("Reference guided de novo assembly started")
-				self.logTextEdit.append("Loading reads in memory")
+			self.logTextEdit.append("* Reference guided de novo assembly")
+			self.logTextEdit.append("* * Loading reads in memory")
+			self.logTextEdit.repaint()
 
+			#Loading high quality reads in memory
+			for seq_record in SeqIO.parse(reads,"fasta"):
+				if not str(seq_record.id) in readsSeq:
+					readsSeq[str(seq_record.id)] = str(seq_record.seq)
+
+			#Load reference genome in memory
+			for seq_record in SeqIO.parse(refFile,"fasta"):
+				refSeq = str(seq_record.seq)
+
+			stage_a = open(outputFolder+"/local_assemblies.fasta","w")
+
+			self.logTextEdit.append("* * Converting high quality reads to fastq format....")
+			self.logTextEdit.repaint()
+			with open(reads, "r") as fasta, open(outputFolder+"/hq_reads.fastq", "w") as fastq:
+				for record in SeqIO.parse(fasta, "fasta"):
+					record.letter_annotations["phred_quality"] = [40] * len(record)
+					SeqIO.write(record, fastq, "fastq")
+
+
+			self.logTextEdit.append("* * Assembly on sliding windows started")
+			self.logTextEdit.repaint()
+			for a in range(0,len(refSeq),+windowStep):
+			#for a in range(1):
+				endPos = a+windowSize
+				if endPos>len(refSeq):
+					endPos=len(refSeq)
+
+				self.logTextEdit.append("* * * Assembling region "+str(a)+"-"+str(endPos))
 				self.logTextEdit.repaint()
-				for seq_record in SeqIO.parse(reads,"fasta"):
-				#for seq_record in SeqIO.parse(self.readsFileLineEdit.text(),"fastq"):
-					if not str(seq_record.id) in readsSeq:
-						readsSeq[str(seq_record.id)] = str(seq_record.seq)
+				#print("Assembling range %d-%d" %(a,a+windowSize))
+				partSeq = refSeq[a:endPos]
+				tempFasta = open(outputFolder+"/partReference.fasta","w")
+				tempFasta.write(">partReference\n"+partSeq+"\n")
+				tempFasta.close()
 
-				reference = outputFolder+"/partReference.fasta"
+				os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
 
+				os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 
+				readsToAssemble = set()
+				numAttempt = 0
+				maxScaffoldLength = 0
 
-				for seq_record in SeqIO.parse(refFile,"fasta"):
-					refSeq = str(seq_record.seq)
-
-				stage_a = open(outputFolder+"/stage_a.fasta","w")
-
-				with open(reads, "r") as fasta, open(reads+".fastq", "w") as fastq:
-					for record in SeqIO.parse(fasta, "fasta"):
-						record.letter_annotations["phred_quality"] = [40] * len(record)
-						SeqIO.write(record, fastq, "fastq")
 				
-				for a in range(0,len(refSeq),+windowStep):
-				#for a in range(1):
-					endPos = a+windowSize
-					if endPos>len(refSeq):
-						endPos=len(refSeq)
-
-					self.logTextEdit.append("Assembling region "+str(a)+"-"+str(endPos))
-					self.logTextEdit.repaint()
-					#print("Assembling range %d-%d" %(a,a+windowSize))
-					partSeq = refSeq[a:endPos]
-					tempFasta = open(outputFolder+"/partReference.fasta","w")
-					tempFasta.write(">partReference\n"+partSeq+"\n")
-					tempFasta.close()
-
-					self.logTextEdit.append("Aligning reads.... ")
-					self.logTextEdit.repaint()
-
+				while float(maxScaffoldLength) < float(windowSize)*0.9:
+					numAttempt +=1
+					if numAttempt == 5:
+						break
 					
+					for b in range(0,19500,+150):
+						tfile = open(outputFolder+"/outputMinimap_filtered")						
 
-
-					os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/partReference.fasta "+reads+".fastq > "+outputFolder+"/outputMinimap")
-
-					os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
-
-					self.logTextEdit.append("Scanning alignment.... ")
-					self.logTextEdit.repaint()
-					readsToAssemble = set()
-					numAttempt = 0
-					maxScaffoldLength = 0
-
-					
-					while float(maxScaffoldLength) < float(windowSize)*0.9:
-						numAttempt +=1
-						if numAttempt == 5:
-							break
-						
-						for b in range(0,19500,+150):
-							tfile = open(outputFolder+"/outputMinimap_filtered")
-							print("Analyzing range %d-%d" %(b,b+150))
-							
-							refPos = -1
-							collectedReads = 0
-							while True:
-								tline = tfile.readline().rstrip()
-								if not tline:
+						collectedReads = 0
+						while True:
+							tline = tfile.readline().rstrip()
+							if not tline:
+								break
+							tfields = tline.split("\t")
+							if int(tfields[7]) >b and int(tfields[7]) <(b+150):
+								readsToAssemble.add(tfields[0])
+								print(tfields[0])
+								collectedReads+=1
+								if collectedReads == numAttempt:
 									break
-								tfields = tline.split("\t")
-								if int(tfields[7]) >b and int(tfields[7]) <(b+150):
-									readsToAssemble.add(tfields[0])
-									print(tfields[0])
-									collectedReads+=1
-									if collectedReads == numAttempt:
-										break
-						tfile.close()
+					tfile.close()
 
-						outfile = open(outputFolder+"/toAssemble.fasta","w")
-						numReadsToAssemble = 0
-						for item in readsToAssemble:
-							if not item == '':
-								numReadsToAssemble+=1
-								outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
-						outfile.close()
+					outfile = open(outputFolder+"/toAssemble.fasta","w")
+					numReadsToAssemble = 0
+					for item in readsToAssemble:
+						if not item == '':
+							numReadsToAssemble+=1
+							outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
+					outfile.close()
 
-						print("Assembling %d reads with cap3" %numReadsToAssemble)
-						self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads")
-						self.logTextEdit.repaint()
-						#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
-						os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
-						toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
-						os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
-						os.system("rm -rf "+outputFolder+"/outputIdba/")
-						os.system(installationDirectory+"/src/conda/bin/idba_hybrid --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads 8 -o "+outputFolder+"/outputIdba")
-						maxScaffoldLength = 0
-						longestContig = ""
-						
-						for seq_record in SeqIO.parse(outputFolder+"//outputIdba/scaffold.fa","fasta"):
-							if len(str(seq_record.seq)) > maxScaffoldLength:
-								maxScaffoldLength = len(str(seq_record.seq))
-								longestContig = str(seq_record.seq)
-
-						self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
-						self.logTextEdit.repaint()
-					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
-
-				stage_a.close()
-
-				#Joining contigs
-				self.logTextEdit.append("\nJoining contigs.... ")
-				self.logTextEdit.repaint()
-				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/stage_a.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
-
-				#Check final number of scaffold and attempt gap closure if > 1
-				finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/stage_b.fasta"))
-
-				if len(finalScaffols)>1:
-					self.logTextEdit.append("\nAttempting gap closure.... ")
+					print("Assembling %d reads" %numReadsToAssemble)
+					self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads")
 					self.logTextEdit.repaint()
-					os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
-						-p "+installationDirectory+ " -c "+outputFolder+"/stage_b.fasta -r "+refFile+" -x " + \
-							outputFolder+" -s "+ self.readsFileLineEdit.text()+" -o stage_c.fasta")
+					#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
+					os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+					toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
+					os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
+					os.system("rm -rf "+outputFolder+"/outputIdba/")
+					os.system(installationDirectory+"/src/conda/bin/idba_hybrid --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+self.numThreadsLineEdit.text()+" -o "+outputFolder+"/outputIdba")
+					maxScaffoldLength = 0
+					longestContig = ""
+					
+					for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
+						if len(str(seq_record.seq)) > maxScaffoldLength:
+							maxScaffoldLength = len(str(seq_record.seq))
+							longestContig = str(seq_record.seq)
 
-		#Align original reads and create consensus
-		#if self.readFilteringCheckBox_3.isChecked() == True:
+					self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
+					self.logTextEdit.repaint()
+				stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
+
+			stage_a.close()
+			os.system("rm -rf "+outputFolder+"/outputMinimap* "+outputFolder+"/partReference.fasta" +\
+				outputFolder+"/toAssemble.fasta "+outputFolder+"/simulatedReads* "+outputFolder+\
+					"/allSimulated.fasta "+outputFolder+"/outputIdba/")
+
+			#Joining contigs
+			self.logTextEdit.append("* * Joining contigs.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/local_assemblies.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
+
+			#Check final number of scaffold and attempt gap closure if > 1
+			self.logTextEdit.append("* * Attempting gap closure.... ")
+			self.logTextEdit.repaint()
+			finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta"))
+
+			if len(finalScaffols)>1:
+				self.logTextEdit.append("\nAttempting gap closure.... ")
+				self.logTextEdit.repaint()
+				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
+					-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
+						outputFolder+" -s "+ self.readsFileLineEdit.text()+" -o scaffolds_gapClosed.fasta")
+
+			#Final alignment and consensus calling
+			self.logTextEdit.append("* * Calling consensus.... ")
+			self.logTextEdit.repaint()
 
 
 
