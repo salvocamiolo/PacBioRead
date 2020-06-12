@@ -203,7 +203,7 @@ class Ui_Form(object):
 		totNumBases = 0
 		inputFile = self.readsFileLineEdit.text()
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
-			self.logTextEdit.append(str(seq_record.seq)+"\b")
+			self.logTextEdit.append(str(seq_record.id)+"\r")
 			self.logTextEdit.repaint()
 			totSequences+=1
 			totNumBases+=len(str(seq_record.seq))
