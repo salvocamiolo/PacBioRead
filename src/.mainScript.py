@@ -263,7 +263,7 @@ class Ui_Form(object):
 			if not line:
 				break
 			fields = line.split("\t")
-			if (float(fields[3])-float(fields[2]))/fields[1] >0.7:
+			if (float(fields[3])-float(fields[2]))/float(fields[1]) >0.7:
 				outfile.write(inputSequences[fields[0]],outfile,"fastq")
 		outfile.close()
 
