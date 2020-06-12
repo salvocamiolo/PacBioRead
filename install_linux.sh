@@ -28,6 +28,7 @@ else
 	./src/conda/bin/conda install -c bioconda -y varscan
 	./src/conda/bin/conda install -c bioconda -y tabix
 	./src/conda/bin/conda install -c bioconda -y bcftools
+	./src/conda/bin/conda install -c bioconda -y  jellyfish=2.2.10
 	
 	fi
 fi
