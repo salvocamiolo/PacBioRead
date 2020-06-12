@@ -381,7 +381,7 @@ class Ui_Form(object):
 			self.logTextEdit.append("* * * Calling variants.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
-			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/assembly/utils/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+self.readsFileLineEdit.text()+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory ) 
+			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+self.readsFileLineEdit.text()+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory ) 
 			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output.vcf_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly.fasta")
