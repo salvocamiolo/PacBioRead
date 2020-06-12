@@ -183,7 +183,10 @@ class Ui_Form(object):
 
 	
 	def calculateStatistics(self):
-
+		inputFile = self.readsFileLineEdit.text()
+		threshold = self.qualityLineEdit.text()
+		minLen = 150
+		
 		self.logTextEdit.append("Read statistics calculation started")
 		self.logTextEdit.repaint()
 		outputFolder = self.projectFolderLineEdit.text()
