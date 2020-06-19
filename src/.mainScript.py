@@ -397,7 +397,7 @@ class Ui_Form(object):
 			refSeq = str(seq_record.seq)
 
 		# Perform HQ read fragmentaiton
-		performHQFrgm = False:
+		performHQFrgm = False
 		if performHQFrgm == True:
 				self.logTextEdit.append("* * Extracting high quality read portions....\n")
 				self.logTextEdit.repaint()
