@@ -399,54 +399,54 @@ class Ui_Form(object):
 		# Perform HQ read fragmentaiton
 		performHQFrgm = False
 		if performHQFrgm == True:
-				self.logTextEdit.append("* * Extracting high quality read portions....\n")
-				self.logTextEdit.repaint()
+			self.logTextEdit.append("* * Extracting high quality read portions....\n")
+			self.logTextEdit.repaint()
 
-				inputFile = self.readsFileLineEdit.text()
-				threshold = self.qualityLineEdit.text()
-				minLen = 150
+			inputFile = self.readsFileLineEdit.text()
+			threshold = self.qualityLineEdit.text()
+			minLen = 150
 
-				numSeq = 0
-				totSequences = 0
-				qualityValues = []
-				totNumBases = 0
-				outfile = open(outputFolder+"/masked.fasta","w")
-				for seq_record in SeqIO.parse(inputFile,"fastq"):
-					numSeq+=1
-					totSequences+=1
-					if totSequences%3000 == 0:
-						self.logTextEdit.append("* * * "+str(totSequences)+" reads analyzed....")
-						self.logTextEdit.repaint()
-					sequence = str(seq_record.seq)
-					totNumBases+=len(sequence)
+			numSeq = 0
+			totSequences = 0
+			qualityValues = []
+			totNumBases = 0
+			outfile = open(outputFolder+"/masked.fasta","w")
+			for seq_record in SeqIO.parse(inputFile,"fastq"):
+				numSeq+=1
+				totSequences+=1
+				if totSequences%3000 == 0:
+					self.logTextEdit.append("* * * "+str(totSequences)+" reads analyzed....")
+					self.logTextEdit.repaint()
+				sequence = str(seq_record.seq)
+				totNumBases+=len(sequence)
 
-					quality = seq_record.letter_annotations["phred_quality"]
-					maskedSeq = ""
-					for a in range(len(quality)):
-						qualityValues.append(float(quality[a]))
-						if quality[a]>int(threshold):
-							maskedSeq+=sequence[a]
-						else:
-							outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
-							numSeq+=1
-							maskedSeq=""
-				outfile.close()
-				self.o_numReadsLineEdit.setText(str(totSequences))
-				self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
-				self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+				quality = seq_record.letter_annotations["phred_quality"]
+				maskedSeq = ""
+				for a in range(len(quality)):
+					qualityValues.append(float(quality[a]))
+					if quality[a]>int(threshold):
+						maskedSeq+=sequence[a]
+					else:
+						outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+						numSeq+=1
+						maskedSeq=""
+			outfile.close()
+			self.o_numReadsLineEdit.setText(str(totSequences))
+			self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
+			self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+		
+
+
+			outfile = open(outputFolder+"/hq_reads.fasta","w")
+			totNumHQBases = 0
+			for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
+				if len(str(seq_record.seq))>int(minLen):
+					SeqIO.write(seq_record,outfile,"fasta")
+					totNumHQBases+= len(str(seq_record.seq))
+
+			os.system("rm "+outputFolder+"/masked.fasta")
+			self.o_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
 			
-
-
-				outfile = open(outputFolder+"/hq_reads.fasta","w")
-				totNumHQBases = 0
-				for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
-					if len(str(seq_record.seq))>int(minLen):
-						SeqIO.write(seq_record,outfile,"fasta")
-						totNumHQBases+= len(str(seq_record.seq))
-
-				os.system("rm "+outputFolder+"/masked.fasta")
-				self.o_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
-				
 			reads = outputFolder+"/hq_reads.fasta"
 		else:
 			reads = outputFolder+"/originalReads.fasta"
