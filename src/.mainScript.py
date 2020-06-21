@@ -549,7 +549,9 @@ class Ui_Form(object):
 					print("Assembling %d reads" %numReadsToAssemble)
 					self.logTextEdit.append("* * * Using "+str(numReadsToAssemble)+" reads....")
 					self.logTextEdit.repaint()
-					#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
+					os.system("rm "+outputFolder+"/raven.fasta")
+					os.system(installationDirectory+"/src/conda/bin/raven -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/toAssemble.fasta > "+outputFolder+"/raven.fasta")
+					""" #os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
 					os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
 					toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
 					os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
@@ -557,8 +559,8 @@ class Ui_Form(object):
 					os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+self.numThreadsLineEdit.text()+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
 					maxScaffoldLength = 0
 					longestContig = ""
-					
-					for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
+					 """
+					for seq_record in SeqIO.parse(outputFolder+"/raven.fasta","fasta"):
 						if len(str(seq_record.seq)) > maxScaffoldLength:
 							maxScaffoldLength = len(str(seq_record.seq))
 							longestContig = str(seq_record.seq)
