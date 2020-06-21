@@ -521,7 +521,7 @@ class Ui_Form(object):
 					if numAttempt == 5:
 						break
 					
-					for b in range(0,19500,+150):
+					for b in range(0,windowSize-500,+150):
 						tfile = open(outputFolder+"/outputMinimap_filtered")						
 
 						collectedReads = 0
