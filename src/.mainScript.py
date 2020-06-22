@@ -568,7 +568,7 @@ class Ui_Form(object):
 					
 					#os.system("rm -rf "+outputFolder+"/sb*")
 					#os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
-					for seq_record in SeqIO.parse(outputFolder+"/outputIdba.scaffold.fa","fasta"):
+					for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
 						if len(str(seq_record.seq)) > maxScaffoldLength:
 							maxScaffoldLength = len(str(seq_record.seq))
 							longestContig = str(seq_record.seq)
@@ -576,8 +576,7 @@ class Ui_Form(object):
 					self.logTextEdit.append("* * * Contig size: "+str(maxScaffoldLength))
 					self.logTextEdit.repaint()
 				stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
-				print("Finished window")
-				sys.stdin.read(1)
+
 
 			stage_a.close()
 			os.system("rm -rf "+outputFolder+"/outputMinimap* "+outputFolder+"/partReference.fasta " +\
