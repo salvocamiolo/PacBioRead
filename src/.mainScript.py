@@ -507,7 +507,7 @@ class Ui_Form(object):
 				tempFasta.write(">partReference\n"+partSeq+"\n")
 				tempFasta.close()
 
-				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -B 0 -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
+				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
 
 				os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 
@@ -568,7 +568,8 @@ class Ui_Form(object):
 					maxScaffoldLength = 0
 					longestContig = ""
 					 """
-					for seq_record in SeqIO.parse(outputFolder+"/raven.fasta","fasta"):
+					os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
+					for seq_record in SeqIO.parse(outputFolder+"/sb_Scaffold.fasta","fasta"):
 						if len(str(seq_record.seq)) > maxScaffoldLength:
 							maxScaffoldLength = len(str(seq_record.seq))
 							longestContig = str(seq_record.seq)
