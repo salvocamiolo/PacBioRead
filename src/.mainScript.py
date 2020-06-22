@@ -520,8 +520,16 @@ class Ui_Form(object):
 					numAttempt +=1
 					if numAttempt == 5:
 						break
-					
-					for b in range(0,windowSize-500,+150):
+					tfile = open(outputFolder+"/outputMinimap_filtered")
+					while True:
+						tline = tfile.readline().rstrip()
+						if not tline:
+							break
+						tfields = tline.split("\t")
+						readsToAssemble.add(tfields[0])
+					tfile.close()
+
+					"""for b in range(0,windowSize-500,+150):
 						tfile = open(outputFolder+"/outputMinimap_filtered")						
 
 						collectedReads = 0
@@ -536,7 +544,7 @@ class Ui_Form(object):
 								collectedReads+=1
 								if collectedReads == numAttempt:
 									break
-					tfile.close()
+					tfile.close()"""
 
 					outfile = open(outputFolder+"/toAssemble.fasta","w")
 					numReadsToAssemble = 0
