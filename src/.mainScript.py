@@ -520,7 +520,7 @@ class Ui_Form(object):
 					numAttempt +=1
 					if numAttempt == 2:
 						break
-					tfile = open(outputFolder+"/outputMinimap_filtered")
+					tfile = open(outputFolder+"/outputMinimap")
 					while True:
 						tline = tfile.readline().rstrip()
 						if not tline:
