@@ -507,7 +507,7 @@ class Ui_Form(object):
 				tempFasta.write(">partReference\n"+partSeq+"\n")
 				tempFasta.close()
 
-				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -B 2 -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
+				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -B 1 -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
 
 				os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 
