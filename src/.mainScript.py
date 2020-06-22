@@ -507,10 +507,13 @@ class Ui_Form(object):
 				tempFasta.write(">partReference\n"+partSeq+"\n")
 				tempFasta.close()
 
-				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
+				#os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
 
-				os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+				#os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 
+				os.system("lordfast --index "+outputFolder+"/partReference.fasta")
+				os.system("lordfast --search "+outputFolder+"/partReference.fasta  --seq "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/alignment.sam")
+				os.system("samtools view -F 4 "+outputFolder+"/alignment.sam  | cut -f 1 > "+outputFolder+"/outputMinimap")
 				readsToAssemble = set()
 				numAttempt = 0
 				maxScaffoldLength = 0
@@ -568,9 +571,9 @@ class Ui_Form(object):
 					maxScaffoldLength = 0
 					longestContig = ""
 					 """
-					os.system("rm -rf "+outputFolder+"/sb*")
-					os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
-					for seq_record in SeqIO.parse(outputFolder+"/sb_Scaffold.fasta","fasta"):
+					#os.system("rm -rf "+outputFolder+"/sb*")
+					#os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
+					for seq_record in SeqIO.parse(outputFolder+"/raven.fasta","fasta"):
 						if len(str(seq_record.seq)) > maxScaffoldLength:
 							maxScaffoldLength = len(str(seq_record.seq))
 							longestContig = str(seq_record.seq)
