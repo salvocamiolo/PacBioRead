@@ -568,6 +568,7 @@ class Ui_Form(object):
 					maxScaffoldLength = 0
 					longestContig = ""
 					 """
+					os.system("rm -rf "+outputFolder+"/sb*")
 					os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
 					for seq_record in SeqIO.parse(outputFolder+"/sb_Scaffold.fasta","fasta"):
 						if len(str(seq_record.seq)) > maxScaffoldLength:
