@@ -518,7 +518,7 @@ class Ui_Form(object):
 				
 				while float(maxScaffoldLength) < float(windowSize)*0.9:
 					numAttempt +=1
-					if numAttempt == 5:
+					if numAttempt == 2:
 						break
 					tfile = open(outputFolder+"/outputMinimap_filtered")
 					while True:
@@ -576,6 +576,8 @@ class Ui_Form(object):
 					self.logTextEdit.append("* * * Contig size: "+str(maxScaffoldLength))
 					self.logTextEdit.repaint()
 				stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
+				print("Finished window")
+				sys.stdin.read(1)
 
 			stage_a.close()
 			os.system("rm -rf "+outputFolder+"/outputMinimap* "+outputFolder+"/partReference.fasta " +\
