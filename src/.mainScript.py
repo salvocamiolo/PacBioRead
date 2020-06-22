@@ -397,59 +397,57 @@ class Ui_Form(object):
 			refSeq = str(seq_record.seq)
 
 		# Perform HQ read fragmentaiton
-		performHQFrgm = False
-		if performHQFrgm == True:
-			self.logTextEdit.append("* * Extracting high quality read portions....\n")
-			self.logTextEdit.repaint()
 
-			inputFile = self.readsFileLineEdit.text()
-			threshold = self.qualityLineEdit.text()
-			minLen = 150
+		self.logTextEdit.append("* * Extracting high quality read portions....\n")
+		self.logTextEdit.repaint()
 
-			numSeq = 0
-			totSequences = 0
-			qualityValues = []
-			totNumBases = 0
-			outfile = open(outputFolder+"/masked.fasta","w")
-			for seq_record in SeqIO.parse(inputFile,"fastq"):
-				numSeq+=1
-				totSequences+=1
-				if totSequences%3000 == 0:
-					self.logTextEdit.append("* * * "+str(totSequences)+" reads analyzed....")
-					self.logTextEdit.repaint()
-				sequence = str(seq_record.seq)
-				totNumBases+=len(sequence)
+		inputFile = self.readsFileLineEdit.text()
+		threshold = self.qualityLineEdit.text()
+		minLen = 150
 
-				quality = seq_record.letter_annotations["phred_quality"]
-				maskedSeq = ""
-				for a in range(len(quality)):
-					qualityValues.append(float(quality[a]))
-					if quality[a]>int(threshold):
-						maskedSeq+=sequence[a]
-					else:
-						outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
-						numSeq+=1
-						maskedSeq=""
-			outfile.close()
-			self.o_numReadsLineEdit.setText(str(totSequences))
-			self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
-			self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+		numSeq = 0
+		totSequences = 0
+		qualityValues = []
+		totNumBases = 0
+		outfile = open(outputFolder+"/masked.fasta","w")
+		for seq_record in SeqIO.parse(inputFile,"fastq"):
+			numSeq+=1
+			totSequences+=1
+			if totSequences%3000 == 0:
+				self.logTextEdit.append("* * * "+str(totSequences)+" reads analyzed....")
+				self.logTextEdit.repaint()
+			sequence = str(seq_record.seq)
+			totNumBases+=len(sequence)
+
+			quality = seq_record.letter_annotations["phred_quality"]
+			maskedSeq = ""
+			for a in range(len(quality)):
+				qualityValues.append(float(quality[a]))
+				if quality[a]>int(threshold):
+					maskedSeq+=sequence[a]
+				else:
+					outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+					numSeq+=1
+					maskedSeq=""
+		outfile.close()
+		self.o_numReadsLineEdit.setText(str(totSequences))
+		self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
+		self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+	
+
+
+		outfile = open(outputFolder+"/hq_reads.fasta","w")
+		totNumHQBases = 0
+		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
+			if len(str(seq_record.seq))>int(minLen):
+				SeqIO.write(seq_record,outfile,"fasta")
+				totNumHQBases+= len(str(seq_record.seq))
+
+		os.system("rm "+outputFolder+"/masked.fasta")
+		self.o_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
 		
+		reads = outputFolder+"/hq_reads.fasta"
 
-
-			outfile = open(outputFolder+"/hq_reads.fasta","w")
-			totNumHQBases = 0
-			for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
-				if len(str(seq_record.seq))>int(minLen):
-					SeqIO.write(seq_record,outfile,"fasta")
-					totNumHQBases+= len(str(seq_record.seq))
-
-			os.system("rm "+outputFolder+"/masked.fasta")
-			self.o_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
-			
-			reads = outputFolder+"/hq_reads.fasta"
-		else:
-			reads = outputFolder+"/originalReads.fasta"
 		
 		
 		#Perform reference guided de novo assembly
@@ -507,13 +505,10 @@ class Ui_Form(object):
 				tempFasta.write(">partReference\n"+partSeq+"\n")
 				tempFasta.close()
 
-				#os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
+				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
 
-				#os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+				os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 
-				os.system("lordfast --index "+outputFolder+"/partReference.fasta")
-				os.system("lordfast --search "+outputFolder+"/partReference.fasta  --seq "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/alignment.sam")
-				os.system("samtools view -F 4 "+outputFolder+"/alignment.sam  | cut -f 1 > "+outputFolder+"/outputMinimap")
 				readsToAssemble = set()
 				numAttempt = 0
 				maxScaffoldLength = 0
@@ -521,9 +516,9 @@ class Ui_Form(object):
 				
 				while float(maxScaffoldLength) < float(windowSize)*0.9:
 					numAttempt +=1
-					if numAttempt == 2:
+					if numAttempt == 5:
 						break
-					tfile = open(outputFolder+"/outputMinimap")
+					tfile = open(outputFolder+"/outputMinimap_filtered")
 					while True:
 						tline = tfile.readline().rstrip()
 						if not tline:
@@ -532,7 +527,7 @@ class Ui_Form(object):
 						readsToAssemble.add(tfields[0])
 					tfile.close()
 
-					"""for b in range(0,windowSize-500,+150):
+					for b in range(0,windowSize-500,+150):
 						tfile = open(outputFolder+"/outputMinimap_filtered")						
 
 						collectedReads = 0
@@ -547,7 +542,7 @@ class Ui_Form(object):
 								collectedReads+=1
 								if collectedReads == numAttempt:
 									break
-					tfile.close()"""
+					tfile.close()
 
 					outfile = open(outputFolder+"/toAssemble.fasta","w")
 					numReadsToAssemble = 0
