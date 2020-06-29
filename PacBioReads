@@ -15,13 +15,15 @@ from PyQt5.QtWidgets import QMessageBox
 
 import os,sys
 from Bio import SeqIO
+import numpy as np
+import time
 
 
 
 class Ui_Form(object):
 	def setupUi(self, Form,installationDirectory):
 		Form.setObjectName("Form")
-		Form.resize(846, 536)
+		Form.resize(846, 653)
 		self.label = QtWidgets.QLabel(Form)
 		self.label.setGeometry(QtCore.QRect(10, 10, 101, 16))
 		self.label.setObjectName("label")
@@ -29,10 +31,10 @@ class Ui_Form(object):
 		self.projectFolderLineEdit.setGeometry(QtCore.QRect(10, 30, 361, 21))
 		self.projectFolderLineEdit.setObjectName("projectFolderLineEdit")
 		self.projectFolderButton = QtWidgets.QPushButton(Form)
-		self.projectFolderButton.setGeometry(QtCore.QRect(390, 27, 113, 30))
+		self.projectFolderButton.setGeometry(QtCore.QRect(390, 30, 113, 21))
 		self.projectFolderButton.setObjectName("projectFolderButton")
 		self.readsFileButton = QtWidgets.QPushButton(Form)
-		self.readsFileButton.setGeometry(QtCore.QRect(390, 78, 113, 30))
+		self.readsFileButton.setGeometry(QtCore.QRect(390, 80, 113, 21))
 		self.readsFileButton.setObjectName("readsFileButton")
 		self.label_2 = QtWidgets.QLabel(Form)
 		self.label_2.setGeometry(QtCore.QRect(10, 60, 101, 16))
@@ -41,7 +43,7 @@ class Ui_Form(object):
 		self.readsFileLineEdit.setGeometry(QtCore.QRect(10, 80, 361, 21))
 		self.readsFileLineEdit.setObjectName("readsFileLineEdit")
 		self.referenceButton = QtWidgets.QPushButton(Form)
-		self.referenceButton.setGeometry(QtCore.QRect(390, 127, 113, 30))
+		self.referenceButton.setGeometry(QtCore.QRect(390, 130, 113, 21))
 		self.referenceButton.setObjectName("referenceButton")
 		self.label_3 = QtWidgets.QLabel(Form)
 		self.label_3.setGeometry(QtCore.QRect(10, 110, 101, 16))
@@ -71,29 +73,105 @@ class Ui_Form(object):
 		self.label_14.setGeometry(QtCore.QRect(140, 170, 101, 16))
 		self.label_14.setObjectName("label_14")
 		self.runButton = QtWidgets.QPushButton(Form)
-		self.runButton.setGeometry(QtCore.QRect(600, 490, 113, 32))
+		self.runButton.setGeometry(QtCore.QRect(600, 620, 113, 21))
 		self.runButton.setObjectName("runButton")
 		self.exitButton = QtWidgets.QPushButton(Form)
-		self.exitButton.setGeometry(QtCore.QRect(720, 490, 113, 32))
+		self.exitButton.setGeometry(QtCore.QRect(720, 620, 113, 21))
 		self.exitButton.setObjectName("exitButton")
 		self.label_16 = QtWidgets.QLabel(Form)
-		self.label_16.setGeometry(QtCore.QRect(20, 290, 111, 16))
+		self.label_16.setGeometry(QtCore.QRect(20, 420, 111, 16))
 		self.label_16.setObjectName("label_16")
 		self.logTextEdit = QtWidgets.QTextEdit(Form)
-		self.logTextEdit.setGeometry(QtCore.QRect(10, 310, 821, 161))
+		self.logTextEdit.setGeometry(QtCore.QRect(10, 440, 821, 161))
 		self.logTextEdit.setObjectName("logTextEdit")
 		self.qualityStatsButton = QtWidgets.QPushButton(Form)
-		self.qualityStatsButton.setGeometry(QtCore.QRect(136, 247, 111, 30))
+		self.qualityStatsButton.setGeometry(QtCore.QRect(140, 250, 101, 21))
 		self.qualityStatsButton.setObjectName("qualityStatsButton")
-		self.label_17 = QtWidgets.QLabel(Form)
-		self.label_17.setGeometry(QtCore.QRect(540, 10, 111, 16))
+		self.numThreadsLineEdit = QtWidgets.QLineEdit(Form)
+		self.numThreadsLineEdit.setGeometry(QtCore.QRect(270, 190, 101, 21))
+		self.numThreadsLineEdit.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+		self.numThreadsLineEdit.setObjectName("numThreadsLineEdit")
+		self.numThreadsLabel = QtWidgets.QLabel(Form)
+		self.numThreadsLabel.setGeometry(QtCore.QRect(270, 170, 101, 16))
+		self.numThreadsLabel.setObjectName("numThreadsLabel")
+		self.label_4 = QtWidgets.QLabel(Form)
+		self.label_4.setGeometry(QtCore.QRect(520, 10, 101, 16))
+		self.label_4.setObjectName("label_4")
+		self.frame = QtWidgets.QFrame(Form)
+		self.frame.setGeometry(QtCore.QRect(520, 30, 311, 391))
+		self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+		self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+		self.frame.setObjectName("frame")
+		self.groupBox = QtWidgets.QGroupBox(self.frame)
+		self.groupBox.setGeometry(QtCore.QRect(10, 10, 291, 171))
+		self.groupBox.setObjectName("groupBox")
+		self.o_numReadsLineEdit = QtWidgets.QLineEdit(self.groupBox)
+		self.o_numReadsLineEdit.setEnabled(True)
+		self.o_numReadsLineEdit.setGeometry(QtCore.QRect(10, 50, 113, 23))
+		self.o_numReadsLineEdit.setReadOnly(True)
+		self.o_numReadsLineEdit.setObjectName("o_numReadsLineEdit")
+		self.label_5 = QtWidgets.QLabel(self.groupBox)
+		self.label_5.setGeometry(QtCore.QRect(10, 30, 101, 16))
+		self.label_5.setObjectName("label_5")
+		self.o_avQualLineEdit = QtWidgets.QLineEdit(self.groupBox)
+		self.o_avQualLineEdit.setEnabled(True)
+		self.o_avQualLineEdit.setGeometry(QtCore.QRect(160, 50, 113, 23))
+		self.o_avQualLineEdit.setReadOnly(True)
+		self.o_avQualLineEdit.setObjectName("o_avQualLineEdit")
+		self.label_6 = QtWidgets.QLabel(self.groupBox)
+		self.label_6.setGeometry(QtCore.QRect(160, 30, 101, 16))
+		self.label_6.setObjectName("label_6")
+		self.o_estCoverageLineEdit = QtWidgets.QLineEdit(self.groupBox)
+		self.o_estCoverageLineEdit.setEnabled(True)
+		self.o_estCoverageLineEdit.setGeometry(QtCore.QRect(10, 120, 113, 23))
+		self.o_estCoverageLineEdit.setReadOnly(True)
+		self.o_estCoverageLineEdit.setObjectName("o_estCoverageLineEdit")
+		self.label_7 = QtWidgets.QLabel(self.groupBox)
+		self.label_7.setGeometry(QtCore.QRect(10, 100, 101, 16))
+		self.label_7.setObjectName("label_7")
+		self.o_estHQCoverageLineEdit = QtWidgets.QLineEdit(self.groupBox)
+		self.o_estHQCoverageLineEdit.setEnabled(True)
+		self.o_estHQCoverageLineEdit.setGeometry(QtCore.QRect(160, 120, 113, 23))
+		self.o_estHQCoverageLineEdit.setReadOnly(True)
+		self.o_estHQCoverageLineEdit.setObjectName("o_estHQCoverageLineEdit")
+		self.label_8 = QtWidgets.QLabel(self.groupBox)
+		self.label_8.setGeometry(QtCore.QRect(160, 100, 101, 16))
+		self.label_8.setObjectName("label_8")
+		self.groupBox_2 = QtWidgets.QGroupBox(self.frame)
+		self.groupBox_2.setGeometry(QtCore.QRect(10, 210, 291, 171))
+		self.groupBox_2.setObjectName("groupBox_2")
+		self.r_numReadsLineEdit_3 = QtWidgets.QLineEdit(self.groupBox_2)
+		self.r_numReadsLineEdit_3.setEnabled(True)
+		self.r_numReadsLineEdit_3.setGeometry(QtCore.QRect(10, 50, 113, 23))
+		self.r_numReadsLineEdit_3.setReadOnly(True)
+		self.r_numReadsLineEdit_3.setObjectName("r_numReadsLineEdit_3")
+		self.label_17 = QtWidgets.QLabel(self.groupBox_2)
+		self.label_17.setGeometry(QtCore.QRect(10, 30, 101, 16))
 		self.label_17.setObjectName("label_17")
-		self.textEdit = QtWidgets.QTextEdit(Form)
-		self.textEdit.setGeometry(QtCore.QRect(540, 30, 291, 241))
-		font = QtGui.QFont()
-		font.setPointSize(10)
-		self.textEdit.setFont(font)
-		self.textEdit.setObjectName("textEdit")
+		self.r_avQualLineEdit = QtWidgets.QLineEdit(self.groupBox_2)
+		self.r_avQualLineEdit.setEnabled(True)
+		self.r_avQualLineEdit.setGeometry(QtCore.QRect(160, 50, 113, 23))
+		self.r_avQualLineEdit.setReadOnly(True)
+		self.r_avQualLineEdit.setObjectName("r_avQualLineEdit")
+		self.label_18 = QtWidgets.QLabel(self.groupBox_2)
+		self.label_18.setGeometry(QtCore.QRect(160, 30, 101, 16))
+		self.label_18.setObjectName("label_18")
+		self.r_estCoverageLineEdit = QtWidgets.QLineEdit(self.groupBox_2)
+		self.r_estCoverageLineEdit.setEnabled(True)
+		self.r_estCoverageLineEdit.setGeometry(QtCore.QRect(10, 120, 113, 23))
+		self.r_estCoverageLineEdit.setReadOnly(True)
+		self.r_estCoverageLineEdit.setObjectName("r_estCoverageLineEdit")
+		self.label_19 = QtWidgets.QLabel(self.groupBox_2)
+		self.label_19.setGeometry(QtCore.QRect(10, 100, 101, 16))
+		self.label_19.setObjectName("label_19")
+		self.r_estHQCoverageLineEdit = QtWidgets.QLineEdit(self.groupBox_2)
+		self.r_estHQCoverageLineEdit.setEnabled(True)
+		self.r_estHQCoverageLineEdit.setGeometry(QtCore.QRect(160, 120, 113, 23))
+		self.r_estHQCoverageLineEdit.setReadOnly(True)
+		self.r_estHQCoverageLineEdit.setObjectName("r_estHQCoverageLineEdit")
+		self.label_20 = QtWidgets.QLabel(self.groupBox_2)
+		self.label_20.setGeometry(QtCore.QRect(160, 100, 101, 16))
+		self.label_20.setObjectName("label_20")
 
 		self.retranslateUi(Form)
 		QtCore.QMetaObject.connectSlotsByName(Form)
@@ -104,29 +182,158 @@ class Ui_Form(object):
 		self.referenceButton.clicked.connect(self.selectReferenceFile)
 		self.runButton.clicked.connect(self.runAssembly)
 		self.exitButton.clicked.connect(self.exitProgram)
+		self.qualityStatsButton.clicked.connect(self.calculateStatistics)
+
+	
+	def calculateStatistics(self):
+		inputFile = self.readsFileLineEdit.text()
+		threshold = self.qualityLineEdit.text()
+		minLen = 150
+
+		self.logTextEdit.append("Read statistics calculation started")
+		self.logTextEdit.repaint()
+		outputFolder = self.projectFolderLineEdit.text()
+
+		#Load reference genome in memory
+		self.logTextEdit.append("Loading reference....")
+		self.logTextEdit.repaint()
+		refFile = self.referenceLineEdit.text()
+		for seq_record in SeqIO.parse(refFile,"fasta"):
+			refSeq = str(seq_record.seq)
+		
+		#Load the reads in memory
+		self.logTextEdit.append("Calculating original read stats....")
+		self.logTextEdit.repaint()
+		
+		numSeq = 0
+		totSequences = 0
+		qualityValues = []
+		totNumBases = 0
+		inputSequences = {}
+		outfile = open(outputFolder+"/masked.fasta","w")
+		for seq_record in SeqIO.parse(inputFile,"fastq"):
+			if not str(seq_record.id) in inputSequences:
+				inputSequences[str(seq_record.id)] = seq_record
+			numSeq+=1
+			totSequences+=1
+			if totSequences%3000 == 0:
+				self.logTextEdit.append("* "+str(totSequences)+" reads analyzed....")
+				self.logTextEdit.repaint()
+			sequence = str(seq_record.seq)
+			totNumBases+=len(sequence)
+
+			quality = seq_record.letter_annotations["phred_quality"]
+			maskedSeq = ""
+			for a in range(len(quality)):
+				qualityValues.append(float(quality[a]))
+				if quality[a]>int(threshold):
+					maskedSeq+=sequence[a]
+				else:
+					outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+					numSeq+=1
+					maskedSeq=""
+		outfile.close()
+
+		self.logTextEdit.append("Calculating stats....")
+		self.logTextEdit.repaint()
+		self.o_numReadsLineEdit.setText(str(totSequences))
+		self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
+		self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+	
+		
+
+		outfile = open(outputFolder+"/hq_reads.fasta","w")
+		totNumHQBases = 0
+		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
+			if len(str(seq_record.seq))>int(minLen):
+				SeqIO.write(seq_record,outfile,"fasta")
+				totNumHQBases+= len(str(seq_record.seq))
+
+		os.system("rm "+outputFolder+"/masked.fasta "+outputFolder+"/hq_reads.fasta")
+		self.o_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
+
+		self.logTextEdit.append("Calculating reference homologous read stats....")
+		self.logTextEdit.append("* Aligning reads....")
+		self.logTextEdit.repaint()
+
+		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+refFile+" "+inputFile+" > "+outputFolder+"/outputMinimap")
+		outfile.close()
+
+		outfile = open(outputFolder+"/refSpecificReads.fastq","w")
+		infile = open(outputFolder+"/outputMinimap")
+		while True:
+			line = infile.readline().rstrip()
+			if not line:
+				break
+			fields = line.split("\t")
+			if (float(fields[3])-float(fields[2]))/float(fields[1]) >0.7:
+				SeqIO.write(inputSequences[fields[0]],outfile,"fastq")
+		outfile.close()
+
+		inputFile = outputFolder+"/refSpecificReads.fastq"
+		numSeq = 0
+		totSequences = 0
+		qualityValues = []
+		totNumBases = 0
+		inputSequences = {}
+		outfile = open(outputFolder+"/masked.fasta","w")
+		for seq_record in SeqIO.parse(inputFile,"fastq"):
+			if not str(seq_record.id) in inputSequences:
+				inputSequences[str(seq_record.id)] = seq_record
+			numSeq+=1
+			totSequences+=1
+			if totSequences%3000 == 0:
+				self.logTextEdit.append("* "+str(totSequences)+" reads analyzed....")
+				self.logTextEdit.repaint()
+			sequence = str(seq_record.seq)
+			totNumBases+=len(sequence)
+
+			quality = seq_record.letter_annotations["phred_quality"]
+			maskedSeq = ""
+			for a in range(len(quality)):
+				qualityValues.append(float(quality[a]))
+				if quality[a]>int(threshold):
+					maskedSeq+=sequence[a]
+				else:
+					outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+					numSeq+=1
+					maskedSeq=""
+		outfile.close()
+
+		self.logTextEdit.append("Calculating stats....")
+		self.logTextEdit.repaint()
+		self.r_numReadsLineEdit_3.setText(str(totSequences))
+		self.r_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
+		self.r_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+	
+		
+
+		outfile = open(outputFolder+"/hq_reads.fasta","w")
+		totNumHQBases = 0
+		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
+			if len(str(seq_record.seq))>int(minLen):
+				SeqIO.write(seq_record,outfile,"fasta")
+				totNumHQBases+= len(str(seq_record.seq))
+
+		os.system("rm "+outputFolder+"/masked.fasta "+outputFolder+"/hq_reads.fasta")
+		self.r_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
+
+
+
+				
+
+			
+
+
 
 
 	def selectProjectFolder(self):
 		folderName = QFileDialog.getExistingDirectory(None, "Select project folder","./")
 		self.projectFolderLineEdit.setText(folderName)
-		self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
-		self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
-		self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
-		self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
-		self.consensusCorrectionLaebl.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Red_tick.png"))
 
 		if os.path.isdir(folderName) == False:
 			os.system("mkdir "+folderName)
 
-		else:
-			if os.path.isfile(folderName+"/hq.fasta") == True:
-				self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-			
-			if os.path.isfile(folderName+"/lastzOutput.txt") == True:
-				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-			
-			if os.path.isfile(folderName+"/hq_specific.fasta") == True:
-				self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
 
 	def selectReadFile(self):
 		filename, __ = QFileDialog.getOpenFileName(None,"Select read file","./")
@@ -146,6 +353,9 @@ class Ui_Form(object):
 	
 	#Check required fields
 	def runAssembly(self):
+
+		self.logTextEdit.append("Reference guided de novo assembly started\n")
+		self.logTextEdit.repaint()
 
 		if os.path.isdir(self.projectFolderLineEdit.text()) == "":
 			msg = QMessageBox()
@@ -178,312 +388,254 @@ class Ui_Form(object):
 			return
 
 		#Convert the input fastq file in fast format
+		self.logTextEdit.append("* Reads preprocessing\n")
+		self.logTextEdit.append("* * Converting input file from fastq to fasta....\n")
+		self.logTextEdit.repaint()
 		outputFolder = self.projectFolderLineEdit.text()
 		os.system(installationDirectory+"/src/conda/bin/fq2fa "+self.readsFileLineEdit.text()+" "+outputFolder+'/originalReads.fasta')
 
+		#Load reference genome in memory
+		refFile = self.referenceLineEdit.text()
+		for seq_record in SeqIO.parse(refFile,"fasta"):
+			refSeq = str(seq_record.seq)
 
 		# Perform HQ read fragmentaiton
-		if self.hqFragmentationCheckBox.isChecked() == True:
-			self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
-			self.logTextEdit.append("High quality read fragmentation started\n")
-			self.logTextEdit.repaint()
 
-			inputFile = self.readsFileLineEdit.text()
-			threshold = self.qualityLineEdit.text()
-			minLen = self.lengthLineEdit.text()
+		self.logTextEdit.append("* * Extracting high quality read portions....\n")
+		self.logTextEdit.repaint()
 
-			numSeq = 0
-			outfile = open(outputFolder+"/masked.fasta","w")
-			for seq_record in SeqIO.parse(inputFile,"fastq"):
-				numSeq+=1
-				if numSeq%1000 == 0:
-					self.logTextEdit.append(str(numSeq)+" analyzed....")
-					self.logTextEdit.repaint()
-					print(str(numSeq)+" analyzed....\n")
-				sequence = str(seq_record.seq)
-				quality = seq_record.letter_annotations["phred_quality"]
-				maskedSeq = ""
-				maskedQual = ""
-				for a in range(len(quality)):
-					if quality[a]>int(threshold):
-						maskedSeq+=sequence[a]
-						maskedQual+="G"
-					else:
-						outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
-						numSeq+=1
-						maskedSeq=""
-			outfile.close()
-			outfile = open(outputFolder+"/hq.fasta","w")
-			for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
-				if len(str(seq_record.seq))>int(minLen):
-					SeqIO.write(seq_record,outfile,"fasta")
+		inputFile = self.readsFileLineEdit.text()
+		threshold = self.qualityLineEdit.text()
+		minLen = 150
 
-			os.system("rm "+outputFolder+"/masked.fasta")
-			self.logTextEdit.append("\nHigh quality read fragmentation finished\n")
-			self.logTextEdit.repaint()
-			self.hqFragmentationLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-		
-
-
-		#Perform read mapping on reference to extract organisms specific reads
-		if self.readsMappingCheckBox.isChecked() == True:
-			self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
-			self.logTextEdit.append("Read mapping on reference started\n")
-			self.logTextEdit.repaint()
-			if os.path.isfile(outputFolder+"/hq.fasta")==True:
-				inputFile = outputFolder+"/hq.fasta"
-				reference = self.referenceLineEdit.text()
-
-				numSeq = 0
-				os.system("rm -f "+outputFolder+"/lastzOutput.txt")
-				os.system("touch "+outputFolder+"/lastzOutput.txt")
-				for seq_record in SeqIO.parse(inputFile,"fasta"):
-					outfile = open(outputFolder+"/tempFasta.fasta","w")
-					SeqIO.write(seq_record,outfile,"fasta")
-					outfile.close()
-					os.system(installationDirectory+"/src/conda/bin/lastz "+outputFolder+"/tempFasta.fasta "+reference+"  --format=general  >> "+outputFolder+"/lastzOutput.txt")
-					numSeq+=1
-					print(numSeq)
-				os.system("rm "+outputFolder+"/temp.fasta")
-				self.logTextEdit.append("\nRead mapping on reference finished\n")
+		numSeq = 0
+		totSequences = 0
+		qualityValues = []
+		totNumBases = 0
+		outfile = open(outputFolder+"/masked.fasta","w")
+		for seq_record in SeqIO.parse(inputFile,"fastq"):
+			numSeq+=1
+			totSequences+=1
+			if totSequences%3000 == 0:
+				self.logTextEdit.append("* * * "+str(totSequences)+" reads analyzed....")
 				self.logTextEdit.repaint()
-				self.referenceReadMappingLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-			else:
-				msg = QMessageBox()
-				msg.setIcon(QMessageBox.Warning)
-				msg.setText("Please run the HQ fragmentation first")
-				msg.setWindowTitle("Warning")
-				msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
-				msg.setStandardButtons(QMessageBox.Ok)
-				msg.exec_()
-				return
+			sequence = str(seq_record.seq)
+			totNumBases+=len(sequence)
 
-		#Perform read mapping on reference to extract organisms specific reads
-		if self.readFilteringCheckBox.isChecked() == True:
-			if os.path.isfile(outputFolder+"/lastzOutput.txt") == True:
-				if os.path.isfile(outputFolder+"/hq.fasta") == True:
-					self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
-					inputFile = outputFolder+"/hq.fasta"
-					lastzOutput = outputFolder+"/lastzOutput.txt"
-					coverage = float(self.coverageLineEdit.text())/100
-
-					self.logTextEdit.append("\nOrganisms specific read filtering started\n")
-					self.logTextEdit.repaint()
-
-
-					sequences = {}
-					self.logTextEdit.append("\nLoading HQ reads in memory\n")
-					self.logTextEdit.repaint()
-
-					for seq_record in SeqIO.parse(inputFile,"fasta"):
-						if not str(seq_record.id) in sequences:
-							sequences[str(seq_record.id)] = seq_record
-
-					self.logTextEdit.append("\nApplying filter\n")
-					self.logTextEdit.repaint()
-					outfile = open(outputFolder+"/hq_specific.fasta","w")
-					infile = open(lastzOutput)
-					numSeq = 0
-					while True:
-						line = infile.readline().rstrip()
-						if not line:
-							break
-						if not "#score" in line:
-							fields = line.split("\t")
-							readName = fields[1]
-							strand = fields[2]
-							length = float(fields[3])
-							start = float(fields[4])
-							end = float(fields[5])
-
-							if abs(end-start)/length> coverage:
-								numSeq +=1
-								if numSeq%1000 == 0:
-									self.logTextEdit.append(str(numSeq)+" reads passed the filter")
-									self.logTextEdit.repaint()
-								SeqIO.write(sequences[readName],outfile,"fasta")
-								print("Read %s comes from Reference!" %readName)
-					self.logTextEdit.append(str(numSeq)+" reads passed the filter")
-					self.logTextEdit.repaint()
-					self.specificReadsLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Green_tick.png"))
-					infile.close()
-					outfile.close()
+			quality = seq_record.letter_annotations["phred_quality"]
+			maskedSeq = ""
+			for a in range(len(quality)):
+				qualityValues.append(float(quality[a]))
+				if quality[a]>int(threshold):
+					maskedSeq+=sequence[a]
 				else:
-					msg = QMessageBox()
-					msg.setIcon(QMessageBox.Warning)
-					msg.setText("Please run the HQ fragmentation first")
-					msg.setWindowTitle("Warning")
-					msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
-					msg.setStandardButtons(QMessageBox.Ok)
-					msg.setStandardButtons(QMessageBox.Ok)
-					msg.exec_()
-					return
+					outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+					numSeq+=1
+					maskedSeq=""
+		outfile.close()
+		self.o_numReadsLineEdit.setText(str(totSequences))
+		self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
+		self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+	
 
-			else:
-				msg = QMessageBox()
-				msg.setIcon(QMessageBox.Warning)
-				msg.setText("Please map the reads to the reference first.")
-				msg.setWindowTitle("Warning")
-				msg.setDetailedText("You should map the reads to the provided reference first. This will generate a file named lastzOutput.txt in your project folder\n ")
-				msg.setStandardButtons(QMessageBox.Ok)
-				msg.exec_()
-				return
+
+		outfile = open(outputFolder+"/hq_reads.fasta","w")
+		totNumHQBases = 0
+		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
+			if len(str(seq_record.seq))>int(minLen):
+				SeqIO.write(seq_record,outfile,"fasta")
+				totNumHQBases+= len(str(seq_record.seq))
+
+		os.system("rm "+outputFolder+"/masked.fasta")
+		self.o_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
 		
+		reads = outputFolder+"/hq_reads.fasta"
 
-			
+		
+		
 		#Perform reference guided de novo assembly
-		if self.readFilteringCheckBox_2.isChecked() == True:
-			self.denovoAssemblyLabel.setPixmap(QtGui.QPixmap(installationDirectory+"/src/Images/1024px-Yellow_tick.png"))
-			reads = ""
-			if os.path.isfile(outputFolder+"/hq_specific.fasta") == True:
-				reads = outputFolder+"/hq_specific.fasta"
-			if os.path.isfile(outputFolder+"/hq.fasta") == True:
-				reads = outputFolder+"/hq.fasta"
+		if reads == "":
+			msg = QMessageBox()
+			msg.setIcon(QMessageBox.Warning)
+			msg.setText("Something did not work with the quality filtering step!")
+			msg.setWindowTitle("Warning")
+			msg.setDetailedText("The quality filtering step did not produce the expected hq_reads.fasta file in the output folder\n ")
+			msg.setStandardButtons(QMessageBox.Ok)
+			msg.setStandardButtons(QMessageBox.Ok)
+			msg.exec_()
+			return
+
+		else:
 			
-			if reads == "":
-				msg = QMessageBox()
-				msg.setIcon(QMessageBox.Warning)
-				msg.setText("Please run the HQ fragmentation first")
-				msg.setWindowTitle("Warning")
-				msg.setDetailedText("You should perform the HQ fragmentation first. This will create a file named hq.fasta in your project folder, which is not there at the moment\n ")
-				msg.setStandardButtons(QMessageBox.Ok)
-				msg.setStandardButtons(QMessageBox.Ok)
-				msg.exec_()
-				return
+			readsSeq = {}
+			windowSize = int(self.windowSizeLineEdit.text())
+			windowStep = int(self.windowStepLineEdit.text())
 
-			else:
-				refFile = self.referenceLineEdit.text()
-				readsSeq = {}
-				windowSize = int(self.windowSizeLineEdit.text())
-				windowStep = int(self.windowStepLineEdit.text())
+			self.logTextEdit.append("* Reference guided de novo assembly")
+			self.logTextEdit.append("* * Loading reads in memory")
+			self.logTextEdit.repaint()
 
-				self.logTextEdit.append("Reference guided de novo assembly started")
-				self.logTextEdit.append("Loading reads in memory")
+			#Loading high quality reads in memory
+			for seq_record in SeqIO.parse(reads,"fasta"):
+				if not str(seq_record.id) in readsSeq:
+					readsSeq[str(seq_record.id)] = str(seq_record.seq)
 
+			
+
+			stage_a = open(outputFolder+"/local_assemblies.fasta","w")
+
+			self.logTextEdit.append("* * Converting high quality reads to fastq format....")
+			self.logTextEdit.repaint()
+			with open(reads, "r") as fasta, open(outputFolder+"/hq_reads.fastq", "w") as fastq:
+				for record in SeqIO.parse(fasta, "fasta"):
+					record.letter_annotations["phred_quality"] = [40] * len(record)
+					SeqIO.write(record, fastq, "fastq")
+
+
+			self.logTextEdit.append("* * Assembly on sliding windows started")
+			self.logTextEdit.repaint()
+			for a in range(0,len(refSeq),+windowStep):
+			#for a in range(1):
+				endPos = a+windowSize
+				if endPos>len(refSeq):
+					endPos=len(refSeq)
+					windowSize = len(refSeq) - a
+
+				self.logTextEdit.append("* * * Assembling region "+str(a)+"-"+str(endPos))
 				self.logTextEdit.repaint()
-				for seq_record in SeqIO.parse(reads,"fasta"):
-				#for seq_record in SeqIO.parse(self.readsFileLineEdit.text(),"fastq"):
-					if not str(seq_record.id) in readsSeq:
-						readsSeq[str(seq_record.id)] = str(seq_record.seq)
+				partSeq = refSeq[a:endPos]
+				tempFasta = open(outputFolder+"/partReference.fasta","w")
+				tempFasta.write(">partReference\n"+partSeq+"\n")
+				tempFasta.close()
 
-				reference = outputFolder+"/partReference.fasta"
+				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
 
+				os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 
+				readsToAssemble = set()
+				numAttempt = 0
+				maxScaffoldLength = 0
 
-				for seq_record in SeqIO.parse(refFile,"fasta"):
-					refSeq = str(seq_record.seq)
-
-				stage_a = open(outputFolder+"/stage_a.fasta","w")
-
-				with open(reads, "r") as fasta, open(reads+".fastq", "w") as fastq:
-					for record in SeqIO.parse(fasta, "fasta"):
-						record.letter_annotations["phred_quality"] = [40] * len(record)
-						SeqIO.write(record, fastq, "fastq")
 				
-				for a in range(0,len(refSeq),+windowStep):
-				#for a in range(1):
-					endPos = a+windowSize
-					if endPos>len(refSeq):
-						endPos=len(refSeq)
-
-					self.logTextEdit.append("Assembling region "+str(a)+"-"+str(endPos))
-					self.logTextEdit.repaint()
-					#print("Assembling range %d-%d" %(a,a+windowSize))
-					partSeq = refSeq[a:endPos]
-					tempFasta = open(outputFolder+"/partReference.fasta","w")
-					tempFasta.write(">partReference\n"+partSeq+"\n")
-					tempFasta.close()
-
-					self.logTextEdit.append("Aligning reads.... ")
-					self.logTextEdit.repaint()
-
-					
-
-
-					os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/partReference.fasta "+reads+".fastq > "+outputFolder+"/outputMinimap")
-
-					os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
-
-					self.logTextEdit.append("Scanning alignment.... ")
-					self.logTextEdit.repaint()
-					readsToAssemble = set()
-					numAttempt = 0
-					maxScaffoldLength = 0
-
-					
-					while float(maxScaffoldLength) < float(windowSize)*0.9:
-						numAttempt +=1
-						if numAttempt == 5:
+				while float(maxScaffoldLength) < float(windowSize)*0.9:
+					numAttempt +=1
+					if numAttempt == 5:
+						break
+					tfile = open(outputFolder+"/outputMinimap_filtered")
+					while True:
+						tline = tfile.readline().rstrip()
+						if not tline:
 							break
-						
-						for b in range(0,19500,+150):
-							tfile = open(outputFolder+"/outputMinimap_filtered")
-							print("Analyzing range %d-%d" %(b,b+150))
-							
-							refPos = -1
-							collectedReads = 0
-							while True:
-								tline = tfile.readline().rstrip()
-								if not tline:
+						tfields = tline.split("\t")
+						readsToAssemble.add(tfields[0])
+					tfile.close()
+
+					for b in range(0,windowSize-500,+150):
+						tfile = open(outputFolder+"/outputMinimap_filtered")						
+
+						collectedReads = 0
+						while True:
+							tline = tfile.readline().rstrip()
+							if not tline:
+								break
+							tfields = tline.split("\t")
+							if int(tfields[7]) >b and int(tfields[7]) <(b+150):
+								readsToAssemble.add(tfields[0])
+								print(tfields[0])
+								collectedReads+=1
+								if collectedReads == numAttempt:
 									break
-								tfields = tline.split("\t")
-								if int(tfields[7]) >b and int(tfields[7]) <(b+150):
-									readsToAssemble.add(tfields[0])
-									print(tfields[0])
-									collectedReads+=1
-									if collectedReads == numAttempt:
-										break
-						tfile.close()
+					tfile.close()
 
-						outfile = open(outputFolder+"/toAssemble.fasta","w")
-						numReadsToAssemble = 0
-						for item in readsToAssemble:
-							if not item == '':
-								numReadsToAssemble+=1
-								outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
-						outfile.close()
+					outfile = open(outputFolder+"/toAssemble.fasta","w")
+					numReadsToAssemble = 0
+					for item in readsToAssemble:
+						if not item == '':
+							numReadsToAssemble+=1
+							outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
+					outfile.close()
 
-						print("Assembling %d reads with cap3" %numReadsToAssemble)
-						self.logTextEdit.append("Assembling "+str(numReadsToAssemble)+" reads")
-						self.logTextEdit.repaint()
-						#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
-						os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
-						toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
-						os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
-						os.system("rm -rf "+outputFolder+"/outputIdba/")
-						os.system(installationDirectory+"/src/conda/bin/idba_hybrid --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads 8 -o "+outputFolder+"/outputIdba")
-						maxScaffoldLength = 0
-						longestContig = ""
-						
-						for seq_record in SeqIO.parse(outputFolder+"//outputIdba/scaffold.fa","fasta"):
-							if len(str(seq_record.seq)) > maxScaffoldLength:
-								maxScaffoldLength = len(str(seq_record.seq))
-								longestContig = str(seq_record.seq)
-
-						self.logTextEdit.append("Scaffold size: "+str(maxScaffoldLength))
-						self.logTextEdit.repaint()
-					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
-
-				stage_a.close()
-
-				#Joining contigs
-				self.logTextEdit.append("\nJoining contigs.... ")
-				self.logTextEdit.repaint()
-				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/stage_a.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
-
-				#Check final number of scaffold and attempt gap closure if > 1
-				finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/stage_b.fasta"))
-
-				if len(finalScaffols)>1:
-					self.logTextEdit.append("\nAttempting gap closure.... ")
+					print("Assembling %d reads" %numReadsToAssemble)
+					self.logTextEdit.append("* * * Using "+str(numReadsToAssemble)+" reads....")
 					self.logTextEdit.repaint()
-					os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
-						-p "+installationDirectory+ " -c "+outputFolder+"/stage_b.fasta -r "+refFile+" -x " + \
-							outputFolder+" -s "+ self.readsFileLineEdit.text()+" -o stage_c.fasta")
+					#os.system("rm "+outputFolder+"/raven.fasta")
+					#os.system(installationDirectory+"/src/conda/bin/raven -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/toAssemble.fasta > "+outputFolder+"/raven.fasta")
+					#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
+					os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+					toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
+					os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
+					os.system("rm -rf "+outputFolder+"/outputIdba/")
+					os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+self.numThreadsLineEdit.text()+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
+					maxScaffoldLength = 0
+					longestContig = ""
+					
+					#os.system("rm -rf "+outputFolder+"/sb*")
+					#os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
+					for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
+						if len(str(seq_record.seq)) > maxScaffoldLength:
+							maxScaffoldLength = len(str(seq_record.seq))
+							longestContig = str(seq_record.seq)
 
-		#Align original reads and create consensus
-		#if self.readFilteringCheckBox_3.isChecked() == True:
+					self.logTextEdit.append("* * * Contig size: "+str(maxScaffoldLength))
+					self.logTextEdit.repaint()
+				stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
+
+			stage_a.close()
+			os.system("rm -rf "+outputFolder+"/outputMinimap* "+outputFolder+"/partReference.fasta " +\
+				outputFolder+"/toAssemble.fasta "+outputFolder+"/simulatedReads* "+outputFolder+\
+					"/allSimulated.fasta "+outputFolder+"/outputIdba/ " +outputFolder+"/null")
+
+			#Joining contigs
+			self.logTextEdit.append("* * Joining contigs.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/local_assemblies.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
+
+			#Check final number of scaffold and attempt gap closure if > 1
+			self.logTextEdit.append("* * Attempting gap closure.... ")
+			self.logTextEdit.repaint()
+			finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta","fasta"))
+
+			if len(finalScaffols)>1:
+				self.logTextEdit.append("\nAttempting gap closure.... ")
+				self.logTextEdit.repaint()
+				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
+					-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
+						outputFolder+" -s "+ self.readsFileLineEdit.text()+" -o scaffolds_gapClosed.fasta")
+			else:
+				os.system("mv "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
+			
+			
+			#Final alignment and consensus calling
+			self.logTextEdit.append("* * Calling consensus.... ")
+			self.logTextEdit.append("* * * Mapping original reads.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/scaffolds_gapClosed.fasta "+self.readsFileLineEdit.text()+" > "+outputFolder+"/alignment.sam")
+			self.logTextEdit.append("* * * Converting sam to bam.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
+			self.logTextEdit.append("* * * Sorting.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
+			self.logTextEdit.append("* * * Indexing.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/alignment_sorted.bam")
+			self.logTextEdit.append("* * * Creating pilleup.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
+				"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
+					"/pileup.txt")
+
+			self.logTextEdit.append("* * * Calling variants.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
+			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+self.readsFileLineEdit.text()+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory ) 
+			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
+			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
+			os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly.fasta")
+
+			self.logTextEdit.append("\n\n De novo assembly finished!")
+			self.logTextEdit.repaint()
 
 
 
@@ -507,27 +659,27 @@ class Ui_Form(object):
 		self.exitButton.setText(_translate("Form", "Exit"))
 		self.label_16.setText(_translate("Form", "Log "))
 		self.qualityStatsButton.setText(_translate("Form", "Quality stats"))
-		self.label_17.setText(_translate("Form", "Quality stats"))
-		self.textEdit.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'.AppleSystemUIFont\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Original reads</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Number:   --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Average quality:  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;30):  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;20):  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;20):  --</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:13pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Reference homologue</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Number:  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Average quality:  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;30):  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;20):  --</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13pt;\">Bases (Q&gt;20):  --</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:13pt;\"><br /></p></body></html>"))
-
-
+		self.numThreadsLineEdit.setText(_translate("Form", "8"))
+		self.numThreadsLabel.setText(_translate("Form", "Num. threads"))
+		self.label_4.setText(_translate("Form", "Read statistics"))
+		self.groupBox.setTitle(_translate("Form", "Original"))
+		self.o_numReadsLineEdit.setText(_translate("Form", "--"))
+		self.label_5.setText(_translate("Form", "Read number"))
+		self.o_avQualLineEdit.setText(_translate("Form", "--"))
+		self.label_6.setText(_translate("Form", "Average  quality"))
+		self.o_estCoverageLineEdit.setText(_translate("Form", "--"))
+		self.label_7.setText(_translate("Form", "Coverage"))
+		self.o_estHQCoverageLineEdit.setText(_translate("Form", "--"))
+		self.label_8.setText(_translate("Form", "HQ coverage"))
+		self.groupBox_2.setTitle(_translate("Form", "Reference specific"))
+		self.r_numReadsLineEdit_3.setText(_translate("Form", "--"))
+		self.label_17.setText(_translate("Form", "Read number"))
+		self.r_avQualLineEdit.setText(_translate("Form", "--"))
+		self.label_18.setText(_translate("Form", "Average  quality"))
+		self.r_estCoverageLineEdit.setText(_translate("Form", "--"))
+		self.label_19.setText(_translate("Form", "Coverage"))
+		self.r_estHQCoverageLineEdit.setText(_translate("Form", "--"))
+		self.label_20.setText(_translate("Form", "HQ coverage"))
 	
 
 	
