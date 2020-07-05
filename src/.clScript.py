@@ -43,7 +43,7 @@ minLen = 150
 
 numSeq = 0
 totSequences = 0
-qualityValues = []
+
 totNumBases = 0
 outfile = open(outputFolder+"/masked.fasta","w")
 for seq_record in SeqIO.parse(inputFile,"fastq"):
@@ -56,14 +56,20 @@ for seq_record in SeqIO.parse(inputFile,"fastq"):
 
     quality = seq_record.letter_annotations["phred_quality"]
     maskedSeq = ""
+    qualityValues = []
     for a in range(len(quality)):
-        qualityValues.append(float(quality[a]))
+        
         if quality[a]>int(threshold):
             maskedSeq+=sequence[a]
+            qualityValues.append(float(quality[a]))
         else:
             outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
             numSeq+=1
             maskedSeq=""
+    if len(qualityValues) == len(quality): #the entire sequence has phred scores higher than the threshold
+        outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+        numSeq+=1
+        maskedSeq=""
 outfile.close()
 
 
