@@ -180,7 +180,7 @@ else:
                     break
                 erfields = erline.split(" ")
                 ero.write("@Sequence_"+str(numSeq_er)+"\n"+erfields[0]+"\n+\n")
-                for y in range(len(fields[0])):
+                for y in range(len(erfields[0])):
                     ero.write("G")
                 ero.write("\n")
                 numSeq_er+=1
