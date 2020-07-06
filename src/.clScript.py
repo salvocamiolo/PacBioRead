@@ -147,14 +147,14 @@ else:
             numAttempt +=1
             if numAttempt == 5:
                 break
-            tfile = open(outputFolder+"/outputMinimap_filtered")
+            """tfile = open(outputFolder+"/outputMinimap_filtered")
             while True:
                 tline = tfile.readline().rstrip()
                 if not tline:
                     break
                 tfields = tline.split("\t")
                 readsToAssemble.add(tfields[0])
-            tfile.close()
+            tfile.close()"""
 
             for b in range(0,windowSize-500,+150):
                 tfile = open(outputFolder+"/outputMinimap_filtered")						
