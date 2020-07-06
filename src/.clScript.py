@@ -207,6 +207,7 @@ else:
                     longestContig = str(seq_record.seq)
 
             print("* * * Contig size: "+str(maxScaffoldLength))
+            sys.stdin.read(1)
             
         stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
