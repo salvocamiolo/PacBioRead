@@ -169,7 +169,7 @@ else:
             print("* * * Using "+str(numReadsToAssemble)+" reads....")
 
 
-            os.system(installationDirectory+"/src/conda/bin/jellyfish count -m 150 -t 10 -s 500m -C "+outputFolder+"/toAssemble.fasta -o "+outputFolder+"/jellyOut")
+            os.system(installationDirectory+"/src/conda/bin/jellyfish count -m 150 -t 10 -s 500M -C "+outputFolder+"/toAssemble.fasta -o "+outputFolder+"/jellyOut")
             os.system(installationDirectory+"/src/conda/bin/jellyfish dump -c "+outputFolder+"/jellyOut | awk '$2>2' > "+outputFolder+"/extractedReads.txt")
             er = open(outputFolder+"/extractedReads.txt")
             ero = open(outputFolder+"/extractedReads.fastq","w")
