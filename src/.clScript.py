@@ -156,8 +156,8 @@ else:
                 readsToAssemble.add(tfields[0])
             tfile.close()"""
             b=0
-            while b<(windowSize-500):
-            #for b in range(0,windowSize-500,+150):
+            #while b<(windowSize-500):
+            for b in range(0,windowSize-500,+150):
                 tfile = open(outputFolder+"/outputMinimap_filtered")						
 
                 collectedReads = 0
@@ -170,14 +170,14 @@ else:
                         readsToAssemble.add(tfields[0])
                         print(tfields[0])
                         collectedReads+=1
-                        if int(tfields[10]) >1200:
+                        """if int(tfields[10]) >1200:
                             b+=int(tfields[10])-1000
                         else:
-                            b+=150
+                            b+=150"""
                         if collectedReads == numAttempt:
                             break
-                if collectedReads==0:
-                    b+=150
+                """if collectedReads==0:
+                    b+=150"""
             tfile.close()
 
             outfile = open(outputFolder+"/toAssemble.fasta","w")
