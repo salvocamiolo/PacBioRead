@@ -145,7 +145,7 @@ else:
         
         while float(maxScaffoldLength) < float(windowSize)*0.9:
             numAttempt +=1
-            if numAttempt == 5:
+            if numAttempt == 2:
                 break
             tfile = open(outputFolder+"/outputMinimap_filtered")
             while True:
@@ -186,7 +186,7 @@ else:
                 numSeq_er+=1
             ero.close()
             os.system("rm -rf "+outputFolder+"/outputSpades")
-            os.system("spades.py -s "+outputFolder+"/extractedReads.fastq --careful --cov-cutoff auto -o "+outputFolder+"/outputSpades --phred-offset 33 ")
+            os.system("spades.py -s "+outputFolder+"/extractedReads.fastq -k 81,91,111 --careful --cov-cutoff auto -o "+outputFolder+"/outputSpades --phred-offset 33 >"+outputFolder+"/null")
 
             #os.system("rm "+outputFolder+"/raven.fasta")
             #os.system(installationDirectory+"/src/conda/bin/raven -t "+numThreads+" "+outputFolder+"/toAssemble.fasta > "+outputFolder+"/raven.fasta")
