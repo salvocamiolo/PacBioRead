@@ -170,7 +170,7 @@ else:
                         readsToAssemble.add(tfields[0])
                         print(tfields[0])
                         collectedReads+=1
-                        b+=int(tfields[10])-150
+                        b+=int(tfields[10])-1000
                         if collectedReads == numAttempt:
                             break
                 if collectedReads==0:
