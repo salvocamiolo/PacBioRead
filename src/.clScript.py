@@ -165,7 +165,7 @@ else:
                     if not tline:
                         break
                     tfields = tline.split("\t")
-                    if int(tfields[7]) >b and int(tfields[7]) <(b+150):
+                    if int(tfields[7]) >b and int(tfields[7]) <(b+150) and tfields[4]=='+':
                         readsToAssemble.add(tfields[0])
                         print(tfields[0])
                         collectedReads+=1
