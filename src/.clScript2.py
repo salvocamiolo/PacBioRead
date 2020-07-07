@@ -53,10 +53,10 @@ for a in range(256,55,-50):
 		fields = line.split("\t")
 		numSeq+=1
 		outfile.write(">Sequence_"+str(numSeq)+"\n"+fields[0]+"\n")
-		totBases+=1
+		totBases+=a
 	infile.close()
-	print("Found %d high confident reads of length %d" %(totBases,a))
-	totBases = totBases*a
+	print("Found %d bases in high confident reads" %totBases)
+	
 	if totBases>10*genomeSize:
 		break
 outfile.close()
@@ -66,6 +66,8 @@ outfile.close()
 
 
 reads = outputFolder+"/hq_reads.fasta"
+print("Subsampling....")
+os.system("seqtk sample -s100 "+outputFolder+"/hq_reads.fasta "+str(int(genomeSize*10/56))+" >"+outputFolder"/subsample.fasta")
 
 
 
@@ -105,7 +107,7 @@ else:
 		tempFasta.close()
 		print("Aligning hq reads with bowtie2")
 		os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+outputFolder+"/partReference.fasta "+outputFolder+"/reference "+outputFolder+"/null")
-		os.system(installationDirectory+"/src/conda/bin/bowtie2  -p "+numThreads+" -x "+outputFolder+"/reference -f  "+outputFolder+"/hq_reads.fasta -S "+outputFolder+"/alignment.sam")
+		os.system(installationDirectory+"/src/conda/bin/bowtie2  -p "+numThreads+" -x "+outputFolder+"/reference -f  "+outputFolder+"/subsample.fasta -S "+outputFolder+"/alignment.sam")
 		print("Converting to bam")
 		os.system(installationDirectory+"/src/conda/bin/samtools view -bS -h -F 4 "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
 		#os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
