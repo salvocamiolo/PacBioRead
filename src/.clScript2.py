@@ -148,12 +148,12 @@ for a in range(0,len(refSeq),+windowStep):
 
 	sys.stdin.read(1)
 	print("Performing local assembly of all reads with idba")
-	os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble_corrected.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
-	toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
-	os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
+	#os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble_corrected.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+	#toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
+	#os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
 	os.system("rm -rf "+outputFolder+"/outputIdba/")
 
-	os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/toAssemble2.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
+	os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/toAssemble_corrected.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
 	maxScaffoldLength = 0
 	longestContig = ""
 
