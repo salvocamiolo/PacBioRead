@@ -113,9 +113,11 @@ for a in range(0,len(refSeq),+windowStep):
 
 	#Correcting toAssemble with hqKmers
 	numCorrReads = 0
+	numSubSeq = 0
 	outfile = open(outputFolder+"/toAssemble_corrected.fasta","w")
 	for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta","fasta"):
 		numCorrReads+=1
+		elongingSequence = ""
 		if numCorrReads%100==0:
 			print("%d reads corrected " %numCorrReads)
 		seqID = str(seq_record.id)
@@ -128,9 +130,15 @@ for a in range(0,len(refSeq),+windowStep):
 		for b in range(0,len(sequence)-9,+9):
 			if sequence[b:b+9] in goodKmers:
 				correctedSequence+=sequence[b:b+9]
+				elongingSequence+=sequence[b:b+9]
 			else:
 				correctedSequence+="NNNNNNNNN"
-		outfile.write(">"+seqID+"\n"+correctedSequence+"\n")
+				if len(elongingSequence)>71:
+					numSubSeq+=1
+					outfile.write(">SubSeq_"+str(numSubSeq)+"\n"+elongingSequence+"\n")
+					elongingSequence=""
+
+		#outfile.write(">"+seqID+"\n"+correctedSequence+"\n")
 	outfile.close()
 
 
@@ -138,7 +146,7 @@ for a in range(0,len(refSeq),+windowStep):
 
 
 
-
+	sys.stdin.read(1)
 	print("Performing local assembly of all reads with idba")
 	os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble_corrected.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
 	toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
