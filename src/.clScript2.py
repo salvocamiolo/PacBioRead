@@ -38,7 +38,7 @@ readsSeq = {}
 #Loading high quality reads in memory
 numSeq = 0
 print("Loading reads in memory")
-for seq_record in SeqIO.parse(inputReadsFile,"fasta"):
+for seq_record in SeqIO.parse(inputReadsFile,"fastq"):
 	numSeq+=1
 	if numSeq%50000==0:
 		print("%d sequences loaded...." %numSeq)
