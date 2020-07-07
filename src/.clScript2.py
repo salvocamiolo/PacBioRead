@@ -135,7 +135,10 @@ for a in range(0,len(refSeq),+windowStep):
 				correctedSequence+="NNNNNNNNN"
 				if len(elongingSequence)>71:
 					numSubSeq+=1
-					outfile.write(">SubSeq_"+str(numSubSeq)+"\n"+elongingSequence+"\n")
+					outfile.write("@SubSeq_"+str(numSubSeq)+"\n"+elongingSequence+"\n+\n")
+					for l in range(len(elongingSequence)):
+						outfile.write("G")
+					outfile.write("\n")
 					elongingSequence=""
 
 		#outfile.write(">"+seqID+"\n"+correctedSequence+"\n")
