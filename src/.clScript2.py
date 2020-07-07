@@ -109,10 +109,15 @@ for a in range(0,len(refSeq),+windowStep):
 			numReadsToAssemble+=1
 			outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
 	outfile.close()
+	print("%d reads aligned to the reference " %numReadsToAssemble)
 
 	#Correcting toAssemble with hqKmers
+	numCorrReads = 0
 	outfile = open(outputFolder+"/toAssemble_corrected.fasta","w")
 	for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta","fasta"):
+		numCorrReads+=1
+		if numCorrReads%100==0:
+			print("%d reads corrected " %numCorrReads)
 		seqID = str(seq_record.id)
 		sequence = str(seq_record.seq)
 		correctedSequence = ""
@@ -121,9 +126,7 @@ for a in range(0,len(refSeq),+windowStep):
 				correctedSequence+=sequence[b:b+21]
 			else:
 				correctedSequence+="NNNNNNNNNNNNNNNNNNNNN"
-	
-		print(correctedSequence)
-		sys.stdin.read(1)
+
 
 
 
@@ -131,7 +134,11 @@ for a in range(0,len(refSeq),+windowStep):
 
 
 	print("Performing local assembly of all reads with idba")
+	os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+	toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
+	os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
 	os.system("rm -rf "+outputFolder+"/outputIdba/")
+
 	os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/toAssemble2.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
 	maxScaffoldLength = 0
 	longestContig = ""
