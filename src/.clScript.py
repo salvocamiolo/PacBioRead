@@ -21,9 +21,9 @@ args = vars(parser.parse_args())
 outputFolder = args['outputFolder']
 inputReadsFile = args['inputReads']
 refFile = args['reference']
-threshold = args['quality']
-windowSize = args['windowSize']
-windowStep = args['windowStep']
+threshold = int(args['quality'])
+windowSize = int(args['windowSize'])
+windowStep = int(args['windowStep'])
 numThreads = args['threads']
 #Convert the input fastq file in fast format
 
