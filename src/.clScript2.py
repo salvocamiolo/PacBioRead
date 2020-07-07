@@ -49,117 +49,87 @@ for seq_record in SeqIO.parse(inputReadsFile,"fastq"):
 
 
 inputFile = inputReadsFile
-outfile = open(outputFolder+"/hq_reads.fasta","w")
+
 numSeq = 0
-for a in range(256,55,-50):
-	print("Extracting high confident reads with length equal to %d" %a)
-	totBases = 0
-	os.system("kmc -k"+str(a)+" "+inputFile+" "+outputFolder+"/kmcOutput "+outputFolder+"/")
-	os.system("kmc_dump -ci2 "+outputFolder+"/kmcOutput "+outputFolder+"/kmcDump_output")
-	infile = open(outputFolder+"/kmcDump_output")
-	while True:
-		line = infile.readline().rstrip()
-		if not line:
-			break
-		fields = line.split("\t")
-		numSeq+=1
-		outfile.write(">Sequence_"+str(numSeq)+"\n"+fields[0]+"\n")
-		totBases+=a
-	infile.close()
-	print("Found %d bases in high confident reads" %totBases)
-	
-	if totBases>10*genomeSize:
+hqKmers = []
+
+
+print("Extracting high confident kmers")
+os.system("kmc -k 21 "+inputFile+" "+outputFolder+"/kmcOutput "+outputFolder+"/")
+os.system("kmc_dump -ci3 "+outputFolder+"/kmcOutput "+outputFolder+"/kmcDump_output")
+infile = open(outputFolder+"/kmcDump_output")
+while True:
+	line = infile.readline().rstrip()
+	if not line:
 		break
-outfile.close()
+	fields = line.split("\t")
+	numSeq+=1
+	hqKmers.append(fields[0])
+
+infile.close()
+print("Found %d high quality kmers" %(len(hqKmers)))
 
 
 
+for a in range(0,len(refSeq),+windowStep):
+#for a in range(1):
+	endPos = a+windowSize
+	if endPos>len(refSeq):
+		endPos=len(refSeq)
+		windowSize = len(refSeq) - a
 
+	print("* * * Assembling region "+str(a)+"-"+str(endPos))
 
-reads = outputFolder+"/hq_reads.fasta"
-print("Subsampling....")
-os.system("seqtk sample -s100 "+outputFolder+"/hq_reads.fasta "+str(int(genomeSize*10/56) )+" >"+outputFolder+"/subsample.fasta")
+	partSeq = refSeq[a:endPos]
+	tempFasta = open(outputFolder+"/partReference.fasta","w")
+	tempFasta.write(">partReference\n"+partSeq+"\n")
+	tempFasta.close()
 
+	os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+inputReadsFile+" > "+outputFolder+"/outputMinimap")
 
+	os.system("awk '($9/$10)>0.70' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 
-#Perform reference guided de novo assembly
-if reads == "":
-	print("Something went wrong with the quality filtering step, now exiting")
-	exit()
+	readsToAssemble = set()
+	numAttempt = 0
+	maxScaffoldLength = 0
 
-else:
+	tfile = open(outputFolder+"/outputMinimap_filtered")
+	while True:
+		tline = tfile.readline().rstrip()
+		if not tline:
+			break
+		tfields = tline.split("\t")
+		readsToAssemble.add(tfields[0])
+	tfile.close()
 
-	print("* Reference guided de novo assembly")
+	outfile = open(outputFolder+"/toAssemble.fasta","w")
+	numReadsToAssemble = 0
+	for item in readsToAssemble:
+		if not item == '':
+			numReadsToAssemble+=1
+			outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
+	outfile.close()
 
+	#Correcting toAssemble with hqKmers
+	outfile = open(outputFolder+"/toAssemble_corrected.fasta","w")
+	for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta","fasta"):
+		seqID = str(seq_record.id)
+		sequence = str(seq_record.seq)
+		correctedSequence = ""
+		for b in range(len(sequence)-21):
+			if sequence[b:b+21] in hqKmers:
+				correctedSequence+=sequence[b:b+21]
+			else:
+				correctedSequence+="NNNNNNNNNNNNNNNNNNNNN"
 	
-
-	stage_a = open(outputFolder+"/local_assemblies.fasta","w")
-
-
+		print(correctedSequence)
+		sys.stdin.read(1)
 
 
-	print("* * Assembly on sliding windows started")
-	
-	for a in range(0,len(refSeq),+windowStep):
-	#for a in range(1):
-		endPos = a+windowSize
-		if endPos>len(refSeq):
-			endPos=len(refSeq)
-			windowSize = len(refSeq) - a
 
-		print("* * * Assembling region with original reads"+str(a)+"-"+str(endPos))
-		
-		partSeq = refSeq[a:endPos]
-		tempFasta = open(outputFolder+"/partReference.fasta","w")
-		tempFasta.write(">partReference\n"+partSeq+"\n")
-		tempFasta.close()
 
-		print("minimap alignment")
-		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+inputReadsFile+" > "+outputFolder+"/outputMinimap")
 
-		os.system("awk '($9/$10)>0.70' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 
-		readsToAssemble = set()
-		numAttempt = 0
-		maxScaffoldLength = 0
-
-		tfile = open(outputFolder+"/outputMinimap_filtered")
-		while True:
-			tline = tfile.readline().rstrip()
-			if not tline:
-				break
-			tfields = tline.split("\t")
-			readsToAssemble.add(tfields[0])
-		tfile.close()
-
-		print("Extracting aligned reads")
-		outfile = open(outputFolder+"/toAssemble.fasta","w")
-		numReadsToAssemble = 0
-		for item in readsToAssemble:
-			if not item == '':
-				numReadsToAssemble+=1
-				outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
-		outfile.close()
-
-		os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 3 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
-		toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
-		os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
-
-		print("Aligning hq reads with bowtie2")
-		os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+outputFolder+"/partReference.fasta "+outputFolder+"/reference "+outputFolder+"/null")
-		os.system(installationDirectory+"/src/conda/bin/bowtie2  -p "+numThreads+" -x "+outputFolder+"/reference -f  "+outputFolder+"/hq_reads.fasta -S "+outputFolder+"/alignment.sam")
-		print("Converting to bam")
-		os.system(installationDirectory+"/src/conda/bin/samtools view -bS -h -F 4 "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
-		#os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
-		print("Extracting aligned reads")
-		os.system("bam2fastq -o "+outputFolder+"/hq_alignedReads.fq -f -q "+outputFolder+"/alignment.bam")
-		
-		os.system(installationDirectory+"/src/conda/bin/fq2fa "+outputFolder+"/hq_alignedReads.fq "+outputFolder+"/hq_alignedReads.fa")
-		
-		print("Concatenating low and high quality aligned reads")
-		os.system("cat "+outputFolder+"/allSimulated.fasta "+outputFolder+"/hq_alignedReads.fa >"+outputFolder+"/toAssemble2.fasta")
-		
-		
 		print("Performing local assembly of all reads with idba")
 		os.system("rm -rf "+outputFolder+"/outputIdba/")
 		os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/toAssemble2.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
