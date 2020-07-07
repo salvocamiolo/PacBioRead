@@ -14,8 +14,8 @@ chmod +x PacBioReads_commmandLine
 
 
 installationPath=$(pwd)
-echo "#!"$installationPath"/src/conda/bin/python" >PacBioReads_commmandLine
-echo "installationDirectory = \""$installationPath"/\"" >> PacBioReads_commmandLine
+echo "#!"$installationPath"/src/conda/bin/python" >PacBioReads_commmandLine2
+echo "installationDirectory = \""$installationPath"/\"" >> PacBioReads_commmandLine2
 echo " " >> PacBioReads_commmandLine2
 cat PacBioReads_commmandLine2 ./src/.clScript2.py >temp ; mv temp PacBioReads_commmandLine
 chmod +x PacBioReads_commmandLine2
