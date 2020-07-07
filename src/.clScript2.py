@@ -67,7 +67,7 @@ outfile.close()
 
 reads = outputFolder+"/hq_reads.fasta"
 print("Subsampling....")
-os.system("seqtk sample -s100 "+outputFolder+"/hq_reads.fasta "+str(int(genomeSize*10/56))+" >"+outputFolder"/subsample.fasta")
+os.system("seqtk sample -s100 "+outputFolder+"/hq_reads.fasta "+str(int(genomeSize*10/56) )+" >"+outputFolder+"/subsample.fasta")
 
 
 
