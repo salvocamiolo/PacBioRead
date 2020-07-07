@@ -12,6 +12,15 @@ echo " " >> PacBioReads_commmandLine
 cat PacBioReads_commmandLine ./src/.clScript.py >temp ; mv temp PacBioReads_commmandLine
 chmod +x PacBioReads_commmandLine
 
+
+installationPath=$(pwd)
+echo "#!"$installationPath"/src/conda/bin/python" >PacBioReads_commmandLine
+echo "installationDirectory = \""$installationPath"/\"" >> PacBioReads_commmandLine
+echo " " >> PacBioReads_commmandLine2
+cat PacBioReads_commmandLine2 ./src/.clScript2.py >temp ; mv temp PacBioReads_commmandLine
+chmod +x PacBioReads_commmandLine2
+
+
 if  test -f "./src/conda/bin/conda"; then
 	echo "Miniconda3 already installed"
 else
