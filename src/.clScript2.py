@@ -112,8 +112,8 @@ else:
 		print("Extracting aligned reads")
 		os.system("bam2fastq -o "+outputFolder+"/alignedReads.fq -f -q "+outputFolder+"/alignment.bam")
 		print("Performing local assembly")
-		sys.stdin.read(1)
-		os.system("spades.py -s "+outputFolder+"/alignment.fq --careful --cov-cutoff auto --phred-offset 33 -o "+outputFolder+"/outputSpades/")
+
+		os.system("spades.py -s "+outputFolder+"/alignedReads.fq --careful --cov-cutoff auto --phred-offset 33 -o "+outputFolder+"/outputSpades/")
 		
 		for seq_record in SeqIO.parse(outputFolder+"/outputSpades/scaffolds.fa","fasta"):
 			if len(str(seq_record.seq)) > maxScaffoldLength:
