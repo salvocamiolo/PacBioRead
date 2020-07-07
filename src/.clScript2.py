@@ -130,76 +130,76 @@ for a in range(0,len(refSeq),+windowStep):
 
 
 
-		print("Performing local assembly of all reads with idba")
-		os.system("rm -rf "+outputFolder+"/outputIdba/")
-		os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/toAssemble2.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
-		maxScaffoldLength = 0
-		longestContig = ""
+	print("Performing local assembly of all reads with idba")
+	os.system("rm -rf "+outputFolder+"/outputIdba/")
+	os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/toAssemble2.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
+	maxScaffoldLength = 0
+	longestContig = ""
 
-		#os.system("rm -rf "+outputFolder+"/sb*")
-		#os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
-		for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
-			if len(str(seq_record.seq)) > maxScaffoldLength:
-				maxScaffoldLength = len(str(seq_record.seq))
-				longestContig = str(seq_record.seq)
+	#os.system("rm -rf "+outputFolder+"/sb*")
+	#os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
+	for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
+		if len(str(seq_record.seq)) > maxScaffoldLength:
+			maxScaffoldLength = len(str(seq_record.seq))
+			longestContig = str(seq_record.seq)
 
-		print("* * * Contig size: "+str(maxScaffoldLength))
+	print("* * * Contig size: "+str(maxScaffoldLength))
 
-		sys.stdin.read(1)	
-		stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
+	sys.stdin.read(1)	
+	stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 
-	stage_a.close()
-	os.system("rm -rf "+outputFolder+"/outputMinimap* "+outputFolder+"/partReference.fasta " +\
-		outputFolder+"/toAssemble.fasta "+outputFolder+"/simulatedReads* "+outputFolder+\
-			"/allSimulated.fasta "+outputFolder+"/outputIdba/ " +outputFolder+"/null")
+stage_a.close()
+os.system("rm -rf "+outputFolder+"/outputMinimap* "+outputFolder+"/partReference.fasta " +\
+	outputFolder+"/toAssemble.fasta "+outputFolder+"/simulatedReads* "+outputFolder+\
+		"/allSimulated.fasta "+outputFolder+"/outputIdba/ " +outputFolder+"/null")
 
-	#Joining contigs
-	print("* * Joining contigs.... ")
-	
-	os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/local_assemblies.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
+#Joining contigs
+print("* * Joining contigs.... ")
 
-	#Check final number of scaffold and attempt gap closure if > 1
-	print("* * Attempting gap closure.... ")
-	
-	finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta","fasta"))
+os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/local_assemblies.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
 
-	if len(finalScaffols)>1:
-		print("\nAttempting gap closure.... ")
-		
-		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
-			-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
-				outputFolder+" -s "+ inputReadsFile+" -o scaffolds_gapClosed.fasta")
-	else:
-		os.system("mv "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
-	
-	
-	#Final alignment and consensus calling
-	print("* * Calling consensus.... ")
-	print("* * * Mapping original reads.... ")
-	
-	os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+numThreads+" "+outputFolder+"/scaffolds_gapClosed.fasta "+inputReadsFile+" > "+outputFolder+"/alignment.sam")
-	print("* * * Converting sam to bam.... ")
-	
-	os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
-	print("* * * Sorting.... ")
-	
-	os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
-	print("* * * Indexing.... ")
-	
-	os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/alignment_sorted.bam")
-	print("* * * Creating pilleup.... ")
-	
-	os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
-		"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
-			"/pileup.txt")
+#Check final number of scaffold and attempt gap closure if > 1
+print("* * Attempting gap closure.... ")
 
-	print("* * * Calling variants.... ")
-	
-	os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
-	os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+inputReadsFile+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory ) 
-	os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
-	os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
-	os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly.fasta")
+finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta","fasta"))
 
-	print("\n\n De novo assembly finished!")
+if len(finalScaffols)>1:
+	print("\nAttempting gap closure.... ")
+	
+	os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
+		-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
+			outputFolder+" -s "+ inputReadsFile+" -o scaffolds_gapClosed.fasta")
+else:
+	os.system("mv "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
+
+
+#Final alignment and consensus calling
+print("* * Calling consensus.... ")
+print("* * * Mapping original reads.... ")
+
+os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+numThreads+" "+outputFolder+"/scaffolds_gapClosed.fasta "+inputReadsFile+" > "+outputFolder+"/alignment.sam")
+print("* * * Converting sam to bam.... ")
+
+os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
+print("* * * Sorting.... ")
+
+os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
+print("* * * Indexing.... ")
+
+os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/alignment_sorted.bam")
+print("* * * Creating pilleup.... ")
+
+os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
+	"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
+		"/pileup.txt")
+
+print("* * * Calling variants.... ")
+
+os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
+os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+inputReadsFile+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory ) 
+os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
+os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
+os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly.fasta")
+
+print("\n\n De novo assembly finished!")
