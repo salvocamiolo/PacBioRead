@@ -130,6 +130,8 @@ for a in range(0,len(refSeq),+windowStep):
 				correctedSequence+=sequence[b:b+9]
 			else:
 				correctedSequence+="NNNNNNNNN"
+		outfile.write(">"+seqID+"\n"+correctedSequence+"\n")
+	outfile.close()
 
 
 
@@ -138,7 +140,7 @@ for a in range(0,len(refSeq),+windowStep):
 
 
 	print("Performing local assembly of all reads with idba")
-	os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+	os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble_corrected.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
 	toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
 	os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
 	os.system("rm -rf "+outputFolder+"/outputIdba/")
