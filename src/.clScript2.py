@@ -115,9 +115,9 @@ else:
 		os.system("bam2fastq -o "+outputFolder+"/alignedReads.fq -f -q "+outputFolder+"/alignment.bam")
 		print("Performing local assembly")
 
-		os.system("spades.py -s "+outputFolder+"/alignedReads.fq --careful --cov-cutoff auto --phred-offset 33 -o "+outputFolder+"/outputSpades/")
+		os.system("spades.py -s "+outputFolder+"/alignedReads.fq -k 31 --careful --cov-cutoff auto --phred-offset 33 -o "+outputFolder+"/outputSpades/")
 		
-		for seq_record in SeqIO.parse(outputFolder+"/outputSpades/scaffolds.fa","fasta"):
+		for seq_record in SeqIO.parse(outputFolder+"/outputSpades/scaffolds.fasta","fasta"):
 			if len(str(seq_record.seq)) > maxScaffoldLength:
 				maxScaffoldLength = len(str(seq_record.seq))
 				longestContig = str(seq_record.seq)
