@@ -141,6 +141,10 @@ else:
 				outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
 		outfile.close()
 
+		os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+		toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
+		os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
+
 		print("Aligning hq reads with bowtie2")
 		os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+outputFolder+"/partReference.fasta "+outputFolder+"/reference "+outputFolder+"/null")
 		os.system(installationDirectory+"/src/conda/bin/bowtie2  -p "+numThreads+" -x "+outputFolder+"/reference -f  "+outputFolder+"/subsample.fasta -S "+outputFolder+"/alignment.sam")
@@ -153,7 +157,7 @@ else:
 		os.system(installationDirectory+"/src/conda/bin/fq2fa "+outputFolder+"/hq_alignedReads.fq "+outputFolder+"/hq_alignedReads.fa")
 		
 		print("Concatenating low and high quality aligned reads")
-		os.system("cat "+outputFolder+"/toAssemble.fasta "+outputFolder+"/hq_alignedReads.fa >"+outputFolder+"/toAssemble2.fasta")
+		os.system("cat "+outputFolder+"/allSimulated.fasta "+outputFolder+"/hq_alignedReads.fa >"+outputFolder+"/toAssemble2.fasta")
 		
 		
 		print("Performing local assembly of all reads with idba")
