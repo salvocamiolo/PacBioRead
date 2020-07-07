@@ -141,13 +141,13 @@ else:
 				outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
 		outfile.close()
 
-		os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+		os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 3 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
 		toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
 		os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
 
 		print("Aligning hq reads with bowtie2")
 		os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+outputFolder+"/partReference.fasta "+outputFolder+"/reference "+outputFolder+"/null")
-		os.system(installationDirectory+"/src/conda/bin/bowtie2  -p "+numThreads+" -x "+outputFolder+"/reference -f  "+outputFolder+"/subsample.fasta -S "+outputFolder+"/alignment.sam")
+		os.system(installationDirectory+"/src/conda/bin/bowtie2  -p "+numThreads+" -x "+outputFolder+"/reference -f  "+outputFolder+"/hq_reads.fasta -S "+outputFolder+"/alignment.sam")
 		print("Converting to bam")
 		os.system(installationDirectory+"/src/conda/bin/samtools view -bS -h -F 4 "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
 		#os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
