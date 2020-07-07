@@ -67,7 +67,7 @@ for seq_record in SeqIO.parse(inputFile,"fastq"):
 			outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
 			numSeq+=1
 			maskedSeq=""
-	if hqBases>10*len(refSeq):
+	if hqBases>50*len(refSeq):
 		break
 outfile.close()
 
@@ -202,6 +202,7 @@ else:
 					longestContig = str(seq_record.seq)
 
 			print("* * * Contig size: "+str(maxScaffoldLength))
+			sys.stdin.read(1)
 
 		stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
