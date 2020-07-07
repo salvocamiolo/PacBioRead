@@ -16,6 +16,7 @@ parser.add_argument("-q","--quality",required=True, help="Phred quality threshol
 parser.add_argument("-wsize","--windowSize",required=True, help="Window size")
 parser.add_argument("-wstep","--windowStep",required=True, help="Window step")
 parser.add_argument("-t","--threads",required=True,help="Number of threads")
+parser.add_argument("-gsize","--genomeSize",required=True,help="Number of threads")
 
 args = vars(parser.parse_args())
 outputFolder = args['outputFolder']
@@ -25,6 +26,7 @@ threshold = args['quality']
 windowSize = args['windowSize']
 windowStep = args['windowStep']
 numThreads = args['threads']
+genomeSize = int(args['genomeSize'])
 #Convert the input fastq file in fast format
 
 os.system(installationDirectory+"/src/conda/bin/fq2fa "+inputReadsFile+" "+outputFolder+'/originalReads.fasta')
@@ -42,6 +44,7 @@ outfile = open(outputFolder+"/hq_reads.fasta","w")
 numSeq = 0
 for a in range(256,55,-50):
 	print("Extracting high confident reads with length equal to %d" %a)
+	totBases = 0
 	os.system("kmc -k"+str(a)+" "+inputFile+" "+outputFolder+"/kmcOutput "+outputFolder+"/")
 	os.system("kmc_dump -ci3 "+outputFolder+"/kmcOutput "+outputFolder+"/kmcDump_output")
 	infile = open(outputFolder+"/kmcDump_output")
@@ -52,7 +55,12 @@ for a in range(256,55,-50):
 		fields = line.split("\t")
 		numSeq+=1
 		outfile.write(">Sequence_"+str(numSeq)+"\n"+fields[0]+"\n")
+		totBases+=1
 	infile.close()
+	print("Found %d high confident reads")
+	totBases = totBases*a
+	if totBases>10*genomeSize:
+		break
 outfile.close()
 
 
@@ -74,24 +82,12 @@ else:
 	
 	
 	print("* Reference guided de novo assembly")
-	print("* * Loading reads in memory")
-	
-
-	#Loading high quality reads in memory
-	for seq_record in SeqIO.parse(reads,"fasta"):
-		if not str(seq_record.id) in readsSeq:
-			readsSeq[str(seq_record.id)] = str(seq_record.seq)
 
 	
 
 	stage_a = open(outputFolder+"/local_assemblies.fasta","w")
 
-	print("* * Converting high quality reads to fastq format....")
-	
-	with open(reads, "r") as fasta, open(outputFolder+"/hq_reads.fastq", "w") as fastq:
-		for record in SeqIO.parse(fasta, "fasta"):
-			record.letter_annotations["phred_quality"] = [40] * len(record)
-			SeqIO.write(record, fastq, "fastq")
+
 
 
 	print("* * Assembly on sliding windows started")
@@ -109,76 +105,24 @@ else:
 		tempFasta = open(outputFolder+"/partReference.fasta","w")
 		tempFasta.write(">partReference\n"+partSeq+"\n")
 		tempFasta.close()
-
-		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
-
-		os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
-
-		readsToAssemble = set()
-		numAttempt = 0
-		maxScaffoldLength = 0
-
+		print("Aligning hq reads with bowtie2")
+		os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+outputFolder+"/partReference.fasta "+outputFolder+"/reference "+outputFolder+"/null")
+		os.system(installationDirectory+"/src/conda/bin/bowtie2  -p "+numThreads+" -x "+outputFolder+"/reference -f  "+outputFolder+"/hq_reads.fasta -S "+outputFolder+"/alignment.sam")
+		print("Converting to bam")
+		os.system(installationDirectory+"/src/conda/bin/samtools view -bS -h -F 4 "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
+		#os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
+		print("Extracting aligned reads")
+		os.system("bam2fastq -o "+outputFolder+"/alignedReads -f -q "+outputFolder+"/alignment.bam")
+		print("Performing local assembly")
+		sys.stdin.read(1)
+		os.system("spades.py -s "+outputFolder+"/alignment")
 		
-		while float(maxScaffoldLength) < float(windowSize)*0.9:
-			numAttempt +=1
-			if numAttempt == 5:
-				break
-			tfile = open(outputFolder+"/outputMinimap_filtered")
-			while True:
-				tline = tfile.readline().rstrip()
-				if not tline:
-					break
-				tfields = tline.split("\t")
-				readsToAssemble.add(tfields[0])
-			tfile.close()
+		for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
+			if len(str(seq_record.seq)) > maxScaffoldLength:
+				maxScaffoldLength = len(str(seq_record.seq))
+				longestContig = str(seq_record.seq)
 
-			"""for b in range(0,windowSize-500,+150):
-				tfile = open(outputFolder+"/outputMinimap_filtered")						
-
-				collectedReads = 0
-				while True:
-					tline = tfile.readline().rstrip()
-					if not tline:
-						break
-					tfields = tline.split("\t")
-					if int(tfields[7]) >b and int(tfields[7]) <(b+150):
-						readsToAssemble.add(tfields[0])
-						print(tfields[0])
-						collectedReads+=1
-						if collectedReads == numAttempt:
-							break
-			tfile.close()"""
-
-			outfile = open(outputFolder+"/toAssemble.fasta","w")
-			numReadsToAssemble = 0
-			for item in readsToAssemble:
-				if not item == '':
-					numReadsToAssemble+=1
-					outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
-			outfile.close()
-
-			print("Assembling %d reads" %numReadsToAssemble)
-			print("* * * Using "+str(numReadsToAssemble)+" reads....")
-			
-			#os.system("rm "+outputFolder+"/raven.fasta")
-			#os.system(installationDirectory+"/src/conda/bin/raven -t "+numThreads+" "+outputFolder+"/toAssemble.fasta > "+outputFolder+"/raven.fasta")
-			#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
-			os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
-			toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
-			os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
-			os.system("rm -rf "+outputFolder+"/outputIdba/")
-			os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
-			maxScaffoldLength = 0
-			longestContig = ""
-			
-			#os.system("rm -rf "+outputFolder+"/sb*")
-			#os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
-			for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
-				if len(str(seq_record.seq)) > maxScaffoldLength:
-					maxScaffoldLength = len(str(seq_record.seq))
-					longestContig = str(seq_record.seq)
-
-			print("* * * Contig size: "+str(maxScaffoldLength))
+		print("* * * Contig size: "+str(maxScaffoldLength))
 			
 		stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
