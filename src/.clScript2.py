@@ -16,25 +16,23 @@ parser.add_argument("-q","--quality",required=True, help="Phred quality threshol
 parser.add_argument("-wsize","--windowSize",required=True, help="Window size")
 parser.add_argument("-wstep","--windowStep",required=True, help="Window step")
 parser.add_argument("-t","--threads",required=True,help="Number of threads")
-parser.add_argument("-gsize","--genomeSize",required=True,help="Number of threads")
+
 
 args = vars(parser.parse_args())
 outputFolder = args['outputFolder']
 inputReadsFile = args['inputReads']
 refFile = args['reference']
 threshold = args['quality']
-windowSize = args['windowSize']
-windowStep = args['windowStep']
+windowSize = int(args['windowSize'])
+windowStep = int(args['windowStep'])
 numThreads = args['threads']
-genomeSize = int(args['genomeSize'])
-#Convert the input fastq file in fast format
 
-os.system(installationDirectory+"/src/conda/bin/fq2fa "+inputReadsFile+" "+outputFolder+'/originalReads.fasta')
 
 #Load reference genome in memory
 
 for seq_record in SeqIO.parse(refFile,"fasta"):
 	refSeq = str(seq_record.seq)
+	genomeSize = len(refSeq)
 
 # Perform HQ read extraction
 
