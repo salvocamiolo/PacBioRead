@@ -45,12 +45,14 @@ numSeq = 0
 totSequences = 0
 qualityValues = []
 totNumBases = 0
+hqBases = 0
 outfile = open(outputFolder+"/masked.fasta","w")
 for seq_record in SeqIO.parse(inputFile,"fastq"):
 	numSeq+=1
 	totSequences+=1
 	if totSequences%3000 == 0:
 		print("* * * "+str(totSequences)+" reads analyzed....")
+		print("* * * "+str(hqBases)+" bases filtered....")
 	sequence = str(seq_record.seq)
 	totNumBases+=len(sequence)
 
@@ -60,10 +62,13 @@ for seq_record in SeqIO.parse(inputFile,"fastq"):
 		qualityValues.append(float(quality[a]))
 		if quality[a]>int(threshold):
 			maskedSeq+=sequence[a]
+			hqBases+=1
 		else:
 			outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
 			numSeq+=1
 			maskedSeq=""
+	if hqBases>10*len(refSeq):
+		break
 outfile.close()
 
 
