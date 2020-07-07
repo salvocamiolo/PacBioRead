@@ -204,7 +204,7 @@ class Ui_Form(object):
 		
 		numSeq = 0
 		totSequences = 0
-		qualityValues = []
+		
 		totNumBases = 0
 		inputSequences = {}
 		outfile = open(outputFolder+"/masked.fasta","w")
@@ -221,14 +221,21 @@ class Ui_Form(object):
 
 			quality = seq_record.letter_annotations["phred_quality"]
 			maskedSeq = ""
+			qualityValues = []
 			for a in range(len(quality)):
-				qualityValues.append(float(quality[a]))
+				
 				if quality[a]>int(threshold):
+					qualityValues.append(float(quality[a]))
 					maskedSeq+=sequence[a]
 				else:
 					outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
 					numSeq+=1
 					maskedSeq=""
+			if len(qualityValues) == len(quality): # the entire sequence has phred scores higher than the threshold
+				outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+				numSeq+=1
+				maskedSeq=""
+				
 		outfile.close()
 
 		self.logTextEdit.append("Calculating stats....")
@@ -518,14 +525,14 @@ class Ui_Form(object):
 					numAttempt +=1
 					if numAttempt == 5:
 						break
-					tfile = open(outputFolder+"/outputMinimap_filtered")
+					"""tfile = open(outputFolder+"/outputMinimap_filtered")
 					while True:
 						tline = tfile.readline().rstrip()
 						if not tline:
 							break
 						tfields = tline.split("\t")
 						readsToAssemble.add(tfields[0])
-					tfile.close()
+					tfile.close()"""
 
 					for b in range(0,windowSize-500,+150):
 						tfile = open(outputFolder+"/outputMinimap_filtered")						

@@ -43,7 +43,7 @@ minLen = 150
 
 numSeq = 0
 totSequences = 0
-qualityValues = []
+
 totNumBases = 0
 outfile = open(outputFolder+"/masked.fasta","w")
 for seq_record in SeqIO.parse(inputFile,"fastq"):
@@ -56,14 +56,20 @@ for seq_record in SeqIO.parse(inputFile,"fastq"):
 
     quality = seq_record.letter_annotations["phred_quality"]
     maskedSeq = ""
+    qualityValues = []
     for a in range(len(quality)):
-        qualityValues.append(float(quality[a]))
+        
         if quality[a]>int(threshold):
             maskedSeq+=sequence[a]
+            qualityValues.append(float(quality[a]))
         else:
             outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
             numSeq+=1
             maskedSeq=""
+    if len(qualityValues) == len(quality): #the entire sequence has phred scores higher than the threshold
+        outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+        numSeq+=1
+        maskedSeq=""
 outfile.close()
 
 
@@ -130,7 +136,7 @@ else:
 
         os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
 
-        os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+        os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn | awk '($11/$2)>0.5' | awk '($10/$11)>0.7' >  "+outputFolder+"/outputMinimap_filtered ")
 
         readsToAssemble = set()
         numAttempt = 0
@@ -139,7 +145,7 @@ else:
         
         while float(maxScaffoldLength) < float(windowSize)*0.9:
             numAttempt +=1
-            if numAttempt == 5:
+            if numAttempt == 2:
                 break
             tfile = open(outputFolder+"/outputMinimap_filtered")
             while True:
@@ -149,23 +155,7 @@ else:
                 tfields = tline.split("\t")
                 readsToAssemble.add(tfields[0])
             tfile.close()
-
-            for b in range(0,windowSize-500,+150):
-                tfile = open(outputFolder+"/outputMinimap_filtered")						
-
-                collectedReads = 0
-                while True:
-                    tline = tfile.readline().rstrip()
-                    if not tline:
-                        break
-                    tfields = tline.split("\t")
-                    if int(tfields[7]) >b and int(tfields[7]) <(b+150):
-                        readsToAssemble.add(tfields[0])
-                        print(tfields[0])
-                        collectedReads+=1
-                        if collectedReads == numAttempt:
-                            break
-            tfile.close()
+            
 
             outfile = open(outputFolder+"/toAssemble.fasta","w")
             numReadsToAssemble = 0
@@ -177,26 +167,47 @@ else:
 
             print("Assembling %d reads" %numReadsToAssemble)
             print("* * * Using "+str(numReadsToAssemble)+" reads....")
-            
+
+
+            os.system(installationDirectory+"/src/conda/bin/jellyfish count -m 150 -t 10 -s 500M -C "+outputFolder+"/toAssemble.fasta -o "+outputFolder+"/jellyOut")
+            os.system(installationDirectory+"/src/conda/bin/jellyfish dump -c "+outputFolder+"/jellyOut | awk '$2>2' > "+outputFolder+"/extractedReads.txt")
+            er = open(outputFolder+"/extractedReads.txt")
+            ero = open(outputFolder+"/extractedReads.fastq","w")
+            numSeq_er = 0
+            while True:
+                erline = er.readline().rstrip()
+                if not erline:
+                    break
+                erfields = erline.split(" ")
+                ero.write("@Sequence_"+str(numSeq_er)+"\n"+erfields[0]+"\n+\n")
+                for y in range(len(erfields[0])):
+                    ero.write("G")
+                ero.write("\n")
+                numSeq_er+=1
+            ero.close()
+            os.system("rm -rf "+outputFolder+"/outputSpades")
+            os.system("spades.py -s "+outputFolder+"/extractedReads.fastq -k 21 --careful --cov-cutoff auto -o "+outputFolder+"/outputSpades --phred-offset 33 >"+outputFolder+"/null")
+
             #os.system("rm "+outputFolder+"/raven.fasta")
             #os.system(installationDirectory+"/src/conda/bin/raven -t "+numThreads+" "+outputFolder+"/toAssemble.fasta > "+outputFolder+"/raven.fasta")
             #os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
-            os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
-            toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
-            os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
-            os.system("rm -rf "+outputFolder+"/outputIdba/")
-            os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
+            #os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+            #toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
+            #os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
+            #os.system("rm -rf "+outputFolder+"/outputIdba/")
+            #os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
             maxScaffoldLength = 0
             longestContig = ""
             
             #os.system("rm -rf "+outputFolder+"/sb*")
             #os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
-            for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
+            for seq_record in SeqIO.parse(outputFolder+"/outputSpades/scaffolds.fasta","fasta"):
                 if len(str(seq_record.seq)) > maxScaffoldLength:
                     maxScaffoldLength = len(str(seq_record.seq))
                     longestContig = str(seq_record.seq)
 
             print("* * * Contig size: "+str(maxScaffoldLength))
+            sys.stdin.read(1)
             
         stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
