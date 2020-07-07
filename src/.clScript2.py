@@ -150,7 +150,7 @@ else:
 		print("Extracting aligned reads")
 		os.system("bam2fastq -o "+outputFolder+"/hq_alignedReads.fq -f -q "+outputFolder+"/alignment.bam")
 		
-		os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/hq_alignedReads.fq "+outputFolder+"/hq_alignedReads.fa")
+		os.system(installationDirectory+"/src/conda/bin/fq2fa "+outputFolder+"/hq_alignedReads.fq "+outputFolder+"/hq_alignedReads.fa")
 		
 		print("Concatenating low and high quality aligned reads")
 		os.system("cat "+outputFolder+"/toAssemble.fasta "+outputFolder+"/hq_alignedReads.fa >"+outputFolder+"/toAssemble2.fasta")
