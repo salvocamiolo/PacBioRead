@@ -51,7 +51,7 @@ for seq_record in SeqIO.parse(inputReadsFile,"fastq"):
 inputFile = inputReadsFile
 
 numSeq = 0
-hqKmers = []
+hqKmers = set()
 
 
 print("Extracting high confident kmers")
@@ -64,7 +64,7 @@ while True:
 		break
 	fields = line.split("\t")
 	numSeq+=1
-	hqKmers.append(fields[0])
+	hqKmers.add(fields[0])
 
 infile.close()
 print("Found %d high quality kmers" %(len(hqKmers)))
@@ -121,8 +121,12 @@ for a in range(0,len(refSeq),+windowStep):
 		seqID = str(seq_record.id)
 		sequence = str(seq_record.seq)
 		correctedSequence = ""
+		kmerInReads = set()
 		for b in range(0,len(sequence)-9,+9):
-			if sequence[b:b+9] in hqKmers:
+			kmerInReads.add(sequence[b:b+9])
+		goodKmers = kmerInReads - hqKmers
+		for b in range(0,len(sequence)-9,+9):
+			if sequence[b:b+9] in goodKmers:
 				correctedSequence+=sequence[b:b+9]
 			else:
 				correctedSequence+="NNNNNNNNN"
