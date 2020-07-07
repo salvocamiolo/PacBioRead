@@ -34,6 +34,17 @@ for seq_record in SeqIO.parse(refFile,"fasta"):
 	refSeq = str(seq_record.seq)
 	genomeSize = len(refSeq)
 
+readsSeq = {}
+#Loading high quality reads in memory
+numSeq = 0
+print("Loading reads in memory")
+for seq_record in SeqIO.parse(reads,"fasta"):
+	numSeq+=1
+	if numSeq%50000==0:
+		print("%d sequences loaded...." %numSeq)
+	if not str(seq_record.id) in readsSeq:
+		readsSeq[str(seq_record.id)] = str(seq_record.seq)
+
 # Perform HQ read extraction
 
 
@@ -77,10 +88,7 @@ if reads == "":
 	exit()
 
 else:
-	
-	readsSeq = {}
-	
-	
+
 	print("* Reference guided de novo assembly")
 
 	
@@ -99,12 +107,40 @@ else:
 			endPos=len(refSeq)
 			windowSize = len(refSeq) - a
 
-		print("* * * Assembling region "+str(a)+"-"+str(endPos))
+		print("* * * Assembling region with original reads"+str(a)+"-"+str(endPos))
 		
 		partSeq = refSeq[a:endPos]
 		tempFasta = open(outputFolder+"/partReference.fasta","w")
 		tempFasta.write(">partReference\n"+partSeq+"\n")
 		tempFasta.close()
+
+		print("minimap alignment")
+		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
+
+		os.system("awk '(($4-$3)/$2)>0.80' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+
+		readsToAssemble = set()
+		numAttempt = 0
+		maxScaffoldLength = 0
+
+		tfile = open(outputFolder+"/outputMinimap_filtered")
+		while True:
+			tline = tfile.readline().rstrip()
+			if not tline:
+				break
+			tfields = tline.split("\t")
+			readsToAssemble.add(tfields[0])
+		tfile.close()
+
+		print("Extracting aligned reads")
+		outfile = open(outputFolder+"/toAssemble.fasta","w")
+		numReadsToAssemble = 0
+		for item in readsToAssemble:
+			if not item == '':
+				numReadsToAssemble+=1
+				outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
+		outfile.close()
+
 		print("Aligning hq reads with bowtie2")
 		os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+outputFolder+"/partReference.fasta "+outputFolder+"/reference "+outputFolder+"/null")
 		os.system(installationDirectory+"/src/conda/bin/bowtie2  -p "+numThreads+" -x "+outputFolder+"/reference -f  "+outputFolder+"/subsample.fasta -S "+outputFolder+"/alignment.sam")
@@ -112,17 +148,29 @@ else:
 		os.system(installationDirectory+"/src/conda/bin/samtools view -bS -h -F 4 "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
 		#os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
 		print("Extracting aligned reads")
-		os.system("bam2fastq -o "+outputFolder+"/alignedReads.fq -f -q "+outputFolder+"/alignment.bam")
-		print("Performing local assembly")
-
-		os.system("spades.py -s "+outputFolder+"/alignedReads.fq -k 31 --careful --cov-cutoff auto --phred-offset 33 -o "+outputFolder+"/outputSpades/")
+		os.system("bam2fastq -o "+outputFolder+"/hq_alignedReads.fq -f -q "+outputFolder+"/alignment.bam")
+		
+		os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/hq_alignedReads.fq "+outputFolder+"/hq_alignedReads.fa")
+		
+		print("Concatenating low and high quality aligned reads")
+		os.system("cat "+outputFolder+"/toAssemble.fasta "+outputFolder+"/hq_alignedReads.fa >"+outputFolder+"/toAssemble2.fasta")
+		
+		
+		print("Performing local assembly of all reads with idba")
+		os.system("rm -rf "+outputFolder+"/outputIdba/")
+		os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/toAssemble2.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
 		maxScaffoldLength = 0
-		for seq_record in SeqIO.parse(outputFolder+"/outputSpades/scaffolds.fasta","fasta"):
+		longestContig = ""
+
+		#os.system("rm -rf "+outputFolder+"/sb*")
+		#os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
+		for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
 			if len(str(seq_record.seq)) > maxScaffoldLength:
 				maxScaffoldLength = len(str(seq_record.seq))
 				longestContig = str(seq_record.seq)
 
 		print("* * * Contig size: "+str(maxScaffoldLength))
+
 		sys.stdin.read(1)	
 		stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
