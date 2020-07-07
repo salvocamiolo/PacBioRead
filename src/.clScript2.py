@@ -55,7 +55,7 @@ hqKmers = []
 
 
 print("Extracting high confident kmers")
-os.system("kmc -k 21 "+inputFile+" "+outputFolder+"/kmcOutput "+outputFolder+"/")
+os.system("kmc -k21 "+inputFile+" "+outputFolder+"/kmcOutput "+outputFolder+"/")
 os.system("kmc_dump -ci3 "+outputFolder+"/kmcOutput "+outputFolder+"/kmcDump_output")
 infile = open(outputFolder+"/kmcDump_output")
 while True:
@@ -116,7 +116,7 @@ for a in range(0,len(refSeq),+windowStep):
 		seqID = str(seq_record.id)
 		sequence = str(seq_record.seq)
 		correctedSequence = ""
-		for b in range(len(sequence)-21):
+		for b in range(0,len(sequence)-21,+21):
 			if sequence[b:b+21] in hqKmers:
 				correctedSequence+=sequence[b:b+21]
 			else:
