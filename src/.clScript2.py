@@ -55,7 +55,7 @@ for a in range(256,55,-50):
 		outfile.write(">Sequence_"+str(numSeq)+"\n"+fields[0]+"\n")
 		totBases+=1
 	infile.close()
-	print("Found %d high confident reads")
+	print("Found %d high confident reads of length %d" %(totBases,a))
 	totBases = totBases*a
 	if totBases>10*genomeSize:
 		break
@@ -110,18 +110,18 @@ else:
 		os.system(installationDirectory+"/src/conda/bin/samtools view -bS -h -F 4 "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
 		#os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
 		print("Extracting aligned reads")
-		os.system("bam2fastq -o "+outputFolder+"/alignedReads -f -q "+outputFolder+"/alignment.bam")
+		os.system("bam2fastq -o "+outputFolder+"/alignedReads.fq -f -q "+outputFolder+"/alignment.bam")
 		print("Performing local assembly")
 		sys.stdin.read(1)
-		os.system("spades.py -s "+outputFolder+"/alignment")
+		os.system("spades.py -s "+outputFolder+"/alignment.fq --careful --cov-cutoff auto --phred-offset 33 -o "+outputFolder+"/outputSpades/")
 		
-		for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
+		for seq_record in SeqIO.parse(outputFolder+"/outputSpades/scaffolds.fa","fasta"):
 			if len(str(seq_record.seq)) > maxScaffoldLength:
 				maxScaffoldLength = len(str(seq_record.seq))
 				longestContig = str(seq_record.seq)
 
 		print("* * * Contig size: "+str(maxScaffoldLength))
-			
+		sys.stdin.read(1)	
 		stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 
