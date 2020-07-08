@@ -126,7 +126,7 @@ for a in range(0,len(refSeq),+windowStep):
 		kmerInReads = set()
 		for b in range(0,len(sequence)-9,+9):
 			kmerInReads.add(sequence[b:b+9])
-		goodKmers = kmerInReads - hqKmers
+		goodKmers = kmerInReads & hqKmers
 		for b in range(0,len(sequence)-9,+9):
 			if sequence[b:b+9] in goodKmers:
 				correctedSequence+=sequence[b:b+9]
