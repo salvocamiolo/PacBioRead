@@ -416,7 +416,7 @@ class Ui_Form(object):
 		totSequences = 0
 		qualityValues = []
 		totNumBases = 0
-		outfile = open(outputFolder+"/masked.fasta","w")
+		outfile = open(outputFolder+"/hq_reads.fasta","w")
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
 			numSeq+=1
 			totSequences+=1
@@ -433,7 +433,8 @@ class Ui_Form(object):
 				if quality[a]>int(threshold):
 					maskedSeq+=sequence[a]
 				else:
-					outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
+					if len(maskedSeq)>int(minLen):
+						outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
 					numSeq+=1
 					maskedSeq=""
 		outfile.close()
@@ -443,7 +444,7 @@ class Ui_Form(object):
 	
 
 
-		outfile = open(outputFolder+"/hq_reads.fasta","w")
+"""		outfile = open(outputFolder+"/hq_reads.fasta","w")
 		totNumHQBases = 0
 		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
 			if len(str(seq_record.seq))>int(minLen):
@@ -452,7 +453,7 @@ class Ui_Form(object):
 
 		os.system("rm "+outputFolder+"/masked.fasta")
 		self.o_estHQCoverageLineEdit.setText(str(  int(float(totNumHQBases) / float(len(refSeq)) )  )+" X")
-		
+		"""
 		reads = outputFolder+"/hq_reads.fasta"
 
 		
