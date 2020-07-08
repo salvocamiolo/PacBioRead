@@ -100,7 +100,8 @@ for a in range(0,len(refSeq),+windowStep):
 		if not tline:
 			break
 		tfields = tline.split("\t")
-		start = int(tfields[7])
+		readsToAssemble.add(tfields[0])
+		"""start = int(tfields[7])
 		end = int(tfields[8])
 		if start<end:
 			mappingRange = (start,end)
@@ -122,7 +123,7 @@ for a in range(0,len(refSeq),+windowStep):
 			readsToAssemble.add(tfields[0])
 			mappingRanges.append(mappingRange)
 		#print(redundantRead)
-		#sys.stdin.read(1)
+		#sys.stdin.read(1)"""
 	
 	tfile.close()
 
@@ -138,11 +139,13 @@ for a in range(0,len(refSeq),+windowStep):
 	os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
 	os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
 
-
+	print('Reads collected')
+	sys.stdin.read(1)
+	
 	#Correcting toAssemble with hqKmers
 	numCorrReads = 0
 	numSubSeq = 0
-	outfile = open(outputFolder+"/allSimulated_corrected.fastq","w")
+	"""outfile = open(outputFolder+"/allSimulated_corrected.fastq","w")
 	for seq_record in SeqIO.parse(outputFolder+"/allSimulated.fasta","fasta"):
 		numCorrReads+=1
 		elongingSequence = ""
@@ -161,7 +164,7 @@ for a in range(0,len(refSeq),+windowStep):
 				elongingSequence+=sequence[b:b+9]
 			else:
 				correctedSequence+="NNNNNNNNN"
-				"""if len(elongingSequence)>71:
+				if len(elongingSequence)>71:
 					numSubSeq+=1
 					outfile.write("@SubSeq_"+str(numSubSeq)+"\n"+elongingSequence+"\n+\n")
 					for l in range(len(elongingSequence)):
@@ -187,7 +190,7 @@ for a in range(0,len(refSeq),+windowStep):
 	#os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
 	os.system("rm -rf "+outputFolder+"/outputIdba/")
 
-	os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated_corrected.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
+	os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
 	maxScaffoldLength = 0
 	longestContig = ""
 
