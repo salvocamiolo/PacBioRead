@@ -429,7 +429,7 @@ class Ui_Form(object):
 			quality = seq_record.letter_annotations["phred_quality"]
 			maskedSeq = ""
 			for a in range(len(quality)):
-				qualityValues.append(float(quality[a]))
+				#qualityValues.append(float(quality[a]))
 				if quality[a]>int(threshold):
 					maskedSeq+=sequence[a]
 				else:
@@ -438,9 +438,9 @@ class Ui_Form(object):
 					numSeq+=1
 					maskedSeq=""
 		outfile.close()
-		self.o_numReadsLineEdit.setText(str(totSequences))
-		self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
-		self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
+		#self.o_numReadsLineEdit.setText(str(totSequences))
+		#self.o_avQualLineEdit.setText(str(int(np.mean(qualityValues))))
+		#self.o_estCoverageLineEdit.setText(str( int(float(totNumBases) / float(len(refSeq))  )  )+" X")
 	
 
 
