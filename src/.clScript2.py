@@ -56,7 +56,7 @@ hqKmers = set()
 
 print("Extracting high confident kmers")
 os.system("kmc -k9 "+inputFile+" "+outputFolder+"/kmcOutput "+outputFolder+"/")
-os.system("kmc_dump -ci34 "+outputFolder+"/kmcOutput "+outputFolder+"/kmcDump_output")
+os.system("kmc_dump -ci3 "+outputFolder+"/kmcOutput "+outputFolder+"/kmcDump_output")
 infile = open(outputFolder+"/kmcDump_output")
 while True:
 	line = infile.readline().rstrip()
