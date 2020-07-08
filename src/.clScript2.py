@@ -133,7 +133,7 @@ for a in range(0,len(refSeq),+windowStep):
 				elongingSequence+=sequence[b:b+9]
 			else:
 				correctedSequence+="NNNNNNNNN"
-				if len(elongingSequence)>200:
+				if len(elongingSequence)>71:
 					numSubSeq+=1
 					outfile.write("@SubSeq_"+str(numSubSeq)+"\n"+elongingSequence+"\n+\n")
 					for l in range(len(elongingSequence)):
