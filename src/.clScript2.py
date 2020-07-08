@@ -109,6 +109,7 @@ for a in range(0,len(refSeq),+windowStep):
 		
 		redundantRead = False
 		for item in mappingRanges:
+			print(item,mappingRange)
 			#if (item[1] - mappingRange[0]) >100 or (mappingRange[1] - item[0])>100 : 
 			if (mappingRange[0] < item[1] and mappingRange[0]>item[0]) or (mappingRange[1] < item[1] and mappingRange[1]>item[0]):
 				redundantRead =True
@@ -116,6 +117,8 @@ for a in range(0,len(refSeq),+windowStep):
 		if redundantRead == False:
 			readsToAssemble.add(tfields[0])
 			mappingRanges.append(mappingRange)
+		print(redundantRead)
+		sys.stdin.read(1)
 	
 	tfile.close()
 
