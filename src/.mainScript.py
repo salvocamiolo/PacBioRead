@@ -248,7 +248,8 @@ class Ui_Form(object):
 		outfile = open(outputFolder+"/masked.fasta","w")
 		qualityValues = []
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
-
+			if not str(seq_record.id) in inputSequences:
+				inputSequences[str(seq_record.id)] = str(seq_record.seq)
 			numSeq+=1
 			totSequences+=1
 			
