@@ -173,7 +173,7 @@ class Ui_Form(object):
 		self.runButton.clicked.connect(self.runAssembly)
 		self.exitButton.clicked.connect(self.exitProgram)
 		self.qualityStatsButton.clicked.connect(self.calculateStatistics)
-		self.filterButton.clicled.connect(self.filterReads)
+		self.filterButton.clicked.connect(self.filterReads)
 		
 
 	def filterReads(self):
@@ -323,7 +323,7 @@ class Ui_Form(object):
 		plt.legend()
 		fig.savefig(outputFoder+"/"+self.readsFileLineEdit.text()+"_qualityDist.png",dpi=300)
 
-		
+
 
 
 	def selectProjectFolder(self):
