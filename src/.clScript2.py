@@ -117,8 +117,8 @@ for a in range(0,len(refSeq),+windowStep):
 		if redundantRead == False:
 			readsToAssemble.add(tfields[0])
 			mappingRanges.append(mappingRange)
-		print(redundantRead)
-		sys.stdin.read(1)
+		#print(redundantRead)
+		#sys.stdin.read(1)
 	
 	tfile.close()
 
