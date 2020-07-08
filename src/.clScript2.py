@@ -139,8 +139,7 @@ for a in range(0,len(refSeq),+windowStep):
 	os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
 	os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
 
-	print('Reads collected')
-	sys.stdin.read(1)
+
 
 	#Correcting toAssemble with hqKmers
 	numCorrReads = 0
