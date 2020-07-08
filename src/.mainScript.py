@@ -488,6 +488,7 @@ class Ui_Form(object):
 						tfile = open(outputFolder+"/outputMinimap_filtered")						
 
 						collectedReads = 0
+						maxStep = 0
 						while True:
 							tline = tfile.readline().rstrip()
 							if not tline:
@@ -497,8 +498,10 @@ class Ui_Form(object):
 								readsToAssemble.add(tfields[0])
 								print(tfields[0])
 								collectedReads+=1
-								b = int(tfields[8])-300
+								if int(tfields[8])>maxStep:
+									maxStep = int(tfields[8])
 								if collectedReads == numAttempt:
+									b = maxStep-300
 									break
 						b+=150	
 					tfile.close()
