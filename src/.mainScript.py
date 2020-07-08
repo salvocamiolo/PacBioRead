@@ -497,7 +497,7 @@ class Ui_Form(object):
 								readsToAssemble.add(tfields[0])
 								print(tfields[0])
 								collectedReads+=1
-								b = fields[8]-300
+								b = tfields[8]-300
 								if collectedReads == numAttempt:
 									break
 						b+=150	
