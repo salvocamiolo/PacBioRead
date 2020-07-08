@@ -444,7 +444,7 @@ class Ui_Form(object):
 	
 
 
-"""		outfile = open(outputFolder+"/hq_reads.fasta","w")
+		"""outfile = open(outputFolder+"/hq_reads.fasta","w")
 		totNumHQBases = 0
 		for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
 			if len(str(seq_record.seq))>int(minLen):
