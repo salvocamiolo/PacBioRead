@@ -114,7 +114,7 @@ for a in range(0,len(refSeq),+windowStep):
 	#Correcting toAssemble with hqKmers
 	numCorrReads = 0
 	numSubSeq = 0
-	outfile = open(outputFolder+"/toAssemble_corrected.fasta","w")
+	outfile = open(outputFolder+"/toAssemble_corrected.fastq","w")
 	for seq_record in SeqIO.parse(outputFolder+"/toAssemble.fasta","fasta"):
 		numCorrReads+=1
 		elongingSequence = ""
@@ -139,6 +139,8 @@ for a in range(0,len(refSeq),+windowStep):
 					for l in range(len(elongingSequence)):
 						outfile.write("G")
 					outfile.write("\n")
+					elongingSequence=""
+				else:
 					elongingSequence=""
 
 		#outfile.write(">"+seqID+"\n"+correctedSequence+"\n")
