@@ -187,7 +187,7 @@ class Ui_Form(object):
 		numSeq = 0
 		totSequences = 0
 		outputFolder = self.projectFolderLineEdit.text()
-		
+
 		totNumBases = 0
 		outfile = open(outputFolder+"/hq_reads.fasta","w")
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
@@ -217,6 +217,8 @@ class Ui_Form(object):
 				maskedSeq=""
 
 		outfile.close()
+		self.logTextEdit.append("\n\nJob finished!")
+		self.logTextEdit.repaint()
 
 		
 
@@ -392,7 +394,7 @@ class Ui_Form(object):
 			msg.exec_()
 			return
 
-
+		outputFolder = self.projectFolderLineEdit.text()
 
 		#Load reference genome in memory
 		refFile = self.referenceLineEdit.text()
@@ -404,7 +406,7 @@ class Ui_Form(object):
 		if ".fastq" in reads or ".fq" in reads:
 			self.logTextEdit.append("* * Converting input file from fastq to fasta....\n")
 			self.logTextEdit.repaint()
-			outputFolder = self.projectFolderLineEdit.text()
+			
 			os.system(installationDirectory+"/src/conda/bin/fq2fa "+self.readsFileLineEdit.text()+" "+outputFolder+'/originalReads.fasta')
 
 		reads = outputFolder+'/originalReads.fasta'
