@@ -322,7 +322,10 @@ class Ui_Form(object):
 		plt.hist(qualityValues,bins=200,label="Reference mapping reads",color="blue",alpha=0.5)
 		plt.xlabel("Quality phred score")
 		plt.legend()
-		fig.savefig(outputFoder+"/"+self.readsFileLineEdit.text()+"_qualityDist.png",dpi=300)
+		fig.savefig(outputFolder+"/"+self.readsFileLineEdit.text()+"_qualityDist.png",dpi=300)
+
+		self.logTextEdit.append("\n\nJob finished!")
+		self.logTextEdit.repaint()
 
 
 
