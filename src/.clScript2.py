@@ -94,12 +94,28 @@ for a in range(0,len(refSeq),+windowStep):
 	maxScaffoldLength = 0
 
 	tfile = open(outputFolder+"/outputMinimap_filtered")
+	mappingRanges = []
 	while True:
 		tline = tfile.readline().rstrip()
 		if not tline:
 			break
 		tfields = tline.split("\t")
-		readsToAssemble.add(tfields[0])
+		start = int(fields[7])
+		end = int(fields[8])
+		if start<end:
+			mappingRange = (start,end)
+		else:
+			mappingRange (end,start) 
+		
+		redundantRead = False
+		for item in mappingRanges:
+			if mappingRange[0] > item[0] and mappingRange[1] < item[1]: 
+				redundantRead =True
+		
+		if redundantRead == False:
+			readsToAssemble.add(tfields[0])
+			mappingRanges.append(mappingRange)
+	
 	tfile.close()
 
 	outfile = open(outputFolder+"/toAssemble.fasta","w")
