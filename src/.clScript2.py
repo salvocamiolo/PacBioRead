@@ -143,7 +143,7 @@ for a in range(0,len(refSeq),+windowStep):
 					elongingSequence=""
 				else:
 					elongingSequence=""
-			outfile2.write(">"+seqID+"\n"+correctedSequence+"\n")
+		outfile2.write(">"+seqID+"\n"+correctedSequence+"\n")
 
 		#outfile.write(">"+seqID+"\n"+correctedSequence+"\n")
 	outfile.close()
