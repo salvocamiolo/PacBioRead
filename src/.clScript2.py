@@ -110,8 +110,8 @@ for a in range(0,len(refSeq),+windowStep):
 		redundantRead = False
 		for item in mappingRanges:
 			print(item,mappingRange)
-			#if (item[1] - mappingRange[0]) >100 or (mappingRange[1] - item[0])>100 : 
-			if (mappingRange[0] < item[1] and mappingRange[0]>item[0]) or (mappingRange[1] < item[1] and mappingRange[1]>item[0]) or (mappingRange[0]<item[0] and mappingRange[1]>item[1]):
+			if (item[1] - mappingRange[0]) >100 or (mappingRange[1] - item[0])>100 : 
+			#if (mappingRange[0] < item[1] and mappingRange[0]>item[0]) or (mappingRange[1] < item[1] and mappingRange[1]>item[0]) or (mappingRange[0]<item[0] and mappingRange[1]>item[1]):
 				redundantRead =True
 		
 		if redundantRead == False:
