@@ -23,7 +23,7 @@ outputFfile = args['outputFfile']
 
 #Loading the reads in memory
 readSequences = {}
-for seq_record in SeqIO.parse(reads,"fastq"):
+for seq_record in SeqIO.parse(reads,"fasta"):
     if not str(seq_record.id) in readSequences:
         readSequences[str(seq_record.id)] = str(seq_record.seq)
 
