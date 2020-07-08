@@ -249,7 +249,7 @@ class Ui_Form(object):
 		qualityValues = []
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
 			if not str(seq_record.id) in inputSequences:
-				inputSequences[str(seq_record.id)] = seq_record.seq
+				inputSequences[str(seq_record.id)] = seq_record
 			numSeq+=1
 			totSequences+=1
 			
