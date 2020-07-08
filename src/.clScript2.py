@@ -54,7 +54,7 @@ numSeq = 0
 hqKmers = set()
 
 
-p"""rint("Extracting high confident kmers")
+"""rint("Extracting high confident kmers")
 os.system("kmc -k9 "+inputFile+" "+outputFolder+"/kmcOutput "+outputFolder+"/")
 os.system("kmc_dump -ci3 "+outputFolder+"/kmcOutput "+outputFolder+"/kmcDump_output")
 infile = open(outputFolder+"/kmcDump_output")
