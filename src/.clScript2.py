@@ -123,7 +123,7 @@ for a in range(0,len(refSeq),+windowStep):
 	for item in readsToAssemble:
 		if not item == '':
 			numReadsToAssemble+=1
-			outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
+			outfile.write(">"+item+"\n"+readsSeq[item]+"\n")
 	outfile.close()
 	print("%d reads aligned to the reference " %numReadsToAssemble)
 
