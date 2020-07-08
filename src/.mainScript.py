@@ -186,6 +186,7 @@ class Ui_Form(object):
 
 		numSeq = 0
 		totSequences = 0
+		outputFolder = self.projectFolderLineEdit.text()
 		
 		totNumBases = 0
 		outfile = open(outputFolder+"/hq_reads.fasta","w")
