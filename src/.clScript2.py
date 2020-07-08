@@ -100,8 +100,8 @@ for a in range(0,len(refSeq),+windowStep):
 		if not tline:
 			break
 		tfields = tline.split("\t")
-		start = int(fields[7])
-		end = int(fields[8])
+		start = int(tfields[7])
+		end = int(tfields[8])
 		if start<end:
 			mappingRange = (start,end)
 		else:
