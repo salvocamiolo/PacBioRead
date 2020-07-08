@@ -141,7 +141,7 @@ for a in range(0,len(refSeq),+windowStep):
 
 	print('Reads collected')
 	sys.stdin.read(1)
-	
+
 	#Correcting toAssemble with hqKmers
 	numCorrReads = 0
 	numSubSeq = 0
@@ -172,8 +172,8 @@ for a in range(0,len(refSeq),+windowStep):
 					outfile.write("\n")
 					elongingSequence=""
 				else:
-					elongingSequence="""""
-		outfile.write(">"+seqID+"\n"+correctedSequence+"\n")
+					elongingSequence="
+		outfile.write(">"+seqID+"\n"+correctedSequence+"\n")"""
 
 		#outfile.write(">"+seqID+"\n"+correctedSequence+"\n")
 	outfile.close()
