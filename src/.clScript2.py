@@ -54,7 +54,7 @@ numSeq = 0
 hqKmers = set()
 
 
-print("Extracting high confident kmers")
+p"""rint("Extracting high confident kmers")
 os.system("kmc -k9 "+inputFile+" "+outputFolder+"/kmcOutput "+outputFolder+"/")
 os.system("kmc_dump -ci3 "+outputFolder+"/kmcOutput "+outputFolder+"/kmcDump_output")
 infile = open(outputFolder+"/kmcDump_output")
@@ -67,7 +67,7 @@ while True:
 	hqKmers.add(fields[0])
 
 infile.close()
-print("Found %d high quality kmers" %(len(hqKmers)))
+print("Found %d high quality kmers" %(len(hqKmers)))"""
 
 
 
@@ -85,7 +85,7 @@ for a in range(0,len(refSeq),+windowStep):
 	tempFasta.write(">partReference\n"+partSeq+"\n")
 	tempFasta.close()
 
-	os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+inputReadsFile+" > "+outputFolder+"/outputMinimap")
+	os.system(installationDirectory+"/src/conda/bin/minimap2  -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+inputReadsFile+" > "+outputFolder+"/outputMinimap")
 
 	os.system("awk '($11/$2)>0.70' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 
