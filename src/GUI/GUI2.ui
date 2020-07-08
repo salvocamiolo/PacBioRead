@@ -49,24 +49,11 @@
     <string>Select</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="readsFileButton">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>80</y>
-     <width>113</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Select</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>60</y>
+     <y>90</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -75,21 +62,11 @@
     <string>Reads file</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="readsFileLineEdit">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>80</y>
-     <width>361</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QPushButton" name="referenceButton">
    <property name="geometry">
     <rect>
      <x>390</x>
-     <y>130</y>
+     <y>300</y>
      <width>113</width>
      <height>21</height>
     </rect>
@@ -102,7 +79,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>110</y>
+     <y>280</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -115,46 +92,17 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>130</y>
+     <y>300</y>
      <width>361</width>
      <height>21</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_9">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>230</y>
-     <width>101</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Min. quality</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="qualityLineEdit">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>250</y>
-     <width>101</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>30</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="label_13">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>170</y>
+     <y>370</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -167,7 +115,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
+     <y>390</y>
      <width>101</width>
      <height>21</height>
     </rect>
@@ -183,7 +131,7 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>190</y>
+     <y>390</y>
      <width>101</width>
      <height>21</height>
     </rect>
@@ -199,7 +147,7 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>170</y>
+     <y>370</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -257,24 +205,11 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="qualityStatsButton">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>250</y>
-     <width>101</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Quality stats</string>
-   </property>
-  </widget>
   <widget class="QLineEdit" name="numThreadsLineEdit">
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>190</y>
+     <y>390</y>
      <width>101</width>
      <height>21</height>
     </rect>
@@ -290,7 +225,7 @@
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>170</y>
+     <y>370</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -435,38 +370,6 @@
       <string>Coverage</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="o_estHQCoverageLineEdit">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>120</y>
-       <width>113</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>--</string>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_8">
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>100</y>
-       <width>101</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>HQ coverage</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
@@ -576,38 +479,100 @@
       <string>Coverage</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="r_estHQCoverageLineEdit">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>120</y>
-       <width>113</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>--</string>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_20">
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>100</y>
-       <width>101</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>HQ coverage</string>
-     </property>
-    </widget>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>110</y>
+     <width>501</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLineEdit" name="readsFileLineEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>351</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="readsFileButton">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>10</y>
+      <width>113</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="qualityStatsButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>241</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Plot quality score distribution</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="filterButton">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>100</y>
+      <width>113</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Filter</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="qualityLineEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>30</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Min. quality</string>
+    </property>
    </widget>
   </widget>
  </widget>
