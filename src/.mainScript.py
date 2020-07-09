@@ -536,7 +536,7 @@ class Ui_Form(object):
 
 					self.logTextEdit.append("* * * Contig size: "+str(maxScaffoldLength))
 					self.logTextEdit.repaint()
-					sys.stdin.read(1)
+
 				stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 
