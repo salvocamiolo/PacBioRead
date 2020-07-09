@@ -413,7 +413,7 @@ class Ui_Form(object):
 			
 			os.system(installationDirectory+"/src/conda/bin/fq2fa "+self.readsFileLineEdit.text()+" "+outputFolder+'/originalReads.fasta')
 
-		reads = outputFolder+'/originalReads.fasta'
+			reads = outputFolder+'/originalReads.fasta'
 		
 		
 		#Perform reference guided de novo assembly
