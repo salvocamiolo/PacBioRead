@@ -248,7 +248,7 @@ class Ui_Form(object):
 		
 		totNumBases = 0
 		inputSequences = {}
-		outfile = open(outputFolder+"/masked.fasta","w")
+		
 		qualityValues = []
 		for seq_record in SeqIO.parse(inputFile,"fastq"):
 			if not str(seq_record.id) in inputSequences:
@@ -267,7 +267,7 @@ class Ui_Form(object):
 				qualityValues+=quality
 			
 				
-		outfile.close()
+		
 
 		self.logTextEdit.append("Calculating stats....")
 		self.logTextEdit.repaint()
@@ -284,6 +284,10 @@ class Ui_Form(object):
 		self.logTextEdit.append("* Aligning reads....")
 		self.logTextEdit.repaint()
 
+		numSeq = 0
+		totSequences = 0
+		qualityValues = []
+		totNumBases = 0
 		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+refFile+" "+inputFile+" > "+outputFolder+"/outputMinimap")
 		outfile.close()
 
