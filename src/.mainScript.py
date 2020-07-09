@@ -289,7 +289,7 @@ class Ui_Form(object):
 		qualityValues = []
 		totNumBases = 0
 		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+refFile+" "+inputFile+" > "+outputFolder+"/outputMinimap")
-		outfile.close()
+
 
 		outfile = open(outputFolder+"/refSpecificReads.fastq","w")
 		infile = open(outputFolder+"/outputMinimap")
