@@ -562,7 +562,7 @@ class Ui_Form(object):
 						break
 
 					b=0
-					previousCollectedReads = ""
+					collectedReads = []
 					while b<(windowSize-150):
 					#for b in range(0,windowSize-500,+150):
 
@@ -573,11 +573,11 @@ class Ui_Form(object):
 							if not tline:
 								break
 							tfields = tline.split("\t")
-							if int(tfields[7]) >b and int(tfields[7]) <(b+150) and not tfields[0]==previousCollectedReads:
+							if int(tfields[7]) >b and int(tfields[7]) <(b+150) and not tfields[0] in collectedReads:
 								readsToAssemble.add(tfields[0])
 								print(tfields[0])
-								b = int(tfields[8])-300
-								previousCollectedReads = tfields[0]
+								b = int(tfields[8])-150
+								previousCollectedReads.append(tfields[0])
 								break
 						b+=150	
 					tfile.close()
