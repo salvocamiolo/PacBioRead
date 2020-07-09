@@ -9,12 +9,14 @@ parser.add_argument("-g","--validateIndel",required=False,help="Validate indels 
 parser.add_argument("-1","--read1",required=False,help="First fastq file in reads, needed for indel validation")
 parser.add_argument("-r","--reference",required=False,help="Reference fasta file, needed for indel validation")
 parser.add_argument("-p","--installationDirectory",required=False,help="Full path to the GRACy directory")
+parser.add_argument("-t","--threads",required=False,help="Number of threads")
 
 
 args = vars(parser.parse_args())
 inputFile = args['input']
 outputFile = args['output']
 reference = args['reference']
+numThreads = args['threads']
 if not args['validateIndel']:
 	validate = 0
 else:
@@ -25,7 +27,7 @@ read1 = args['read1']
 installationDirectory = args['installationDirectory']
 kmersInReads = []
 if validate == 1:
-	os.system(installationDirectory+"src/conda/bin/jellyfish count -m 50 -s 4G -t 8 -C  -o kmerCount.jf "+read1)
+	os.system(installationDirectory+"src/conda/bin/jellyfish count -m 50 -s 1G -t "+numThreads+" -C  -o kmerCount.jf "+read1)
 
 	refSeq = {}
 	for seq_record in SeqIO.parse(reference,"fasta"):
