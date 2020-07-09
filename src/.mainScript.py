@@ -593,7 +593,7 @@ class Ui_Form(object):
 			self.logTextEdit.append("* * Calling consensus.... ")
 			self.logTextEdit.append("* * * Subsampling.... ")
 			self.logTextEdit.repaint()
-			outfile = open(outputFolder+"./subSample.fasta","w")
+			outfile = open(outputFolder+"/subSample.fasta","w")
 			totCoverage = 0
 			for seq_record in SeqIO.parse(reads,"fasta"):
 				totCoverage+=len(str(seq_record.seq))
