@@ -193,6 +193,7 @@ class Ui_Form(object):
 		self.exitButton.clicked.connect(self.exitProgram)
 		self.qualityStatsButton.clicked.connect(self.calculateStatistics)
 		self.filterButton.clicked.connect(self.filterReads)
+		self.gapClosingReadsButton.clicked.connect(self.selectGapClosingReadsFile)
 		
 
 	def filterReads(self):
@@ -363,6 +364,10 @@ class Ui_Form(object):
 
 		if os.path.isdir(folderName) == False:
 			os.system("mkdir "+folderName)
+
+	def selectGapClosingReadsFile(self):
+		filename, __ = QFileDialog.getOpenFileName(None,"Select read file","./")
+		self.gapClosingReadsLineEdit.setText(filename)
 
 
 	def selectReadFile(self):
