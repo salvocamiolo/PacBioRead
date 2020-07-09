@@ -576,7 +576,7 @@ class Ui_Form(object):
 							if int(tfields[7]) >b and int(tfields[7]) <(b+150) and not tfields[0]==previousCollectedReads:
 								readsToAssemble.add(tfields[0])
 								print(tfields[0])
-								b = maxStep-300
+								b = int(tfields[8])-300
 								previousCollectedReads = tFields[0]
 								break
 						b+=150	
