@@ -584,7 +584,7 @@ class Ui_Form(object):
 				self.logTextEdit.repaint()
 				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
 					-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
-						outputFolder+" -s "+ self.gapClosingReadsLineEdit.txt() +" -o scaffolds_gapClosed.fasta")
+						outputFolder+" -s "+ self.gapClosingReadsLineEdit.text() +" -o scaffolds_gapClosed.fasta")
 			else:
 				os.system("mv "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
 			
