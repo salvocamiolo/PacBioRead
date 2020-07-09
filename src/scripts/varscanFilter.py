@@ -55,12 +55,14 @@ while True:
 	fields = line.split("\t")
 	info = fields[9].split(":")
 	if validate == 1:
+		print("Validating deletions")
 		numValidated = 0
-		if len(fields[4])>1: #a deletion
+
+		if len(fields[4])>1 and (int(info[5]) > int(info[4])): #a deletion
 			numValidated+=1
 			if numValidated%100==1000:
 				print("Validated %d deletion" %numValidated)
-			print("Validating deletions")
+			
 			#print(refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+"-"+fields[3]+"-"+refSeq[fields[0]][int(fields[1]):int(fields[1])+25])
 			#print(refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+"-"+fields[4]+"-"+refSeq[fields[0]][int(fields[1]):int(fields[1])+25-len(fields[4])+1])
 			refAllele = refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+fields[3]+refSeq[fields[0]][int(fields[1]):int(fields[1])+25]
@@ -96,7 +98,7 @@ while True:
 			if altReads>refReads:
 				outfile.write(line+"\n")
 
-		if len(fields[3])>1:
+		if len(fields[3])>1 and (int(info[5]) > int(info[4])):
 			#print("Validating deletion at position %s" %fields[1])
 			#print(refSeq[int(fields[1])-25:int(fields[1])-1]+"-"+fields[3]+"-"+refSeq[int(fields[1])+len(fields[3])-1:int(fields[1])+25])
 			#print(refSeq[int(fields[1])-25:int(fields[1])-1]+"-"+fields[4]+"-"+refSeq[int(fields[1])+len(fields[3])-1:int(fields[1])+25+len(fields[3])-1])
