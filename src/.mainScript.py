@@ -478,7 +478,7 @@ class Ui_Form(object):
 				
 				while float(maxScaffoldLength) < float(windowSize)*0.9:
 					numAttempt +=1
-					if numAttempt == 5:
+					if numAttempt == 2:
 						break
 
 					b=0
@@ -532,6 +532,7 @@ class Ui_Form(object):
 
 					self.logTextEdit.append("* * * Contig size: "+str(maxScaffoldLength))
 					self.logTextEdit.repaint()
+					sys.stdin.read(1)
 				stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 

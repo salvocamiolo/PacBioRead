@@ -45,7 +45,7 @@ else
 	./src/conda/bin/conda install -c bioconda -y tabix
 	./src/conda/bin/conda install -c bioconda -y bcftools
 	./src/conda/bin/conda install -c bioconda -y  jellyfish=2.2.10
-	./src/conda/bin/conda install -c bioconda -y  raven
+	./src/conda/bin/conda install -y matplotlib
 	
 	fi
 fi
