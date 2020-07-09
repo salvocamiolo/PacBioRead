@@ -612,7 +612,7 @@ class Ui_Form(object):
 
 					self.logTextEdit.append("* * * Contig size: "+str(maxScaffoldLength))
 					self.logTextEdit.repaint()
-					lofFile.write("Range "+str(a)+"-"+str(a+windowSize)+"\t"+str(maxScaffoldLength)+"\n")
+					logFile.write("Range "+str(a)+"-"+str(a+windowSize)+"\t"+str(maxScaffoldLength)+"\n")
 
 				stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
