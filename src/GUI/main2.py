@@ -171,6 +171,13 @@ class Ui_Form(object):
         self.homologyLineEdit.setGeometry(QtCore.QRect(260, 460, 101, 21))
         self.homologyLineEdit.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.homologyLineEdit.setObjectName("homologyLineEdit")
+        self.prefixLineEdit = QtWidgets.QLineEdit(Form)
+        self.prefixLineEdit.setGeometry(QtCore.QRect(510, 460, 321, 21))
+        self.prefixLineEdit.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.prefixLineEdit.setObjectName("prefixLineEdit")
+        self.numThreadsLabel_3 = QtWidgets.QLabel(Form)
+        self.numThreadsLabel_3.setGeometry(QtCore.QRect(510, 440, 171, 16))
+        self.numThreadsLabel_3.setObjectName("numThreadsLabel_3")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -217,4 +224,6 @@ class Ui_Form(object):
         self.gapClosingReadsButton.setText(_translate("Form", "Select"))
         self.numThreadsLabel_2.setText(_translate("Form", "Homology"))
         self.homologyLineEdit.setText(_translate("Form", "0.7"))
+        self.prefixLineEdit.setText(_translate("Form", "output"))
+        self.numThreadsLabel_3.setText(_translate("Form", "Output files prefix"))
 

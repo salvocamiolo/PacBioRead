@@ -55,16 +55,20 @@ while True:
 	fields = line.split("\t")
 	info = fields[9].split(":")
 	if validate == 1:
+		numValidated = 0
 		if len(fields[4])>1: #a deletion
-			print("Validating deletion at position %s" %fields[1])
-			print(refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+"-"+fields[3]+"-"+refSeq[fields[0]][int(fields[1]):int(fields[1])+25])
-			print(refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+"-"+fields[4]+"-"+refSeq[fields[0]][int(fields[1]):int(fields[1])+25-len(fields[4])+1])
+			numValidated+=1
+			if numValidated%100==1000:
+				print("Validated %d deletion" %numValidated)
+			print("Validating deletions")
+			#print(refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+"-"+fields[3]+"-"+refSeq[fields[0]][int(fields[1]):int(fields[1])+25])
+			#print(refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+"-"+fields[4]+"-"+refSeq[fields[0]][int(fields[1]):int(fields[1])+25-len(fields[4])+1])
 			refAllele = refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+fields[3]+refSeq[fields[0]][int(fields[1]):int(fields[1])+25]
 			altAllele = refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+fields[4]+refSeq[fields[0]][int(fields[1]):int(fields[1])+25-len(fields[4])+1]
 			refReads = kmersInReads.count(refAllele) + kmersInReads.count(Seq.reverse_complement(refAllele))
 			altReads = kmersInReads.count(altAllele) + kmersInReads.count(Seq.reverse_complement(altAllele))
 
-			print(refAllele)
+			#print(refAllele)
 			os.system(installationDirectory+"src/conda/bin/jellyfish query kmerCount.jf "+refAllele+" >count.txt")
 			countFile = open("count.txt")
 			countLine = countFile.readline().rstrip()
@@ -74,9 +78,9 @@ while True:
 				countList = countLine.split(" ")
 				refReads = int(countList[1])
 			countFile.close()
-			print(refReads)
+			#print(refReads)
 
-			print(altAllele)
+			#print(altAllele)
 			os.system(installationDirectory+"src/conda/bin/jellyfish query kmerCount.jf "+altAllele+" >count.txt")
 			countFile = open("count.txt")
 			countLine = countFile.readline().rstrip()
@@ -86,14 +90,14 @@ while True:
 				countList = countLine.split(" ")
 				altReads = int(countList[1])
 			countFile.close()
-			print(altReads)
+			#print(altReads)
 		
 
 			if altReads>refReads:
 				outfile.write(line+"\n")
 
 		if len(fields[3])>1:
-			print("Validating deletion at position %s" %fields[1])
+			#print("Validating deletion at position %s" %fields[1])
 			#print(refSeq[int(fields[1])-25:int(fields[1])-1]+"-"+fields[3]+"-"+refSeq[int(fields[1])+len(fields[3])-1:int(fields[1])+25])
 			#print(refSeq[int(fields[1])-25:int(fields[1])-1]+"-"+fields[4]+"-"+refSeq[int(fields[1])+len(fields[3])-1:int(fields[1])+25+len(fields[3])-1])
 			refAllele = refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+fields[3]+refSeq[fields[0]][int(fields[1])+len(fields[3])-1:int(fields[1])+25]
@@ -101,7 +105,7 @@ while True:
 			refReads = kmersInReads.count(refAllele) + kmersInReads.count(Seq.reverse_complement(refAllele))
 			altReads = kmersInReads.count(altAllele) + kmersInReads.count(Seq.reverse_complement(altAllele))
 
-			print(refAllele)
+			#print(refAllele)
 			os.system(installationDirectory+"src/conda/bin/jellyfish query kmerCount.jf "+refAllele+" >count.txt")
 			countFile = open("count.txt")
 			countLine = countFile.readline().rstrip()
@@ -111,9 +115,9 @@ while True:
 				countList = countLine.split(" ")
 				refReads = int(countList[1])
 			countFile.close()
-			print(refReads)
+			#print(refReads)
 
-			print(altAllele)
+			#print(altAllele)
 			os.system(installationDirectory+"src/conda/bin/jellyfish query kmerCount.jf "+altAllele+" >count.txt")
 			countFile = open("count.txt")
 			countLine = countFile.readline().rstrip()
@@ -123,7 +127,7 @@ while True:
 				countList = countLine.split(" ")
 				altReads = int(countList[1])
 			countFile.close()
-			print(altReads)
+			#print(altReads)
 		
 
 			if altReads>refReads:
