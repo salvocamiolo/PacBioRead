@@ -21,6 +21,10 @@ outputFolder = args['outputFolder']
 reads = args['reads']
 outputFfile = args['outputFfile']
 
+if ".fastq" in reads or ".fq" in reads:
+    os.system(installationDirectory+"/src/conda/bin/fq2fa "+reads+" "+outputFolder+'/gapClosingReads.fasta')
+    reads = outputFolder+'/gapClosingReads.fasta'
+
 #Loading the reads in memory
 readSequences = {}
 for seq_record in SeqIO.parse(reads,"fasta"):
