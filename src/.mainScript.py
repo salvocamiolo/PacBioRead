@@ -576,7 +576,7 @@ class Ui_Form(object):
 							if int(tfields[7]) >b and int(tfields[7]) <(b+150) and not tfields[0] in collectedReads:
 								readsToAssemble.add(tfields[0])
 								print(tfields[0])
-								b = int(tfields[8])-150
+								b = int(tfields[8])-300
 								collectedReads.append(tfields[0])
 								break
 						b+=150	
