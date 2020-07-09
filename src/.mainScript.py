@@ -577,7 +577,7 @@ class Ui_Form(object):
 								readsToAssemble.add(tfields[0])
 								print(tfields[0])
 								b = int(tfields[8])-300
-								previousCollectedReads = tFields[0]
+								previousCollectedReads = tfields[0]
 								break
 						b+=150	
 					tfile.close()
