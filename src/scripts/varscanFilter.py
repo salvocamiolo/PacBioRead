@@ -55,12 +55,11 @@ while True:
 	fields = line.split("\t")
 	info = fields[9].split(":")
 	if validate == 1:
-		print("Validating deletions")
 		numValidated = 0
 
 		if len(fields[4])>1 and (int(info[5]) > int(info[4])): #a deletion
 			numValidated+=1
-			if numValidated%100==1000:
+			if numValidated%100==0:
 				print("Validated %d deletion" %numValidated)
 			
 			#print(refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+"-"+fields[3]+"-"+refSeq[fields[0]][int(fields[1]):int(fields[1])+25])
