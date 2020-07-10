@@ -22,7 +22,7 @@ outputFolder = args['outputFolder']
 
 
 #Mapping the reads
-os.system(installationDirectory+"/src/conda/bin/lastz "+reference+" "+contigs+" --format=general > "+outputFolder+"/scaffoldMapping.txt")
+os.system(installationDirectory+"/src/conda/bin/minimap2 "+reference+" "+contigs+" > "+outputFolder+"/scaffoldMapping.txt")
 #Getting position and strand for best alignment
 infile = open(outputFolder+"/scaffoldMapping.txt")
 infile.readline().rstrip()
@@ -32,10 +32,10 @@ while True:
     if not line:
         break
     fields = line.split("\t")
-    if not fields[6] in scaffoldInfo:
-        scaffoldInfo[fields[6]] = [0,"",""]
-    if int(fields[0]) > scaffoldInfo[fields[6]][0]:
-        scaffoldInfo[fields[6]] = [int(fields[0]),int(fields[4]),fields[7]]
+    if not fields[5] in scaffoldInfo:
+        scaffoldInfo[fields[5]] = [0,"",""]
+    if int(fields[10]) > scaffoldInfo[fields[5]][0]:
+        scaffoldInfo[fields[5]] = [int(fields[10]),int(fields[2]),fields[4]]
 
 #GEnerating a new fasta file with the contigs in the correct orientation
 contigsSeq = {}
@@ -44,8 +44,11 @@ for seq_record in SeqIO.parse(contigs,"fasta"):
     if not str(seq_record.id) in contigsSeq:
         if scaffoldInfo[str(seq_record.id)][2]=="+":    
             contigsSeq[str(seq_record.id)] = str(seq_record.seq)
+            SeqIO.write(seq_record,outfile,"fasta")
         else:
             contigsSeq[str(seq_record.id)] = Seq.reverse_complement(str(seq_record.seq))
+            SeqIO.write(">"+str(seq_record.id)+"\n"+Seq.reverse_complement(str(seq_record.seq))+"\n")
+outfile.close()
 
 #Get the contigs names in the righ order
 infile = open(contigs)

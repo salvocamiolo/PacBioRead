@@ -33,32 +33,15 @@ for seq_record in SeqIO.parse(reads,"fasta"):
 
 
 
-#Mapping the reads
-os.system(installationDirectory+"/src/conda/bin/lastz "+reference+" "+contigs+" --format=general > scaffoldMapping.txt")
-#Getting position and strand for best alignment
-infile = open("scaffoldMapping.txt")
-infile.readline().rstrip()
-scaffoldInfo = {}
-while True:
-    line = infile.readline().rstrip()
-    if not line:
-        break
-    fields = line.split("\t")
-    if not fields[6] in scaffoldInfo:
-        scaffoldInfo[fields[6]] = [0,"",""]
-    if int(fields[0]) > scaffoldInfo[fields[6]][0]:
-        scaffoldInfo[fields[6]] = [int(fields[0]),int(fields[4]),fields[7]]
+
 
 
 #GEnerating a new fasta file with the contigs in the correct orientation
 contigsSeq = {}
-outfile = open(contigs+"_oriented.fasta","w")
-for seq_record in SeqIO.parse(contigs,"fasta"):
+for seq_record in SeqIO.parse(contigs+"_oriented.fasta","fasta"):
     if not str(seq_record.id) in contigsSeq:
-        if scaffoldInfo[str(seq_record.id)][2]=="+":    
-            contigsSeq[str(seq_record.id)] = str(seq_record.seq)
-        else:
-            contigsSeq[str(seq_record.id)] = Seq.reverse_complement(str(seq_record.seq))
+        contigsSeq[str(seq_record.id)] = str(seq_record.seq)
+
 
 outfile.close()
 #Get the contigs names in the righ order
