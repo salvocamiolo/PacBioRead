@@ -37,6 +37,9 @@ while True:
     if int(fields[10]) > scaffoldInfo[fields[0]][0]:
         scaffoldInfo[fields[0]] = [int(fields[10]),int(fields[2]),fields[4]]
 
+for item in scaffoldInfo:
+    print(item)
+
 #GEnerating a new fasta file with the contigs in the correct orientation
 contigsSeq = {}
 outfile = open(contigs+"_oriented.fasta","w")
