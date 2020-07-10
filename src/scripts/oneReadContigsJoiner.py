@@ -38,7 +38,7 @@ for seq_record in SeqIO.parse(reads,"fasta"):
 
 #GEnerating a new fasta file with the contigs in the correct orientation
 contigsSeq = {}
-for seq_record in SeqIO.parse(contigs+"_oriented.fasta","fasta"):
+for seq_record in SeqIO.parse("scaffolds_oriented.fasta","fasta"):
     if not str(seq_record.id) in contigsSeq:
         contigsSeq[str(seq_record.id)] = str(seq_record.seq)
 
