@@ -40,7 +40,7 @@ while True:
 
 #GEnerating a new fasta file with the contigs in the correct orientation
 contigsSeq = {}
-outfile = open("scaffolds_oriented.fasta","w")
+outfile = open(outputFolder+"/scaffolds_oriented.fasta","w")
 for seq_record in SeqIO.parse(contigs,"fasta"):
     if not str(seq_record.id) in contigsSeq:
         if scaffoldInfo[str(seq_record.id)][2]=="+":    
