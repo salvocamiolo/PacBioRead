@@ -43,7 +43,6 @@ for seq_record in SeqIO.parse(contigs+"_oriented.fasta","fasta"):
         contigsSeq[str(seq_record.id)] = str(seq_record.seq)
 
 
-outfile.close()
 #Get the contigs names in the righ order
 infile = open(contigs)
 orderedContigs = []
