@@ -47,13 +47,9 @@ for seq_record in SeqIO.parse(outputFolder+"/scaffolds_oriented.fasta","fasta"):
 #Get the contigs names in the righ order
 infile = open(contigs)
 orderedContigs = []
-while True:
-    title = infile.readline().rstrip()
-    if not title:
-        break
-    infile.readline().rstrip()
-    title = title.replace(">","")
-    orderedContigs.append(title)
+for seq_record in SeqIO.parse(contigs,"fasta"):
+    orderedContigs.append(str(seq_record.id))
+
 
 
 
