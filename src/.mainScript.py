@@ -556,51 +556,49 @@ class Ui_Form(object):
 				maxScaffoldLength = 0
 
 				
-				while float(maxScaffoldLength) < float(windowSize)*0.9:
-					numAttempt +=1
-					if numAttempt == 2:
-						break
+				
 
-					b=0
-					collectedReads = []
-					while b<(windowSize-150):
-					#for b in range(0,windowSize-500,+150):
+				b=0
+				collectedReads = []
+				while b<(windowSize-150):
+				#for b in range(0,windowSize-500,+150):
 
-						tfile = open(outputFolder+"/outputMinimap_filtered")						
+					tfile = open(outputFolder+"/outputMinimap_filtered")						
 
-						while True:
-							tline = tfile.readline().rstrip()
-							if not tline:
-								break
-							tfields = tline.split("\t")
-							if int(tfields[7]) >b and int(tfields[7]) <(b+150) and not tfields[0] in collectedReads:
-								readsToAssemble.add(tfields[0])
-								print(tfields[0])
-								b = int(tfields[8])-300
-								collectedReads.append(tfields[0])
-								break
-						b+=150	
-					tfile.close()
+					while True:
+						tline = tfile.readline().rstrip()
+						if not tline:
+							break
+						tfields = tline.split("\t")
+						if int(tfields[7]) >b and int(tfields[7]) <(b+150) and not tfields[0] in collectedReads:
+							readsToAssemble.add(tfields[0])
+							print(tfields[0])
+							b = int(tfields[8])-300
+							collectedReads.append(tfields[0])
+							break
+					b+=150	
+				tfile.close()
 
-					outfile = open(outputFolder+"/toAssemble.fasta","w")
-					numReadsToAssemble = 0
-					for item in readsToAssemble:
-						if not item == '':
-							numReadsToAssemble+=1
-							outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
-					outfile.close()
+				outfile = open(outputFolder+"/toAssemble.fasta","w")
+				numReadsToAssemble = 0
+				for item in readsToAssemble:
+					if not item == '':
+						numReadsToAssemble+=1
+						outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
+				outfile.close()
 
-					print("Assembling %d reads" %numReadsToAssemble)
-					self.logTextEdit.append("* * * Using "+str(numReadsToAssemble)+" reads....")
-					self.logTextEdit.repaint()
-					os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
-					toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
-					os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
-					os.system("rm -rf "+outputFolder+"/outputIdba/")
-					os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+self.numThreadsLineEdit.text()+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
-					maxScaffoldLength = 0
-					longestContig = ""
+				print("Assembling %d reads" %numReadsToAssemble)
+				self.logTextEdit.append("* * * Using "+str(numReadsToAssemble)+" reads....")
+				self.logTextEdit.repaint()
+				os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
+				toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
+				os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
+				os.system("rm -rf "+outputFolder+"/outputIdba/")
+				os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+self.numThreadsLineEdit.text()+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
+				maxScaffoldLength = 0
+				longestContig = ""
 
+				if os.path.isfile(outputFolder+"/outputIdba/scaffold.fa") == True:
 					for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
 						if len(str(seq_record.seq)) > maxScaffoldLength:
 							maxScaffoldLength = len(str(seq_record.seq))
@@ -610,7 +608,7 @@ class Ui_Form(object):
 					self.logTextEdit.repaint()
 					logFile.write("Range "+str(a)+"-"+str(a+windowSize)+"\t"+str(maxScaffoldLength)+"\n")
 
-				stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
+					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 
 
 			stage_a.close()
