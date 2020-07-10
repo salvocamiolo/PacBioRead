@@ -25,7 +25,7 @@ outputFolder = args['outputFolder']
 os.system(installationDirectory+"/src/conda/bin/minimap2 "+reference+" "+contigs+" > "+outputFolder+"/scaffoldMapping.txt")
 #Getting position and strand for best alignment
 infile = open(outputFolder+"/scaffoldMapping.txt")
-infile.readline().rstrip()
+
 scaffoldInfo = {}
 while True:
     line = infile.readline().rstrip()
@@ -37,8 +37,6 @@ while True:
     if int(fields[10]) > scaffoldInfo[fields[0]][0]:
         scaffoldInfo[fields[0]] = [int(fields[10]),int(fields[2]),fields[4]]
 
-for item in scaffoldInfo:
-    print(item)
 
 #GEnerating a new fasta file with the contigs in the correct orientation
 contigsSeq = {}
