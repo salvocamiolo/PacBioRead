@@ -48,7 +48,7 @@ for seq_record in SeqIO.parse(contigs,"fasta"):
             SeqIO.write(seq_record,outfile,"fasta")
         else:
             contigsSeq[str(seq_record.id)] = Seq.reverse_complement(str(seq_record.seq))
-            SeqIO.write(">"+str(seq_record.id)+"\n"+Seq.reverse_complement(str(seq_record.seq))+"\n")
+            outfile.write(">"+str(seq_record.id)+"\n"+Seq.reverse_complement(str(seq_record.seq))+"\n")
 outfile.close()
 
 #Get the contigs names in the righ order
