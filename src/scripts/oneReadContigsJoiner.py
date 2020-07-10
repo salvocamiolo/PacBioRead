@@ -15,11 +15,12 @@ parser.add_argument("-s","--reads",required=True,help="TThe PacBio reads to use 
 
 args = vars(parser.parse_args())
 installationDirectory = args['installationDirectory']
-contigs = outputFolder+"/scaffolds_oriented.fasta"
+
 reference = args['reference']
 outputFolder = args['outputFolder']
 reads = args['reads']
 outputFfile = args['outputFfile']
+contigs = outputFolder+"/scaffolds_oriented.fasta"
 
 if ".fastq" in reads or ".fq" in reads:
     os.system(installationDirectory+"/src/conda/bin/fq2fa "+reads+" "+outputFolder+'/gapClosingReads.fasta')
