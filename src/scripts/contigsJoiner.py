@@ -32,10 +32,10 @@ while True:
     if not line:
         break
     fields = line.split("\t")
-    if not fields[5] in scaffoldInfo:
-        scaffoldInfo[fields[5]] = [0,"",""]
-    if int(fields[10]) > scaffoldInfo[fields[5]][0]:
-        scaffoldInfo[fields[5]] = [int(fields[10]),int(fields[2]),fields[4]]
+    if not fields[0] in scaffoldInfo:
+        scaffoldInfo[fields[0]] = [0,"",""]
+    if int(fields[10]) > scaffoldInfo[fields[0]][0]:
+        scaffoldInfo[fields[0]] = [int(fields[10]),int(fields[2]),fields[4]]
 
 #GEnerating a new fasta file with the contigs in the correct orientation
 contigsSeq = {}
