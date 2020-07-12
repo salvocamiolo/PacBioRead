@@ -101,7 +101,7 @@ for a in range(len(orderedContigs)-1):
         subjectStart = int(fields[8])
         subjectEnd = int(fields[9])
         
-        if queryEnd - queryStart >500 and float(queryEnd)>0.95*len(elongingSequence):
+        if queryEnd - queryStart >500: # and float(queryEnd)>0.95*len(elongingSequence):
             elongingSequence = elongingSequence[:queryEnd]+contigsSeq[orderedContigs[a+1]][subjectEnd:]
         else:
             print("Too short overlap or wrong overlap")
