@@ -640,7 +640,7 @@ class Ui_Form(object):
 					-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
 						outputFolder+" -s "+ self.gapClosingReadsLineEdit.text() +" -o scaffolds_gapClosed.fasta")
 			else:
-				os.system("mv "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
+				os.system("cp "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
 			
 			
 			#Final alignment and consensus calling
