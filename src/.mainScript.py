@@ -243,6 +243,7 @@ class Ui_Form(object):
 						outfile.write(">HQSequence_"+str(numSeq)+"\n"+maskedSeq+"\n")
 					numSeq+=1
 					maskedSeq=""
+					qualityValues = []
 			if len(qualityValues)==len(quality):
 				outfile.write(">HQSequence_"+str(numSeq)+"\n"+maskedSeq+"\n")
 				numSeq+=1
