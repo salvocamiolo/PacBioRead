@@ -710,13 +710,13 @@ class Ui_Form(object):
 			self.logTextEdit.append("* * * Creating pilleup.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
-				"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
+				"/finalAssembly1.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
 					"/pileup.txt")
 
 			self.logTextEdit.append("* * * Calling variants.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
-			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
+			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 1  -r "+outputFolder+"/finalAssembly1.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
 			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system("cat "+outputFolder+"/finalAssembly1.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly2.fasta")
@@ -742,13 +742,13 @@ class Ui_Form(object):
 			self.logTextEdit.append("* * * Creating pilleup.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
-				"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
+				"/finalAssembly2.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
 					"/pileup.txt")
 
 			self.logTextEdit.append("* * * Calling variants.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
-			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
+			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 1  -r "+outputFolder+"/finalAssembly2.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
 			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system("cat "+outputFolder+"/finalAssembly2.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly3.fasta")
