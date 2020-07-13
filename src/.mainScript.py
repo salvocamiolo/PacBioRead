@@ -719,7 +719,7 @@ class Ui_Form(object):
 			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
 			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
-			os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly2.fasta")
+			os.system("cat "+outputFolder+"/finalAssembly1.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly2.fasta")
 
 			os.chdir(outputFolder)
 			os.system("rm -rf *.vcf *.bam *.sam *.gz")
@@ -751,7 +751,7 @@ class Ui_Form(object):
 			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
 			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
-			os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly3.fasta")
+			os.system("cat "+outputFolder+"/finalAssembly2.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly3.fasta")
 
 			os.chdir(outputFolder)
 			os.system("rm -rf *.vcf *.bam *.sam *.gz")
