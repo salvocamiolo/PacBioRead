@@ -753,9 +753,9 @@ class Ui_Form(object):
 			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system("cat "+outputFolder+"/finalAssembly2.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly3.fasta")
 
-			os.chdir(outputFolder)
-			os.system("rm -rf *.vcf *.bam *.sam *.gz")
-			os.chdir("../")
+			#os.chdir(outputFolder)
+			#os.system("rm -rf *.vcf *.bam *.sam *.gz")
+			#os.chdir("../")
 			
 
 
