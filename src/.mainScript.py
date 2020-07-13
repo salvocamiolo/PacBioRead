@@ -598,6 +598,8 @@ class Ui_Form(object):
 				os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+self.numThreadsLineEdit.text()+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
 				maxScaffoldLength = 0
 				longestContig = ""
+				print("Finito")
+				sys.stdin.read(1)
 
 				if os.path.isfile(outputFolder+"/outputIdba/scaffold.fa") == True:
 					for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
