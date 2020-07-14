@@ -675,7 +675,7 @@ class Ui_Form(object):
 			os.system(installationDirectory+"/src/conda/bin/fq2fa "+outputFolder+"/mapped.fastq "+outputFolder+"/mapped.fasta")
 			self.logTextEdit.append("* * * Generating simulated short reads.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/mapped.fasta -l 71 -c "+str(int(len(refSeq)*100/71)) -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 150 -s 10")
+			os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/mapped.fasta -l 71 -c "+str(int(len(refSeq)*100/71))+" -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 150 -s 10")
 			
 			
 			self.logTextEdit.append("* * * First round of correction.... ")
