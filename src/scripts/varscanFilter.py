@@ -46,6 +46,8 @@ outfile.write(line+"\n")
 
 while not "#CHROM" in line:
 	line = infile.readline().rstrip()
+	if not line:
+		break
 	outfile.write(line+"\n")
 
 while True:
