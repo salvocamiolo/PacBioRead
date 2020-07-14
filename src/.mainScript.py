@@ -665,7 +665,7 @@ class Ui_Form(object):
 			self.logTextEdit.append("* * * Simulating short reads.... ")
 			self.logTextEdit.append("* * * MApping original reads to the assembled sequence.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/scaffolds_gapClosed.fasta "+outputFolder+"/subSample.fasta > "+outputFolder+"/alignment.sam")
+			os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/scaffolds_gapClosed.fasta "+self.readsFileLineEdit.text()+" > "+outputFolder+"/alignment.sam")
 			self.logTextEdit.append("* * * Converting sam to bam.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
