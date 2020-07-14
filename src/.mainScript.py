@@ -749,7 +749,7 @@ class Ui_Form(object):
 			self.logTextEdit.append("* * * Aligning short reads.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+outputFolder+"/finalAssembly2.fasta "+outputFolder+"/reference >"+outputFolder+"/null")
-			os.system(installationDirectory+"/src/conda/bin/bowtie2 -1 "+outputFolder+"/simulatedReads1.fq -2 "+outputFolder+"/simulatedReads2.fq -x "+outputFolder"/reference -S "+outputFolder+"/alignment.sam -p "+self.numThreadsLineEdit.text())
+			os.system(installationDirectory+"/src/conda/bin/bowtie2 -1 "+outputFolder+"/simulatedReads1.fq -2 "+outputFolder+"/simulatedReads2.fq -x "+outputFolder+"/reference -S "+outputFolder+"/alignment.sam -p "+self.numThreadsLineEdit.text())
 			self.logTextEdit.append("* * * Converting sam to bam.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
