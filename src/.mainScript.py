@@ -671,7 +671,7 @@ class Ui_Form(object):
 			os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
 			self.logTextEdit.append("* * * Extracing mapped reads.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/bam2fastq -o "+outputFolder+"/mapped.fastq --aligned "+outputFolder+"/alignment.bam")
+			os.system(installationDirectory+"/src/conda/bin/bam2fastq --force  -o "+outputFolder+"/mapped.fastq --aligned "+outputFolder+"/alignment.bam")
 			os.system(installationDirectory+"/src/conda/bin/fq2fa "+outputFolder+"/mapped.fastq "+outputFolder+"/mapped.fasta")
 			self.logTextEdit.append("* * * Generating simulated short reads.... ")
 			self.logTextEdit.repaint()
