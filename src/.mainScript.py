@@ -663,7 +663,7 @@ class Ui_Form(object):
 
 			self.logTextEdit.append("* * * Assembly correction ")
 			self.logTextEdit.append("* * * Simulating short reads.... ")
-			self.logTextEdit.append("* * * MApping original reads to the assembled sequence.... ")
+			self.logTextEdit.append("* * * Mapping original reads to the assembled sequence.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/scaffolds_gapClosed.fasta "+self.readsFileLineEdit.text()+" > "+outputFolder+"/alignment.sam")
 			self.logTextEdit.append("* * * Converting sam to bam.... ")
@@ -675,14 +675,14 @@ class Ui_Form(object):
 			os.system(installationDirectory+"/src/conda/bin/fq2fa "+outputFolder+"/mapped.fastq "+outputFolder+"/mapped.fasta")
 			self.logTextEdit.append("* * * Generating simulated short reads.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/mapped.fasta -l 71 -f 3 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 150 -s 10")
+			os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/mapped.fasta -l 71 -c "+str(int(len(refSeq)*100/71)) -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 150 -s 10")
 			
 			
 			self.logTextEdit.append("* * * First round of correction.... ")
 			self.logTextEdit.append("* * * Aligning short reads.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+outputFolder+"/scaffolds_gapClosed.fasta reference >"+outputFolder+"/null")
-			os.system(installationDirectory+"/src/conda/bin/bowtie2 -1 "+outputFolder+"/simulatedReads1.fq -2 "+outputFolder+"/simulatedReads2.fq -x reference -S alignment.sam -p "+self.numThreadsLineEdit.text())
+			os.system(installationDirectory+"/src/conda/bin/bowtie2-build "+outputFolder+"/scaffolds_gapClosed.fasta "+outputFolder+"/reference >"+outputFolder+"/null")
+			os.system(installationDirectory+"/src/conda/bin/bowtie2 -1 "+outputFolder+"/simulatedReads1.fq -2 "+outputFolder+"/simulatedReads2.fq -x "+outputFolder"/reference -S "+outputFolder+"/alignment.sam -p "+self.numThreadsLineEdit.text())
 			self.logTextEdit.append("* * * Converting sam to bam.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
