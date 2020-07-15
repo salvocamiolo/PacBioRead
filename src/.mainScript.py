@@ -430,9 +430,10 @@ class Ui_Form(object):
 		numSeq = 0
 		outfile = open(inputFile+"_chopped.fasta","w")
 		for seq_record in SeqIO.parse(inputFile,"fasta"):
-			numSeq+=1
+			
 			sequence = str(seq_record.seq)
 			for a in range(0,len(sequence)-150,+150):
+				numSeq+=1
 				outfile.write(">ChoppedSeq_"+str(numSeq)+"\n"+sequence[a:a+150]+"\n")
 		outfile.close()
 
@@ -716,7 +717,8 @@ class Ui_Form(object):
 			self.logTextEdit.append("* * * Second round of correction.... ")
 			self.logTextEdit.append("* * * Mapping original reads to the assembled sequence.... ")
 			self.logTextEdit.repaint()
-			
+			print("Primo finito!")
+			sys.stdin.read(1)
 			
 			os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/finalAssembly1.fasta "+reads+"_chopped.fasta"+" > "+outputFolder+"/alignment.sam")
 			self.logTextEdit.append("* * * Converting sam to bam.... ")
@@ -738,7 +740,7 @@ class Ui_Form(object):
 			self.logTextEdit.append("* * * Calling variants.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
-			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 0  -r "+outputFolder+"/finalAssembly1.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
+			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+reads+"_chopped.fasta" +" -g 0  -r "+outputFolder+"/finalAssembly1.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
 			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system("cat "+outputFolder+"/finalAssembly1.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly2.fasta")
