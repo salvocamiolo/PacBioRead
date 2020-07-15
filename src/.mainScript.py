@@ -566,7 +566,7 @@ class Ui_Form(object):
 				os.system("awk '($11/$2)>0.70' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 				# awk '($10/$2)>0.5' |
 				infile = open(outputFolder+"/outputMinimap_filtered")
-				outfile = open(outputFolder+"/mapped.fasta")
+				outfile = open(outputFolder+"/mapped.fasta","w")
 				while True:
 					line = infile.readline().rstrip()
 					if not line:
