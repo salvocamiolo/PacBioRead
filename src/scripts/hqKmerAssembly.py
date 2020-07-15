@@ -37,7 +37,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
     os.system("kmc -k"+str(kmerSize)+" "+reads+" "+outputFolder+"/kmerDB")
     os.system("kmc_dump -ci"+int(kmerCoverage)+" "+outputFolder+"/kmerDB "+outputFolder+"/kmerDB_output")
     infile = open(outputFolder+"/kmerDB_output")
-    outfile = open(outputFolder"/kmerDB_output.fastq","w")
+    outfile = open(outputFolder+"/kmerDB_output.fastq","w")
     numSeq = 0
     os.system("rm -rf "+outputFolder+"/outputSpades")
     while True:
