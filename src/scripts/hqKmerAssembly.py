@@ -27,8 +27,8 @@ noAssembly = False
 while float(len(assembledSequence))/float(refLength) < 0.8:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
     #prepare kmer database 
-    print("kmc -k"+str(kmerSize)+" "+reads+" kmerDB "+outputFolder)
-    os.system("kmc -k"+str(kmerSize)+" "+reads+" kmerDB "+outputFolder)
+    print("kmc -fa -k"+str(kmerSize)+" "+reads+" kmerDB "+outputFolder)
+    os.system("kmc -fa  -k"+str(kmerSize)+" "+reads+" kmerDB "+outputFolder)
     os.system("kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/kmerDB "+outputFolder+"/kmerDB_output")
     infile = open(outputFolder+"/kmerDB_output")
     outfile = open(outputFolder+"/kmerDB_output.fastq","w")
@@ -54,7 +54,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
             if len(str(seq_record.seq)) > maxScaffoldLength:
                 maxScaffoldLength = len(str(seq_record.seq))
                 assembledSequence = str(seq_record.seq)
-    fractionKmer +=1
+
     kmerCoverage = kmerCoverage - 10
     if kmerCoverage == 10:
         kmerCoverage = 50
