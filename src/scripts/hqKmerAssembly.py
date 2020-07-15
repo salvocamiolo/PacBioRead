@@ -63,6 +63,8 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
                 assembledSequence = str(seq_record.seq)
     fractionKmer +=1
     kmerCoverage = kmerCoverage - 10
+    print("Longest scaffold ",assembledSequence)
+    print("Length %d" %maxScaffoldLength)
     sys.stdin.read(1)
     
 
