@@ -640,6 +640,9 @@ class Ui_Form(object):
 					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
 					print("Finito")
 					sys.stdin.read(1)
+				else:
+					print("No assembly")
+					sys.stdin.read(1)
 
 
 			stage_a.close()
