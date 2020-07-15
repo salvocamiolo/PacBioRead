@@ -565,7 +565,21 @@ class Ui_Form(object):
 
 				os.system("awk '($11/$2)>0.70' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 				# awk '($10/$2)>0.5' |
-				readsToAssemble = set()
+				infile = open(outputFolder+"/outputMinimap_filtered")
+				outfile = open(outputFolder+"/mapped.fasta")
+				while True:
+					line = infile.readline().rstrip()
+					if not line:
+						break
+					fields = line.split("\t")
+					SeqIO.write(readsSeq[fields[0]],outfile,"fasta")
+				outfile.close()
+				infile.close()
+				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/partReference.fasta -t "+self.numThreadsLineEdit.text()+" -of "+outputFolder)
+
+				
+					
+				"""readsToAssemble = set()
 				numAttempt = 0
 				maxScaffoldLength = 0
 
@@ -611,19 +625,21 @@ class Ui_Form(object):
 				os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+self.numThreadsLineEdit.text()+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
 				maxScaffoldLength = 0
 				longestContig = ""
+"""
 
+				if os.path.isfile(outputFolder+"/localAssembly.fasta") == True:
+					for seq_record in SeqIO.parse(outputFolder+"/localAssembly.fasta","fasta"):
 
-				if os.path.isfile(outputFolder+"/outputIdba/scaffold.fa") == True:
-					for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
-						if len(str(seq_record.seq)) > maxScaffoldLength:
-							maxScaffoldLength = len(str(seq_record.seq))
-							longestContig = str(seq_record.seq)
+						maxScaffoldLength = len(str(seq_record.seq))
+						longestContig = str(seq_record.seq)
 
 					self.logTextEdit.append("* * * Contig size: "+str(maxScaffoldLength))
 					self.logTextEdit.repaint()
 					logFile.write("Range "+str(a)+"-"+str(a+windowSize)+"\t"+str(maxScaffoldLength)+"\n")
 
 					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
+					print("Finito")
+					sys.stdin.read(1)
 
 
 			stage_a.close()

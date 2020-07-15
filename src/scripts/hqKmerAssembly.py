@@ -20,17 +20,10 @@ for seq_record in SeqIO.parse(reference,"fasta"):
     refSequence = str(seq_record.seq)
     refLength = len(refSequence)
 
-#Calculating coverag
-coverage = 0
-for seq_record in SeqIO.parse(reads,"fasta"):
-    coverage += len(str(seq_record.seq))
-
-coverage = float(coverage)/float(refLength)/10
-print("Calculated coverage %f" %coverage)
 assembledSequence = ""
 kmerSize = 81
 kmerCoverage = 50
-fractionKmer = 1
+noAssembly = False
 while float(len(assembledSequence))/float(refLength) < 0.8:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
     #prepare kmer database 
@@ -52,7 +45,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
             outfile.write("G")
         outfile.write("\n")
     outfile.close()
-    os.system("spades.py -s "+outputFolder+"/kmerDB_output.fastq --phred-offset 33 --careful -o "+outputFolder+"/outputSpades")
+    os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/kmerDB_output.fastq --phred-offset 33 --careful -o "+outputFolder+"/outputSpades")
 
     maxScaffoldLength = 0
 
@@ -63,8 +56,16 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
                 assembledSequence = str(seq_record.seq)
     fractionKmer +=1
     kmerCoverage = kmerCoverage - 10
-    print("Longest scaffold ",assembledSequence)
-    print("Length %d" %maxScaffoldLength)
-    sys.stdin.read(1)
+    if kmerCoverage == 10:
+        kmerCoverage = 50
+        kmerSize = kmerSize - 10
+        if kmerSize <31:
+            noAssembly = True
+            break
+
+if noAssembly==False:
+    outfile = open(outputFolder+"/localAssembly.fasta","w")
+    outfile.write(">local\n"+assembledSequence+"\n")
+    outfile.close()
     
 
