@@ -29,7 +29,7 @@ coverage = float(coverage)/float(refLength)/10
 print("Calculated coverage %f" %coverage)
 assembledSequence = ""
 kmerSize = 81
-kmerCoverage = coverage
+kmerCoverage = 50
 fractionKmer = 1
 while float(len(assembledSequence))/float(refLength) < 0.8:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
@@ -61,7 +61,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
                 maxScaffoldLength = len(str(seq_record.seq))
                 assembledSequence = str(seq_record.seq)
     fractionKmer +=1
-    kmerCoverage = int(float(kmerCoverage)/float(fractionKmer))
+    kmerCoverage = kmerCoverage - 10
     sys.stdin.read(1)
     
 
