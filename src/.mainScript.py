@@ -572,7 +572,7 @@ class Ui_Form(object):
 					if not line:
 						break
 					fields = line.split("\t")
-					SeqIO.write(readsSeq[fields[0]],outfile,"fasta")
+					outfile.write(">"+fields[0]+"\n"+readsSeq[fields[0]]+"\n")
 				outfile.close()
 				infile.close()
 				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/partReference.fasta -t "+self.numThreadsLineEdit.text()+" -of "+outputFolder)
