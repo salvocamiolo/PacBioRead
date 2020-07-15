@@ -28,7 +28,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
     #prepare kmer database 
     print("kmc -fa -k"+str(kmerSize)+" "+reads+" kmerDB "+outputFolder)
-    os.system("kmc -fa  -k"+str(kmerSize)+" "+reads+" kmerDB "+outputFolder)
+    os.system("kmc -fa  -k"+str(kmerSize)+" "+reads+" kmerDB "+outputFolder+"/")
     print("DB created")
     sys.stdin.read(1)
     print("kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/kmerDB "+outputFolder+"/kmerDB_output")
