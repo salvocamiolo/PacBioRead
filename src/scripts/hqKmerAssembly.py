@@ -47,7 +47,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
             break
         fields = line.split("\t")
         numSeq+=1
-        outfile.write("Sequence_"+str(numSeq)+"\n"+fields[0]+"\n+\n")
+        outfile.write("@Sequence_"+str(numSeq)+"\n"+fields[0]+"\n+\n")
         for a in range(len(fields[0])):
             outfile.write("G")
         outfile.write("\n")
