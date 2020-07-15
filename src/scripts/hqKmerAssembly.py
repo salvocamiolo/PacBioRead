@@ -25,7 +25,7 @@ coverage = 0
 for seq_record in SeqIO.parse(reads,"fasta"):
     coverage += len(str(seq_record.seq))
 
-coverage = float(coverage)/float(refLength)
+coverage = float(coverage)/float(refLength)/10
 print("Calculated coverage %f" %coverage)
 assembledSequence = ""
 kmerSize = 81
