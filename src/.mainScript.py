@@ -708,12 +708,44 @@ class Ui_Form(object):
 			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
 			os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly1.fasta")
 
+			os.chdir(outputFolder)
+			os.system("rm -rf *.vcf *.bam *.sam *.gz")
+			os.chdir("../")
+
+
+			self.logTextEdit.append("* * * Second round of correction.... ")
+			self.logTextEdit.append("* * * Mapping original reads to the assembled sequence.... ")
+			self.logTextEdit.repaint()
+			
+			
+			os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/finalAssembly1.fasta "+reads+"_chopped.fasta"+" > "+outputFolder+"/alignment.sam")
+			self.logTextEdit.append("* * * Converting sam to bam.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
+			self.logTextEdit.append("* * * Sorting.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
+			self.logTextEdit.append("* * * Indexing.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/alignment_sorted.bam")
+
+			self.logTextEdit.append("* * * Creating pilleup.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
+				"/finalAssembly1.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
+					"/pileup.txt")
+
+			self.logTextEdit.append("* * * Calling variants.... ")
+			self.logTextEdit.repaint()
+			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
+			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 0  -r "+outputFolder+"/finalAssembly1.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
+			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
+			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
+			os.system("cat "+outputFolder+"/finalAssembly1.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly2.fasta")
+
 			"""os.chdir(outputFolder)
 			os.system("rm -rf *.vcf *.bam *.sam *.gz")
 			os.chdir("../")"""
-
-
-
 			
 
 
