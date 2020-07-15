@@ -51,6 +51,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
         for a in range(len(fields[0])):
             outfile.write("G")
         outfile.write("\n")
+    outfile.close()
     os.system("spades.py -s "+outputFolder+"/kmerDB_output.fastq --phred-offset 33 --careful -o "+outputFolder+"/outputSpades")
 
     maxScaffoldLength = 0
