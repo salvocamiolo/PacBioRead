@@ -56,7 +56,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
 
     maxScaffoldLength = 0
 
-    if os.path.isfile(outputFolder+"/outputIdba/scaffold.fa") == True:
+    if os.path.isfile(outputFolder+"/outputSpades/scaffolds.fasta") == True:
         for seq_record in SeqIO.parse(outputFolder+"/outputSpades/scaffolds.fasta","fasta"):
             if len(str(seq_record.seq)) > maxScaffoldLength:
                 maxScaffoldLength = len(str(seq_record.seq))
