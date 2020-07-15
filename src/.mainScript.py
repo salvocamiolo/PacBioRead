@@ -428,7 +428,7 @@ class Ui_Form(object):
 
 	def chopReads(self,inputFile):
 		numSeq = 0
-		outfile = open(inputFile,"w")
+		outfile = open(inputFile+"_chopped.fasta","w")
 		for seq_record in SeqIO.parse(inputFile,"fasta"):
 			numSeq+=1
 			sequence = str(seq_record.seq)
