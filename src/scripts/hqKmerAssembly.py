@@ -29,8 +29,12 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
     #prepare kmer database 
     print("kmc -fa -k"+str(kmerSize)+" "+reads+" kmerDB "+outputFolder)
     os.system("kmc -fa  -k"+str(kmerSize)+" "+reads+" kmerDB "+outputFolder)
+    print("DB created")
+    sys.stdin.read(1)
     print("kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/kmerDB "+outputFolder+"/kmerDB_output")
     os.system("kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/kmerDB "+outputFolder+"/kmerDB_output")
+    print("Count done")
+    sys.stdin.read(1)
     infile = open(outputFolder+"/kmerDB_output")
     outfile = open(outputFolder+"/kmerDB_output.fastq","w")
     numSeq = 0
@@ -47,7 +51,8 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
         outfile.write("\n")
     outfile.close()
     os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/kmerDB_output.fastq --phred-offset 33 --careful -o "+outputFolder+"/outputSpades")
-
+    print("Spades completed")
+    sys.stdin.read(1)
     maxScaffoldLength = 0
 
     if os.path.isfile(outputFolder+"/outputSpades/scaffolds.fasta") == True:
