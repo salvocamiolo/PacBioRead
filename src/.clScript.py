@@ -127,7 +127,7 @@ else:
 		outfile.close()
 		infile.close()
 		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/partReference.fasta -t "+numThreads+" -of "+outputFolder)
-
+		sys.stdin.read(1)
 
 		if os.path.isfile(outputFolder+"/localAssembly.fasta") == True:
 			for seq_record in SeqIO.parse(outputFolder+"/localAssembly.fasta","fasta"):
