@@ -112,7 +112,7 @@ else:
 		tempFasta.write(">partReference\n"+partSeq+"\n")
 		tempFasta.close()
 
-		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+reads)
+		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+reads+" > "+outputFolder+"/outputMinimap")
 
 		os.system("awk '($11/$2)>"+homology+"' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 		# awk '($10/$2)>0.5' |
