@@ -16,6 +16,8 @@ parser.add_argument("-q","--quality",required=True, help="Phred quality threshol
 parser.add_argument("-wsize","--windowSize",required=True, help="Window size")
 parser.add_argument("-wstep","--windowStep",required=True, help="Window step")
 parser.add_argument("-t","--threads",required=True,help="Number of threads")
+parser.add_argument("-p","--prefix",required=True,help="Prefix of output files")
+parser.add_argument("-cr","--closingReads",required=True,help="Fasta file with reads to be used to close the gaps")
 
 args = vars(parser.parse_args())
 outputFolder = args['outputFolder']
@@ -25,100 +27,74 @@ threshold = int(args['quality'])
 windowSize = int(args['windowSize'])
 windowStep = int(args['windowStep'])
 numThreads = args['threads']
+prefix = args['prefix']
+closingReads = args['closingReads']
 #Convert the input fastq file in fast format
 
-os.system(installationDirectory+"/src/conda/bin/fq2fa "+inputReadsFile+" "+outputFolder+'/originalReads.fasta')
+
+def chopReads(inputFile):
+	numSeq = 0
+	outfile = open(inputFile+"_chopped.fasta","w")
+	for seq_record in SeqIO.parse(inputFile,"fasta"):
+		
+		sequence = str(seq_record.seq)
+		for a in range(0,len(sequence)-150,+150):
+			numSeq+=1
+			outfile.write(">ChoppedSeq_"+str(numSeq)+"\n"+sequence[a:a+150]+"\n")
+	outfile.close()
+
+logFile = open(outputFolder+"/"+prefix+"_assembly.log","w")
+startTime = datetime.now()
+current_time = startTime.strftime("%H:%M:%S")
+logFile.write("De novo assembly started at "+str(current_time)+"\n\n")
 
 #Load reference genome in memory
 
 for seq_record in SeqIO.parse(refFile,"fasta"):
 	refSeq = str(seq_record.seq)
 
-# Perform HQ read fragmentaiton
 
+reads = inputReadsFile
+if ".fastq" in reads or ".fq" in reads:
+	print("* * Converting input file from fastq to fasta....\n")
+	
+	
+	os.system(installationDirectory+"/src/conda/bin/fq2fa "+inputReadsFile+" "+outputFolder+'/originalReads.fasta')
 
-inputFile = inputReadsFile
-
-minLen = 150
-
-numSeq = 0
-totSequences = 0
-qualityValues = []
-totNumBases = 0
-hqBases = 0
-outfile = open(outputFolder+"/masked.fasta","w")
-for seq_record in SeqIO.parse(inputFile,"fastq"):
-	numSeq+=1
-	totSequences+=1
-	if totSequences%3000 == 0:
-		print("* * * "+str(totSequences)+" reads analyzed....")
-		print("* * * "+str(hqBases)+" bases filtered....")
-	sequence = str(seq_record.seq)
-	totNumBases+=len(sequence)
-
-	quality = seq_record.letter_annotations["phred_quality"]
-	maskedSeq = ""
-	for a in range(len(quality)):
-		qualityValues.append(float(quality[a]))
-		if quality[a]>int(threshold):
-			maskedSeq+=sequence[a]
-			hqBases+=1
-		else:
-			outfile.write(">MaskedSeq_"+str(numSeq)+"\n"+maskedSeq+"\n")
-			numSeq+=1
-			maskedSeq=""
-	if hqBases>50*len(refSeq):
-		break
-outfile.close()
-
-
-
-outfile = open(outputFolder+"/hq_reads.fasta","w")
-totNumHQBases = 0
-for seq_record in SeqIO.parse(outputFolder+"/masked.fasta","fasta"):
-	if len(str(seq_record.seq))>int(minLen):
-		SeqIO.write(seq_record,outfile,"fasta")
-		totNumHQBases+= len(str(seq_record.seq))
-
-os.system("rm "+outputFolder+"/masked.fasta")
-
-reads = outputFolder+"/hq_reads.fasta"
-
+	reads = outputFolder+'/originalReads.fasta'
 
 
 #Perform reference guided de novo assembly
 if reads == "":
-	print("Something went wrong with the quality filtering step, now exiting")
+
 	exit()
 
 else:
-
+	
 	readsSeq = {}
-
 
 	print("* Reference guided de novo assembly")
 	print("* * Loading reads in memory")
-
+	
 
 	#Loading high quality reads in memory
 	for seq_record in SeqIO.parse(reads,"fasta"):
 		if not str(seq_record.id) in readsSeq:
 			readsSeq[str(seq_record.id)] = str(seq_record.seq)
 
-
+	
 
 	stage_a = open(outputFolder+"/local_assemblies.fasta","w")
 
-	print("* * Converting high quality reads to fastq format....")
 
-	with open(reads, "r") as fasta, open(outputFolder+"/hq_reads.fastq", "w") as fastq:
-		for record in SeqIO.parse(fasta, "fasta"):
-			record.letter_annotations["phred_quality"] = [40] * len(record)
-			SeqIO.write(record, fastq, "fastq")
 
 
 	print("* * Assembly on sliding windows started")
-
+	
+	now = datetime.now()
+	current_time = now.strftime("%H:%M:%S")
+	logFile.write("Sliding window assembly started at "+str(current_time)+"\n\n")
+	logFile.write("Range\tContig_size\n")
 	for a in range(0,len(refSeq),+windowStep):
 	#for a in range(1):
 		endPos = a+windowSize
@@ -127,84 +103,45 @@ else:
 			windowSize = len(refSeq) - a
 
 		print("* * * Assembling region "+str(a)+"-"+str(endPos))
-
+		
 		partSeq = refSeq[a:endPos]
 		tempFasta = open(outputFolder+"/partReference.fasta","w")
 		tempFasta.write(">partReference\n"+partSeq+"\n")
 		tempFasta.close()
 
-		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+outputFolder+"/hq_reads.fastq > "+outputFolder+"/outputMinimap")
+		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+reads+" > "+outputFolder+"/outputMinimap > "+outputFolder+"/null 2>&1")
 
-		os.system("awk '($9/$10)>0.70' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
-
-		readsToAssemble = set()
-		numAttempt = 0
-		maxScaffoldLength = 0
-
-
-		while float(maxScaffoldLength) < float(windowSize)*0.9:
-			numAttempt +=1
-			if numAttempt == 5:
+		os.system("awk '($11/$2)>0.70' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+		# awk '($10/$2)>0.5' |
+		infile = open(outputFolder+"/outputMinimap_filtered")
+		outfile = open(outputFolder+"/mapped.fasta","w")
+		while True:
+			line = infile.readline().rstrip()
+			if not line:
 				break
-			tfile = open(outputFolder+"/outputMinimap_filtered")
-			while True:
-				tline = tfile.readline().rstrip()
-				if not tline:
-					break
-				tfields = tline.split("\t")
-				readsToAssemble.add(tfields[0])
-			tfile.close()
+			fields = line.split("\t")
+			outfile.write(">"+fields[0]+"\n"+readsSeq[fields[0]]+"\n")
+		outfile.close()
+		infile.close()
+		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/partReference.fasta -t "+numThreads+" -of "+outputFolder)
 
-			for b in range(0,windowSize-500,+150):
-				tfile = open(outputFolder+"/outputMinimap_filtered")						
 
-				collectedReads = 0
-				while True:
-					tline = tfile.readline().rstrip()
-					if not tline:
-						break
-					tfields = tline.split("\t")
-					if int(tfields[7]) >b and int(tfields[7]) <(b+150):
-						readsToAssemble.add(tfields[0])
-						print(tfields[0])
-						collectedReads+=1
-						if collectedReads == numAttempt:
-							break
-			tfile.close()
+		if os.path.isfile(outputFolder+"/localAssembly.fasta") == True:
+			for seq_record in SeqIO.parse(outputFolder+"/localAssembly.fasta","fasta"):
 
-			outfile = open(outputFolder+"/toAssemble.fasta","w")
-			numReadsToAssemble = 0
-			for item in readsToAssemble:
-				if not item == '':
-					numReadsToAssemble+=1
-					outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
-			outfile.close()
-
-			print("Assembling %d reads" %numReadsToAssemble)
-			print("* * * Using "+str(numReadsToAssemble)+" reads....")
-
-			#os.system("rm "+outputFolder+"/raven.fasta")
-			#os.system(installationDirectory+"/src/conda/bin/raven -t "+numThreads+" "+outputFolder+"/toAssemble.fasta > "+outputFolder+"/raven.fasta")
-			#os.system(installationDirectory+"/src/conda/bin/cap3 "+outputFolder+"/toAssemble.fasta >null 2>&1")
-			os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
-			toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
-			os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
-			os.system("rm -rf "+outputFolder+"/outputIdba/")
-			os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+numThreads+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
-			maxScaffoldLength = 0
-			longestContig = ""
-
-			#os.system("rm -rf "+outputFolder+"/sb*")
-			#os.system("scaffold_builder_v2.py -q "+outputFolder+"/raven.fasta -r "+outputFolder+"/partReference.fasta -p "+outputFolder+"/sb")
-			for seq_record in SeqIO.parse(outputFolder+"/outputIdba/scaffold.fa","fasta"):
-				if len(str(seq_record.seq)) > maxScaffoldLength:
-					maxScaffoldLength = len(str(seq_record.seq))
-					longestContig = str(seq_record.seq)
+				maxScaffoldLength = len(str(seq_record.seq))
+				longestContig = str(seq_record.seq)
 
 			print("* * * Contig size: "+str(maxScaffoldLength))
-			sys.stdin.read(1)
+			
+			logFile.write("Range "+str(a)+"-"+str(a+windowSize)+"\t"+str(maxScaffoldLength)+"\n")
 
-		stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
+			stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
+			#print("Finito")
+			#sys.stdin.read(1)
+		else:
+			print("No assembly")
+			
 
 
 	stage_a.close()
@@ -213,51 +150,98 @@ else:
 			"/allSimulated.fasta "+outputFolder+"/outputIdba/ " +outputFolder+"/null")
 
 	#Joining contigs
-	print("* * Joining contigs.... ")
+	now = datetime.now()
+	current_time = now.strftime("%H:%M:%S")
+	logFile.write("Conting joining started at "+str(current_time)+"\n\n")
 
+	print("* * Joining contigs.... ")
+	
 	os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/local_assemblies.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
 
 	#Check final number of scaffold and attempt gap closure if > 1
 	print("* * Attempting gap closure.... ")
-
+	
 	finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta","fasta"))
 
 	if len(finalScaffols)>1:
 		print("\nAttempting gap closure.... ")
-
+		
+		now = datetime.now()
+		current_time = now.strftime("%H:%M:%S")
+		logFile.write("Gap closure started at "+str(current_time)+"\n\n")
 		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
 			-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
-				outputFolder+" -s "+ inputReadsFile+" -o scaffolds_gapClosed.fasta")
+				outputFolder+" -s "+ closingReads +" -o scaffolds_gapClosed.fasta")
 	else:
-		os.system("mv "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
-
-
+		os.system("cp "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
+	
+	
 	#Final alignment and consensus calling
 	print("* * Calling consensus.... ")
-	print("* * * Mapping original reads.... ")
+	print("* * * Subsampling.... ")
+	
+	now = datetime.now()
+	current_time = now.strftime("%H:%M:%S")
+	logFile.write("Consensus calling started at "+str(current_time)+"\n\n")
+	"""outfile = open(outputFolder+"/subSample.fasta","w")
+	totCoverage = 0
+	for seq_record in SeqIO.parse(reads,"fasta"):
+		totCoverage+=len(str(seq_record.seq))
+		SeqIO.write(seq_record,outfile,"fasta")
+		if totCoverage > 100*len(refSeq):
+			break
+	outfile.close()"""
 
-	os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+numThreads+" "+outputFolder+"/scaffolds_gapClosed.fasta "+inputReadsFile+" > "+outputFolder+"/alignment.sam")
+	print("* * * Assembly correction ")
+	print("* * * Chopping reads.... ")
+	
+	chopReads(reads)
+
+	print("* * * Mapping original reads to the assembled sequence.... ")
+	
+	
+	
+	os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+numThreads+" "+outputFolder+"/scaffolds_gapClosed.fasta "+reads+"_chopped.fasta"+" > "+outputFolder+"/alignment.sam")
 	print("* * * Converting sam to bam.... ")
-
+	
 	os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
 	print("* * * Sorting.... ")
-
+	
 	os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
 	print("* * * Indexing.... ")
-
+	
 	os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/alignment_sorted.bam")
-	print("* * * Creating pilleup.... ")
 
+	print("* * * Creating pilleup.... ")
+	
 	os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
 		"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
 			"/pileup.txt")
 
 	print("* * * Calling variants.... ")
-
+	
 	os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
-	os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+inputReadsFile+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory ) 
+	os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 0  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory +" -t "+numThreads) 
 	os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output.vcf_filtered.vcf.gz")
 	os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf_filtered.vcf.gz")
 	os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf_filtered.vcf.gz > "+outputFolder+"/finalAssembly.fasta")
 
+	os.chdir(outputFolder)
+	os.system("rm -rf *.vcf *.bam *.sam *.gz")
+	os.chdir("../")
+
+
+	
+	
+
+
+
+
 	print("\n\n De novo assembly finished!")
+	
+	endTime = datetime.now()
+	current_time = endTime.strftime("%H:%M:%S")
+	logFile.write("De novo assembly finished at "+str(current_time)+"\n\n")
+	totalTime = (endTime -startTime).total_seconds()
+	logFile.write("Total processing time: "+str(totalTime)+" seconds")
+	logFile.close()

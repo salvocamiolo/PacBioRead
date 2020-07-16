@@ -2,6 +2,8 @@ import os,sys
 from Bio import SeqIO
 from Bio import Seq
 import argparse
+
+
 parser = argparse.ArgumentParser(description="Attempt an assembly with highly frequent kmers")
 parser.add_argument("-p","--installationDirectory",required=True,help="The installation directory")
 parser.add_argument("-r","--reads",required=True,help="fasta file with reads mapped to a genome or a portion")

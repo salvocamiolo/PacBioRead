@@ -561,7 +561,7 @@ class Ui_Form(object):
 				tempFasta.write(">partReference\n"+partSeq+"\n")
 				tempFasta.close()
 
-				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+reads+" > "+outputFolder+"/outputMinimap")
+				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+reads+" > "+outputFolder+"/outputMinimap > "+outputFolder+"/null 2>&1")
 
 				os.system("awk '($11/$2)>0.70' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 				# awk '($10/$2)>0.5' |
@@ -642,7 +642,7 @@ class Ui_Form(object):
 					#sys.stdin.read(1)
 				else:
 					print("No assembly")
-					sys.stdin.read(1)
+					
 
 
 			stage_a.close()
