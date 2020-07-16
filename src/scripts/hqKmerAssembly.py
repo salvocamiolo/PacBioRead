@@ -51,16 +51,17 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
             outfile.write("G")
         outfile.write("\n")
     outfile.close()
-    os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/kmerDB_output.fastq --pacbio "+outputFolder+"/mapped.fasta --phred-offset 33 --careful -o "+outputFolder+"/outputSpades")
-    print("Spades completed")
+    if float(numSeq)>refLength*0.8:
+        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/kmerDB_output.fastq --pacbio "+outputFolder+"/mapped.fasta --phred-offset 33 --careful -o "+outputFolder+"/outputSpades")
+        print("Spades completed")
 
-    maxScaffoldLength = 0
+        maxScaffoldLength = 0
 
-    if os.path.isfile(outputFolder+"/outputSpades/scaffolds.fasta") == True:
-        for seq_record in SeqIO.parse(outputFolder+"/outputSpades/scaffolds.fasta","fasta"):
-            if len(str(seq_record.seq)) > maxScaffoldLength:
-                maxScaffoldLength = len(str(seq_record.seq))
-                assembledSequence = str(seq_record.seq)
+        if os.path.isfile(outputFolder+"/outputSpades/scaffolds.fasta") == True:
+            for seq_record in SeqIO.parse(outputFolder+"/outputSpades/scaffolds.fasta","fasta"):
+                if len(str(seq_record.seq)) > maxScaffoldLength:
+                    maxScaffoldLength = len(str(seq_record.seq))
+                    assembledSequence = str(seq_record.seq)
 
     if kmerCoverage >11:
         kmerCoverage = kmerCoverage - 10

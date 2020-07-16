@@ -638,8 +638,8 @@ class Ui_Form(object):
 					logFile.write("Range "+str(a)+"-"+str(a+windowSize)+"\t"+str(maxScaffoldLength)+"\n")
 
 					stage_a.write(">Range_"+str(a)+"_"+str(endPos)+"\n"+longestContig+"\n")
-					print("Finito")
-					sys.stdin.read(1)
+					#print("Finito")
+					#sys.stdin.read(1)
 				else:
 					print("No assembly")
 					sys.stdin.read(1)
