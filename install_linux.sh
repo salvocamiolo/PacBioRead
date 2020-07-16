@@ -47,6 +47,8 @@ else
 	./src/conda/bin/conda install -c bioconda -y  jellyfish=2.2.10
 	./src/conda/bin/conda install -y matplotlib
 	./src/conda/bin/conda install -c yuxiang -y bam2fastq
+	./src/conda/bin/conda install -c bioconda -y spades 
+	./src/conda/bin/conda install -c bioconda -y kmc
 	
 	fi
 fi
