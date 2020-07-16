@@ -18,6 +18,7 @@ parser.add_argument("-wstep","--windowStep",required=True, help="Window step")
 parser.add_argument("-t","--threads",required=True,help="Number of threads")
 parser.add_argument("-p","--prefix",required=True,help="Prefix of output files")
 parser.add_argument("-cr","--closingReads",required=True,help="Fasta file with reads to be used to close the gaps")
+parser.add_argument("-ho","--homology",required=True,help="The homology the target and the reference genome share")
 
 args = vars(parser.parse_args())
 outputFolder = args['outputFolder']
@@ -29,6 +30,7 @@ windowStep = int(args['windowStep'])
 numThreads = args['threads']
 prefix = args['prefix']
 closingReads = args['closingReads']
+homology = args['homology']
 #Convert the input fastq file in fast format
 
 
@@ -111,7 +113,7 @@ else:
 
 		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+reads+" > "+outputFolder+"/outputMinimap > "+outputFolder+"/null 2>&1")
 
-		os.system("awk '($11/$2)>0.70' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+		os.system("awk '($11/$2)>"+homology+"' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 		# awk '($10/$2)>0.5' |
 		infile = open(outputFolder+"/outputMinimap_filtered")
 		outfile = open(outputFolder+"/mapped.fasta","w")

@@ -351,7 +351,7 @@ class Ui_Form(object):
 			if not line:
 				break
 			fields = line.split("\t")
-			if (float(fields[3])-float(fields[2]))/float(fields[1]) >0.7: #To change from the GUI
+			if (float(fields[3])-float(fields[2]))/float(fields[1]) >float(self.homologyLineEdit.text()): 
 				SeqIO.write(inputSequences[fields[0]],outfile,"fastq")
 		outfile.close()
 
@@ -563,7 +563,8 @@ class Ui_Form(object):
 
 				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+reads+" > "+outputFolder+"/outputMinimap > "+outputFolder+"/null 2>&1")
 
-				os.system("awk '($11/$2)>0.70' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+				homology = float(self.homologyLineEdit.text())
+				os.system("awk '($11/$2)>"+homology+"' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 				# awk '($10/$2)>0.5' |
 				infile = open(outputFolder+"/outputMinimap_filtered")
 				outfile = open(outputFolder+"/mapped.fasta","w")
