@@ -62,8 +62,11 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
                 maxScaffoldLength = len(str(seq_record.seq))
                 assembledSequence = str(seq_record.seq)
 
-    kmerCoverage = kmerCoverage - 10
-    if kmerCoverage == 10:
+    if kmerCoverage >11:
+        kmerCoverage = kmerCoverage - 10
+    else:
+        kmerCoverage = kmerCoverage - 2
+    if kmerCoverage < 3:
         kmerCoverage = 50
         kmerSize = kmerSize - 10
         if kmerSize <31:
