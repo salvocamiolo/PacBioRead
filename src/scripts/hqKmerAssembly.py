@@ -28,13 +28,11 @@ os.system("rm -rf "+outputFolder+"/kmerDB*")
 while float(len(assembledSequence))/float(refLength) < 0.8:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
     #prepare kmer database 
-    print("kmc -fa -k"+str(kmerSize)+" "+reads+" kmerDB "+outputFolder)
-    os.system("kmc -fa  -k"+str(kmerSize)+" "+reads+ " " +outputFolder+"/kmerDB "+outputFolder+"/")
-    print("DB created")
 
-    print("kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/kmerDB "+outputFolder+"/kmerDB_output")
-    os.system("kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/kmerDB "+outputFolder+"/kmerDB_output")
-    print("Count done")
+    os.system("kmc -fa  -k"+str(kmerSize)+" "+reads+ " " +outputFolder+"/kmerDB "+outputFolder+"/ > "+outputFolder+"/null 2>&1")
+
+    os.system("kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/kmerDB "+outputFolder+"/kmerDB_output > "+outputFolder+"/null 2>&1")
+
 
     infile = open(outputFolder+"/kmerDB_output")
     outfile = open(outputFolder+"/kmerDB_output.fastq","w")
@@ -52,7 +50,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
         outfile.write("\n")
     outfile.close()
     if float(numSeq)>refLength*0.8:
-        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/kmerDB_output.fastq --pacbio "+outputFolder+"/mapped.fasta --phred-offset 33 --careful -o "+outputFolder+"/outputSpades")
+        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/kmerDB_output.fastq --pacbio "+outputFolder+"/mapped.fasta --phred-offset 33 --careful -o "+outputFolder+"/outputSpades > "+outputFolder+"/null 2>&1")
         print("Spades completed")
 
         maxScaffoldLength = 0
