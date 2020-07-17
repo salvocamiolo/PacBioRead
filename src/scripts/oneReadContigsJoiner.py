@@ -182,7 +182,7 @@ for a in range(len(orderedContigs)-1):
     print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
 
     r_outfile = open("bestRead.fasta","w")
-    SeqIO.write(readSequences[bestRead],r_outfile,"fasta")
+    r_outfile.write(">Best_read\n"+readSequences[bestRead]+"\n")
     r_outfile.close()
 
     #Correcting best read
