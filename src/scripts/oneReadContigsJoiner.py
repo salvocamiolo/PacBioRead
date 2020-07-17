@@ -218,7 +218,7 @@ for a in range(len(orderedContigs)-1):
 
 	#Mapping the reads on the two scaffolds
 	print("Mapping reads on %s" %orderedContigs[a])
-	os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/startSeq.fasta localAssembly.fasta > "+outputFolder+"/minimapBit1")
+	os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/startSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit1")
 	#Scanning minimap2 output to search useful reads
 	infile = open(outputFolder+"/minimapBit1")
 	usefulReads1 = set()
@@ -242,7 +242,7 @@ for a in range(len(orderedContigs)-1):
 
 		
 	print("Mapping reads on %s" %orderedContigs[a+1])
-	os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/endSeq.fasta localAssembly.fasta > "+outputFolder+"/minimapBit2")
+	os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/endSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit2")
 	infile = open(outputFolder+"/minimapBit2")
 	usefulReads2 = set()
 	aln2_info = {}
