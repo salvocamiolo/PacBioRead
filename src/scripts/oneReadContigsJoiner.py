@@ -197,7 +197,7 @@ for a in range(len(orderedContigs)-1):
         if not line:
             break
         fields = line.split("\t")
-        outfile.write(">"+fields[0]+"\n"+readSequences[fields[0]]+"\n")
+        r_outfile.write(">"+fields[0]+"\n"+readSequences[fields[0]]+"\n")
         
 
     r_outfile.close()
