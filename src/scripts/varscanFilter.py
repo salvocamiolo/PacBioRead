@@ -20,7 +20,7 @@ numThreads = args['threads']
 if not args['validateIndel']:
 	validate = 0
 else:
-	validate = args['validateIndel']
+	validate = int(args['validateIndel'])
 
 read1 = args['read1']
 
