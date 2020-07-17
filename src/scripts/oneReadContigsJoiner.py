@@ -175,10 +175,11 @@ for a in range(len(orderedContigs)-1):
     bestRead = ""
     bestAvLen = 0
     for item in (usefulReads1 & usefulReads2):
-        avLen = (aln1_info[item][0] + aln2_info[item][0])/2
-        if avLen > bestAvLen:
-            bestAvLen = avLen
-            bestRead = item
+        if aln1_info[item][1] == aln2_info[item][1]: #the two alignments goes in the same direction
+            avLen = (aln1_info[item][0] + aln2_info[item][0])/2
+            if avLen > bestAvLen:
+                bestAvLen = avLen
+                bestRead = item
     print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
 
     r_outfile = open("bestRead.fasta","w")
