@@ -222,7 +222,7 @@ for a in range(len(orderedContigs)-1):
 	#Scanning minimap2 output to search useful reads
 	infile = open(outputFolder+"/minimapBit1")
 	usefulReads1 = set()
-	aln1_info = {}
+
 	
 	while True:
 		line = infile.readline().rstrip()
@@ -244,10 +244,12 @@ for a in range(len(orderedContigs)-1):
 
 		
 	print("Mapping reads on %s" %orderedContigs[a+1])
+	overlap5=True
+	overlap3=True
 	os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/endSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit2")
 	infile = open(outputFolder+"/minimapBit2")
 	usefulReads2 = set()
-	aln2_info = {}
+
 	while True:
 		line = infile.readline().rstrip()
 		if not line:
@@ -269,7 +271,7 @@ for a in range(len(orderedContigs)-1):
 	if overlap3==True and overlap5==True:
 		bestRead="local"
 	
-	
+
 	if aln1_info[bestRead][1] == "+" and aln2_info[bestRead][1] == "+":
 		elongingSequence = elongingSequence[:aln1_info[bestRead][5]] + \
 			readSequences[bestRead][aln1_info[bestRead][3]:aln2_info[bestRead][3]] + \
