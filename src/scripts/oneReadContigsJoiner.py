@@ -181,7 +181,7 @@ for a in range(len(orderedContigs)-1):
                 bestAvLen = avLen
                 bestRead = item
     print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
-
+    sys.stdin.read(1)
     r_outfile = open("bestRead.fasta","w")
     r_outfile.write(">Best_read\n"+readSequences[bestRead]+"\n")
     r_outfile.close()
