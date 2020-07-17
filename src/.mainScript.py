@@ -690,14 +690,14 @@ class Ui_Form(object):
 			now = datetime.now()
 			current_time = now.strftime("%H:%M:%S")
 			logFile.write("Consensus calling started at "+str(current_time)+"\n\n")
-			"""outfile = open(outputFolder+"/subSample.fasta","w")
+			outfile = open(outputFolder+"/subSample.fasta","w")
 			totCoverage = 0
 			for seq_record in SeqIO.parse(reads,"fasta"):
 				totCoverage+=len(str(seq_record.seq))
 				SeqIO.write(seq_record,outfile,"fasta")
 				if totCoverage > 100*len(refSeq):
 					break
-			outfile.close()"""
+			outfile.close()
 
 			self.logTextEdit.append("* * * Assembly correction ")
 			self.logTextEdit.append("* * * Chopping reads.... ")
