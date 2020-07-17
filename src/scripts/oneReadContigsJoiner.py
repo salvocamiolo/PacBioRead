@@ -255,7 +255,7 @@ for a in range(len(orderedContigs)-1):
             aln2_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
     infile.close()
 
-
+    bestRead = "local"
     if aln1_info[bestRead][1] == "+" and aln2_info[bestRead][1] == "+":
         elongingSequence = elongingSequence[:aln1_info[bestRead][5]] + \
             readSequences[bestRead][aln1_info[bestRead][3]:aln2_info[bestRead][3]] + \
