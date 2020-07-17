@@ -185,6 +185,25 @@ for a in range(len(orderedContigs)-1):
     r_outfile.write(">Best_read\n"+readSequences[bestRead]+"\n")
     r_outfile.close()
 
+    os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t 4 "+outputFolder+"/bestRead.fasta "+reads+" > "+outputFolder+"/outputMinimap")
+
+    os.system("awk '($11/$2)>0.7' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+    # awk '($10/$2)>0.5' |
+    totalCollectedBases = 0
+    infile = open(outputFolder+"/outputMinimap_filtered")
+    r_outfile = open(outputFolder+"/mapped.fasta","w")
+    while True:
+        line = infile.readline().rstrip()
+        if not line:
+            break
+        fields = line.split("\t")
+        outfile.write(">"+fields[0]+"\n"+readsSeq[fields[0]]+"\n")
+        totalCollectedBases+=len(str(readsSeq[fields[0]]))
+        if totalCollectedBases > windowSize*1000: #do not collect more than a number of reads leading to a 1000x coverage of the window
+            break
+
+    r_outfile.close()
+    infile.close()
     #Correcting best read
     print("Correcting best joining read",bestRead)
     os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/bestRead.fasta -t 4 -of "+outputFolder)
