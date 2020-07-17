@@ -181,7 +181,7 @@ for a in range(len(orderedContigs)-1):
                 bestAvLen = avLen
                 bestRead = item
     print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
-    sys.stdin.read(1)
+
     r_outfile = open("bestRead.fasta","w")
     
     r_outfile.write(">Best_read\n"+contigsSeq[orderedContigs[a]][-3000:]+readSequences[bestRead]+contigsSeq[orderedContigs[a+1]][:3000]+"\n")
@@ -209,10 +209,10 @@ for a in range(len(orderedContigs)-1):
     #Correcting best read
     print("Correcting best joining read",bestRead)
     os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/bestRead.fasta -t 4 -of "+outputFolder)
-    for seq_record in SeqIO.parse(outputFolder+"/localAssembly.fasta"):
+    for seq_record in SeqIO.parse(outputFolder+"/localAssembly.fasta","fasta"):
         if not str(seq_record.id) in readSequences:
             readSequences[str(seq_record.id)] = str(seq_record.seq)
-            
+
     #Mapping the reads on the two scaffolds
     print("Mapping reads on %s" %orderedContigs[a])
     os.system(installationDirectory+"/src/conda/bin/minimap2 startSeq.fasta localAssembly.fasta > "+outputFolder+"/minimapBit1")
