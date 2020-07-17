@@ -177,7 +177,7 @@ for a in range(len(orderedContigs)-1):
     for item in (usefulReads1 & usefulReads2):
         if aln1_info[item][1] == aln2_info[item][1]: #the two alignments goes in the same direction
             avLen = (aln1_info[item][0] + aln2_info[item][0])/2
-            if avLen > bestAvLen:
+            if avLen > bestAvLen and aln1_info[item][0]>300 and aln2_info[item][0]>300:
                 bestAvLen = avLen
                 bestRead = item
     print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
