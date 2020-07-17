@@ -202,6 +202,8 @@ for a in range(len(orderedContigs)-1):
 
     r_outfile.close()
     infile.close()
+
+
     #Correcting best read
     print("Correcting best joining read",bestRead)
     os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/bestRead.fasta -t 4 -of "+outputFolder)
@@ -224,10 +226,10 @@ for a in range(len(orderedContigs)-1):
         queryEnd = int(fields[3])
         orientation = fields[4]
         alignmentLen = subjectEnd-subjectStart
-        if float(subjectEnd) > 0.9*float(fields[6]) and (alignmentLen) >200:
-            usefulReads1.add(fields[0])
-            if not fields[0] in aln1_info:
-                aln1_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
+        
+        usefulReads1.add(fields[0])
+        if not fields[0] in aln1_info:
+            aln1_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
     infile.close()
 
         
@@ -247,10 +249,10 @@ for a in range(len(orderedContigs)-1):
         queryEnd = int(fields[3])
         orientation = fields[4]
         alignmentLen = subjectEnd-subjectStart
-        if subjectStart < 5000 and (alignmentLen) >200 :
-            usefulReads2.add(fields[0])
-            if not fields[0] in aln2_info:
-                aln2_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
+
+        usefulReads2.add(fields[0])
+        if not fields[0] in aln2_info:
+            aln2_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
     infile.close()
 
 
