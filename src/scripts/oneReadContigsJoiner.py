@@ -205,8 +205,54 @@ for a in range(len(orderedContigs)-1):
     #Correcting best read
     print("Correcting best joining read",bestRead)
     os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/bestRead.fasta -t 4 -of "+outputFolder)
-    print("Correction completed!")
-    sys.stdin.read(1)
+
+    #Mapping the reads on the two scaffolds
+    print("Mapping reads on %s" %orderedContigs[a])
+    os.system(installationDirectory+"/src/conda/bin/minimap2 startSeq.fasta localAssembly.fasta > "+outputFolder+"/minimapBit1")
+    #Scanning minimap2 output to search useful reads
+    infile = open(outputFolder+"/minimapBit1")
+    usefulReads1 = set()
+    aln1_info = {}
+    while True:
+        line = infile.readline().rstrip()
+        if not line:
+            break
+        fields = line.split("\t")
+        subjectStart = int(fields[7])
+        subjectEnd = int(fields[8])
+        queryStart = int(fields[2])
+        queryEnd = int(fields[3])
+        orientation = fields[4]
+        alignmentLen = subjectEnd-subjectStart
+        if float(subjectEnd) > 0.9*float(fields[6]) and (alignmentLen) >200:
+            usefulReads1.add(fields[0])
+            if not fields[0] in aln1_info:
+                aln1_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
+    infile.close()
+
+        
+    print("Mapping reads on %s" %orderedContigs[a+1])
+    os.system(installationDirectory+"/src/conda/bin/minimap2  endSeq.fasta localAssembly.fasta > "+outputFolder+"/minimapBit2")
+    infile = open(outputFolder+"/minimapBit2")
+    usefulReads2 = set()
+    aln2_info = {}
+    while True:
+        line = infile.readline().rstrip()
+        if not line:
+            break
+        fields = line.split("\t")
+        subjectStart = int(fields[7])
+        subjectEnd = int(fields[8])
+        queryStart = int(fields[2])
+        queryEnd = int(fields[3])
+        orientation = fields[4]
+        alignmentLen = subjectEnd-subjectStart
+        if subjectStart < 5000 and (alignmentLen) >200 :
+            usefulReads2.add(fields[0])
+            if not fields[0] in aln2_info:
+                aln2_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
+    infile.close()
+
 
     if aln1_info[bestRead][1] == "+" and aln2_info[bestRead][1] == "+":
         elongingSequence = elongingSequence[:aln1_info[bestRead][5]] + \
