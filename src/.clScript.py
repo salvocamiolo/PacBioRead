@@ -116,6 +116,7 @@ else:
 
 		os.system("awk '($11/$2)>"+homology+"' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
 		# awk '($10/$2)>0.5' |
+		totalCollectedBases = 0
 		infile = open(outputFolder+"/outputMinimap_filtered")
 		outfile = open(outputFolder+"/mapped.fasta","w")
 		while True:
@@ -124,6 +125,10 @@ else:
 				break
 			fields = line.split("\t")
 			outfile.write(">"+fields[0]+"\n"+readsSeq[fields[0]]+"\n")
+			totalCollectedBases+=len(str(readsSeq[fields[0]]))
+			if totalCollectedBases > windowSize*1000: #do not collect more than a number of reads leading to a 1000x coverage of the window
+				break
+
 		outfile.close()
 		infile.close()
 		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/partReference.fasta -t "+numThreads+" -of "+outputFolder)
