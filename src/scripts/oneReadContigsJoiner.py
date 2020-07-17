@@ -198,9 +198,7 @@ for a in range(len(orderedContigs)-1):
             break
         fields = line.split("\t")
         outfile.write(">"+fields[0]+"\n"+readSequences[fields[0]]+"\n")
-        totalCollectedBases+=len(str(readSequences[fields[0]]))
-        if totalCollectedBases > windowSize*1000: #do not collect more than a number of reads leading to a 1000x coverage of the window
-            break
+        
 
     r_outfile.close()
     infile.close()
