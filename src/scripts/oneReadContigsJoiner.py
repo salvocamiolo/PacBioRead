@@ -104,7 +104,7 @@ numElongedSequences = 0
 outfile = open(outputFolder+"/"+outputFfile,"w")
 for a in range(len(orderedContigs)-1):
     print("joining "+orderedContigs[a]+" and "+orderedContigs[a+1])
-    startSeqFile = open("startSeq.fasta","w")
+    startSeqFile = open(outputFolder+"/startSeq.fasta","w")
     if elongingSequence == "":
         startSeqFile.write(">start\n"+contigsSeq[orderedContigs[a]]+"\n")
         startSeq = contigsSeq[orderedContigs[a]]
@@ -114,13 +114,13 @@ for a in range(len(orderedContigs)-1):
         startSeq = elongingSequence
     startSeqFile.close()
 
-    endSeqFile = open("endSeq.fasta","w")
+    endSeqFile = open(outputFolder+"/endSeq.fasta","w")
     endSeqFile.write(">end\n"+contigsSeq[orderedContigs[a+1]]+"\n")
     endSeqFile.close()
 
     #Mapping the reads on the two scaffolds
     print("Mapping reads on %s" %orderedContigs[a])
-    os.system(installationDirectory+"/src/conda/bin/minimap2 startSeq.fasta "+reads+" > "+outputFolder+"/minimapBit1")
+    os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/startSeq.fasta "+reads+" > "+outputFolder+"/minimapBit1")
     #Scanning minimap2 output to search useful reads
     infile = open(outputFolder+"/minimapBit1")
     usefulReads1 = set()
@@ -144,7 +144,7 @@ for a in range(len(orderedContigs)-1):
 
         
     print("Mapping reads on %s" %orderedContigs[a+1])
-    os.system(installationDirectory+"/src/conda/bin/minimap2  endSeq.fasta "+reads+" > "+outputFolder+"/minimapBit2")
+    os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/endSeq.fasta "+reads+" > "+outputFolder+"/minimapBit2")
     infile = open(outputFolder+"/minimapBit2")
     usefulReads2 = set()
     aln2_info = {}
@@ -182,7 +182,7 @@ for a in range(len(orderedContigs)-1):
                 bestRead = item
     print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
 
-    r_outfile = open("bestRead.fasta","w")
+    r_outfile = open(outputFolder+"/bestRead.fasta","w")
     
     r_outfile.write(">Best_read\n"+contigsSeq[orderedContigs[a]][-1500:]+readSequences[bestRead]+contigsSeq[orderedContigs[a+1]][:1500]+"\n")
     r_outfile.close()
@@ -218,7 +218,7 @@ for a in range(len(orderedContigs)-1):
 
     #Mapping the reads on the two scaffolds
     print("Mapping reads on %s" %orderedContigs[a])
-    os.system(installationDirectory+"/src/conda/bin/minimap2 startSeq.fasta localAssembly.fasta > "+outputFolder+"/minimapBit1")
+    os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/startSeq.fasta localAssembly.fasta > "+outputFolder+"/minimapBit1")
     #Scanning minimap2 output to search useful reads
     infile = open(outputFolder+"/minimapBit1")
     usefulReads1 = set()
@@ -242,7 +242,7 @@ for a in range(len(orderedContigs)-1):
 
         
     print("Mapping reads on %s" %orderedContigs[a+1])
-    os.system(installationDirectory+"/src/conda/bin/minimap2  endSeq.fasta localAssembly.fasta > "+outputFolder+"/minimapBit2")
+    os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/endSeq.fasta localAssembly.fasta > "+outputFolder+"/minimapBit2")
     infile = open(outputFolder+"/minimapBit2")
     usefulReads2 = set()
     aln2_info = {}
