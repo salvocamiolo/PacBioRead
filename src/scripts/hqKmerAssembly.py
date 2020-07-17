@@ -52,7 +52,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
         outfile.write("\n")
     outfile.close()
     if float(numSeq)>refLength*0.8:
-        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/kmerDB_output.fastq --pacbio "+outputFolder+"/mapped.fasta --phred-offset 33 --careful -o "+outputFolder+"/outputSpades > "+outputFolder+"/null 2>&1")
+        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/kmerDB_output.fastq --pacbio "+reads+" --phred-offset 33 --careful -o "+outputFolder+"/outputSpades > "+outputFolder+"/null 2>&1")
         print("Spades completed")
 
         maxScaffoldLength = 0

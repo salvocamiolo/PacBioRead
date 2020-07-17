@@ -184,7 +184,7 @@ for a in range(len(orderedContigs)-1):
 
 	r_outfile = open(outputFolder+"/bestRead.fasta","w")
 	
-	r_outfile.write(">Best_read\n"+contigsSeq[orderedContigs[a]][-5000:]+readSequences[bestRead]+contigsSeq[orderedContigs[a+1]][:5000]+"\n")
+	r_outfile.write(">Best_read\n"+contigsSeq[orderedContigs[a]][-3000:]+readSequences[bestRead]+contigsSeq[orderedContigs[a+1]][:3000]+"\n")
 	r_outfile.close()
 
 	os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t 4 "+outputFolder+"/bestRead.fasta "+reads+" > "+outputFolder+"/outputMinimap")
@@ -223,9 +223,11 @@ for a in range(len(orderedContigs)-1):
 	infile = open(outputFolder+"/minimapBit1")
 	usefulReads1 = set()
 	aln1_info = {}
+	
 	while True:
 		line = infile.readline().rstrip()
 		if not line:
+			overlap5=False
 			break
 		fields = line.split("\t")
 		subjectStart = int(fields[7])
@@ -249,6 +251,7 @@ for a in range(len(orderedContigs)-1):
 	while True:
 		line = infile.readline().rstrip()
 		if not line:
+			overlap3=False
 			break
 		fields = line.split("\t")
 		subjectStart = int(fields[7])
@@ -263,7 +266,10 @@ for a in range(len(orderedContigs)-1):
 			aln2_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
 	infile.close()
 
-	bestRead = "local"
+	if overlap3==True and overlap5==True:
+		bestRead="local"
+	
+	
 	if aln1_info[bestRead][1] == "+" and aln2_info[bestRead][1] == "+":
 		elongingSequence = elongingSequence[:aln1_info[bestRead][5]] + \
 			readSequences[bestRead][aln1_info[bestRead][3]:aln2_info[bestRead][3]] + \
