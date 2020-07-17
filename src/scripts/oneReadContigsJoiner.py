@@ -184,7 +184,7 @@ for a in range(len(orderedContigs)-1):
 
 	r_outfile = open(outputFolder+"/bestRead.fasta","w")
 	
-	r_outfile.write(">Best_read\n"+contigsSeq[orderedContigs[a]][-1500:]+readSequences[bestRead]+contigsSeq[orderedContigs[a+1]][:1500]+"\n")
+	r_outfile.write(">Best_read\n"+contigsSeq[orderedContigs[a]][-5000:]+readSequences[bestRead]+contigsSeq[orderedContigs[a+1]][:5000]+"\n")
 	r_outfile.close()
 
 	os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t 4 "+outputFolder+"/bestRead.fasta "+reads+" > "+outputFolder+"/outputMinimap")
@@ -201,7 +201,7 @@ for a in range(len(orderedContigs)-1):
 		fields = line.split("\t")
 		r_outfile.write(">"+fields[0]+"\n"+readSequences[fields[0]]+"\n")
 		totalCollectedBases+=len(readSequences[fields[0]])
-		if totalCollectedBases > (len(readSequences[bestRead])+3000)*1000: #do not collect more than a number of reads leading to a 1000x coverage of the window
+		if totalCollectedBases > (len(readSequences[bestRead])+10000)*1000: #do not collect more than a number of reads leading to a 1000x coverage of the window
 			break
 		
 
