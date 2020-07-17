@@ -180,6 +180,17 @@ for a in range(len(orderedContigs)-1):
             bestAvLen = avLen
             bestRead = item
     print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
+
+    r_outfile = open("bestRead.fasta","w")
+    SeqIO.write(readSequences[bestRead],r_outfile,"fasta")
+    r_outfile.close()
+
+    #Correcting best read
+    print("Correcting best joining read",bestRead)
+    os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/bestRead.fasta -t 4 -of "+outputFolder)
+    print("Correction completed!")
+    sys.stdin.read(1)
+
     if aln1_info[bestRead][1] == "+" and aln2_info[bestRead][1] == "+":
         elongingSequence = elongingSequence[:aln1_info[bestRead][5]] + \
             readSequences[bestRead][aln1_info[bestRead][3]:aln2_info[bestRead][3]] + \
