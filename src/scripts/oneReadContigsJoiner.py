@@ -182,116 +182,126 @@ for a in range(len(orderedContigs)-1):
 				bestRead = item
 	print("The best average alignment length is %f for read %s" %(bestAvLen,bestRead))
 
-	r_outfile = open(outputFolder+"/bestRead.fasta","w")
-	
-	r_outfile.write(">Best_read\n"+contigsSeq[orderedContigs[a]][-3000:]+readSequences[bestRead]+contigsSeq[orderedContigs[a+1]][:3000]+"\n")
-	r_outfile.close()
-
-	os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t 4 "+outputFolder+"/bestRead.fasta "+reads+" > "+outputFolder+"/outputMinimap")
-
-	os.system("awk '($11/$2)>0.7' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
-	# awk '($10/$2)>0.5' |
-	totalCollectedBases = 0
-	infile = open(outputFolder+"/outputMinimap_filtered")
-	r_outfile = open(outputFolder+"/mapped.fasta","w")
-	while True:
-		line = infile.readline().rstrip()
-		if not line:
-			break
-		fields = line.split("\t")
-		r_outfile.write(">"+fields[0]+"\n"+readSequences[fields[0]]+"\n")
-		totalCollectedBases+=len(readSequences[fields[0]])
-		if totalCollectedBases > (len(readSequences[bestRead])+10000)*1000: #do not collect more than a number of reads leading to a 1000x coverage of the window
-			break
-		
-
-	r_outfile.close()
-	infile.close()
-
-
-	#Correcting best read
-	print("Correcting best joining read",bestRead)
-	os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/bestRead.fasta -t 4 -of "+outputFolder)
-	for seq_record in SeqIO.parse(outputFolder+"/localAssembly.fasta","fasta"):
-		if not str(seq_record.id) in readSequences:
-			readSequences[str(seq_record.id)] = str(seq_record.seq)
-
-	#Mapping the reads on the two scaffolds
-	print("Mapping reads on %s" %orderedContigs[a])
-	os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/startSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit1")
-	#Scanning minimap2 output to search useful reads
-	infile = open(outputFolder+"/minimapBit1")
-	usefulReads1 = set()
-
-	
-	while True:
-		line = infile.readline().rstrip()
-		if not line:
-			overlap5=False
-			break
-		fields = line.split("\t")
-		subjectStart = int(fields[7])
-		subjectEnd = int(fields[8])
-		queryStart = int(fields[2])
-		queryEnd = int(fields[3])
-		orientation = fields[4]
-		alignmentLen = subjectEnd-subjectStart
-		
-		usefulReads1.add(fields[0])
-		if not fields[0] in aln1_info:
-			aln1_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
-	infile.close()
-
-		
-	print("Mapping reads on %s" %orderedContigs[a+1])
-	overlap5=True
-	overlap3=True
-	os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/endSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit2")
-	infile = open(outputFolder+"/minimapBit2")
-	usefulReads2 = set()
-
-	while True:
-		line = infile.readline().rstrip()
-		if not line:
-			overlap3=False
-			break
-		fields = line.split("\t")
-		subjectStart = int(fields[7])
-		subjectEnd = int(fields[8])
-		queryStart = int(fields[2])
-		queryEnd = int(fields[3])
-		orientation = fields[4]
-		alignmentLen = subjectEnd-subjectStart
-
-		usefulReads2.add(fields[0])
-		if not fields[0] in aln2_info:
-			aln2_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
-	infile.close()
-
-	if overlap3==True and overlap5==True:
-		bestRead="local"
-	
-
-	if aln1_info[bestRead][1] == "+" and aln2_info[bestRead][1] == "+":
-		elongingSequence = elongingSequence[:aln1_info[bestRead][5]] + \
-			readSequences[bestRead][aln1_info[bestRead][3]:aln2_info[bestRead][3]] + \
-				contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][5]:]
-	
-		
-		
-	if aln1_info[bestRead][1] == "-" and aln2_info[bestRead][1] == "-":
-		print("Lengths reverse")
-		print(len(elongingSequence[:aln1_info[bestRead][5]]))
-		print(len(Seq.reverse_complement(readSequences[bestRead][aln2_info[bestRead][3]:aln1_info[bestRead][2]])))
-		print(len(contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][4]:]))
-		elongingSequence = elongingSequence[:aln1_info[bestRead][5]]+\
-			Seq.reverse_complement(readSequences[bestRead][aln2_info[bestRead][3]:aln1_info[bestRead][2]]) +\
-				contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][4]:]
-
 	if len(usefulReads1 & usefulReads2) == 0: #No reads was found
 		numElongedSequences+=1
 		outfile.write(">Sequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
 		elongingSequence = ""
+	else:
+
+	
+
+
+
+
+
+		r_outfile = open(outputFolder+"/bestRead.fasta","w")
+		
+		r_outfile.write(">Best_read\n"+contigsSeq[orderedContigs[a]][-3000:]+readSequences[bestRead]+contigsSeq[orderedContigs[a+1]][:3000]+"\n")
+		r_outfile.close()
+
+		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t 4 "+outputFolder+"/bestRead.fasta "+reads+" > "+outputFolder+"/outputMinimap")
+
+		os.system("awk '($11/$2)>0.7' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
+		# awk '($10/$2)>0.5' |
+		totalCollectedBases = 0
+		infile = open(outputFolder+"/outputMinimap_filtered")
+		r_outfile = open(outputFolder+"/mapped.fasta","w")
+		while True:
+			line = infile.readline().rstrip()
+			if not line:
+				break
+			fields = line.split("\t")
+			r_outfile.write(">"+fields[0]+"\n"+readSequences[fields[0]]+"\n")
+			totalCollectedBases+=len(readSequences[fields[0]])
+			if totalCollectedBases > (len(readSequences[bestRead])+10000)*1000: #do not collect more than a number of reads leading to a 1000x coverage of the window
+				break
+			
+
+		r_outfile.close()
+		infile.close()
+
+
+		#Correcting best read
+		print("Correcting best joining read",bestRead)
+		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/bestRead.fasta -t 4 -of "+outputFolder)
+		for seq_record in SeqIO.parse(outputFolder+"/localAssembly.fasta","fasta"):
+			if not str(seq_record.id) in readSequences:
+				readSequences[str(seq_record.id)] = str(seq_record.seq)
+
+		#Mapping the reads on the two scaffolds
+		print("Mapping reads on %s" %orderedContigs[a])
+		os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/startSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit1")
+		#Scanning minimap2 output to search useful reads
+		infile = open(outputFolder+"/minimapBit1")
+		usefulReads1 = set()
+
+		
+		while True:
+			line = infile.readline().rstrip()
+			if not line:
+				overlap5=False
+				break
+			fields = line.split("\t")
+			subjectStart = int(fields[7])
+			subjectEnd = int(fields[8])
+			queryStart = int(fields[2])
+			queryEnd = int(fields[3])
+			orientation = fields[4]
+			alignmentLen = subjectEnd-subjectStart
+			
+			usefulReads1.add(fields[0])
+			if not fields[0] in aln1_info:
+				aln1_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
+		infile.close()
+
+			
+		print("Mapping reads on %s" %orderedContigs[a+1])
+		overlap5=True
+		overlap3=True
+		os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/endSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit2")
+		infile = open(outputFolder+"/minimapBit2")
+		usefulReads2 = set()
+
+		while True:
+			line = infile.readline().rstrip()
+			if not line:
+				overlap3=False
+				break
+			fields = line.split("\t")
+			subjectStart = int(fields[7])
+			subjectEnd = int(fields[8])
+			queryStart = int(fields[2])
+			queryEnd = int(fields[3])
+			orientation = fields[4]
+			alignmentLen = subjectEnd-subjectStart
+
+			usefulReads2.add(fields[0])
+			if not fields[0] in aln2_info:
+				aln2_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
+		infile.close()
+
+		if overlap3==True and overlap5==True:
+			bestRead="local"
+		
+
+		if aln1_info[bestRead][1] == "+" and aln2_info[bestRead][1] == "+":
+			elongingSequence = elongingSequence[:aln1_info[bestRead][5]] + \
+				readSequences[bestRead][aln1_info[bestRead][3]:aln2_info[bestRead][3]] + \
+					contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][5]:]
+		
+			
+			
+		if aln1_info[bestRead][1] == "-" and aln2_info[bestRead][1] == "-":
+			print("Lengths reverse")
+			print(len(elongingSequence[:aln1_info[bestRead][5]]))
+			print(len(Seq.reverse_complement(readSequences[bestRead][aln2_info[bestRead][3]:aln1_info[bestRead][2]])))
+			print(len(contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][4]:]))
+			elongingSequence = elongingSequence[:aln1_info[bestRead][5]]+\
+				Seq.reverse_complement(readSequences[bestRead][aln2_info[bestRead][3]:aln1_info[bestRead][2]]) +\
+					contigsSeq[orderedContigs[a+1]][aln2_info[bestRead][4]:]
+
+	
+
 numElongedSequences+=1
 outfile.write(">Sequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
 outfile.close()        
