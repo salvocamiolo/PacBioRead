@@ -23,7 +23,7 @@ for seq_record in SeqIO.parse(reference,"fasta"):
     refLength = len(refSequence)
 
 assembledSequence = ""
-kmerSize = 81
+kmerSize = 61
 kmerCoverage = 50
 noAssembly = False
 os.system("rm -rf "+outputFolder+"/kmerDB*")
