@@ -212,9 +212,9 @@ for a in range(len(orderedContigs)-1):
 				break
 			fields = line.split("\t")
 			r_outfile.write(">"+fields[0]+"\n"+readSequences[fields[0]]+"\n")
-			totalCollectedBases+=len(readSequences[fields[0]])
+			"""totalCollectedBases+=len(readSequences[fields[0]])
 			if totalCollectedBases > (len(readSequences[bestRead])+10000)*1000: #do not collect more than a number of reads leading to a 1000x coverage of the window
-				break
+				break"""
 			
 
 		r_outfile.close()
@@ -224,64 +224,66 @@ for a in range(len(orderedContigs)-1):
 		#Correcting best read
 		print("Correcting best joining read",bestRead)
 		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/bestRead.fasta -t 4 -of "+outputFolder)
-		for seq_record in SeqIO.parse(outputFolder+"/mapped.fasta_localAssembly.fasta","fasta"):
-			if not str(seq_record.id) in readSequences:
-				readSequences[str(seq_record.id)] = str(seq_record.seq)
+		if os.path.isfile(outputFolder+"/mapped.fasta_localAssembly.fasta")==True:
+			for seq_record in SeqIO.parse(outputFolder+"/mapped.fasta_localAssembly.fasta","fasta"):
+				if not str(seq_record.id) in readSequences:
+					readSequences[str(seq_record.id)] = str(seq_record.seq)
 
-		#Mapping the reads on the two scaffolds
-		print("Mapping reads on %s" %orderedContigs[a])
-		os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/startSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit1")
-		#Scanning minimap2 output to search useful reads
-		infile = open(outputFolder+"/minimapBit1")
-		usefulReads1 = set()
-
-		
-		while True:
-			line = infile.readline().rstrip()
-			if not line:
-				overlap5=False
-				break
-			fields = line.split("\t")
-			subjectStart = int(fields[7])
-			subjectEnd = int(fields[8])
-			queryStart = int(fields[2])
-			queryEnd = int(fields[3])
-			orientation = fields[4]
-			alignmentLen = subjectEnd-subjectStart
-			
-			usefulReads1.add(fields[0])
-			if not fields[0] in aln1_info:
-				aln1_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
-		infile.close()
+			#Mapping the reads on the two scaffolds
+			print("Mapping reads on %s" %orderedContigs[a])
+			os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/startSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit1")
+			#Scanning minimap2 output to search useful reads
+			infile = open(outputFolder+"/minimapBit1")
+			usefulReads1 = set()
 
 			
-		print("Mapping reads on %s" %orderedContigs[a+1])
-		overlap5=True
-		overlap3=True
-		os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/endSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit2")
-		infile = open(outputFolder+"/minimapBit2")
-		usefulReads2 = set()
+			while True:
+				line = infile.readline().rstrip()
+				if not line:
+					overlap5=False
+					break
+				fields = line.split("\t")
+				subjectStart = int(fields[7])
+				subjectEnd = int(fields[8])
+				queryStart = int(fields[2])
+				queryEnd = int(fields[3])
+				orientation = fields[4]
+				alignmentLen = subjectEnd-subjectStart
+				
+				usefulReads1.add(fields[0])
+				if not fields[0] in aln1_info:
+					aln1_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
+			infile.close()
 
-		while True:
-			line = infile.readline().rstrip()
-			if not line:
-				overlap3=False
-				break
-			fields = line.split("\t")
-			subjectStart = int(fields[7])
-			subjectEnd = int(fields[8])
-			queryStart = int(fields[2])
-			queryEnd = int(fields[3])
-			orientation = fields[4]
-			alignmentLen = subjectEnd-subjectStart
+				
+			print("Mapping reads on %s" %orderedContigs[a+1])
+			overlap5=True
+			overlap3=True
+			os.system(installationDirectory+"/src/conda/bin/minimap2 "+outputFolder+"/endSeq.fasta "+outputFolder+"/localAssembly.fasta > "+outputFolder+"/minimapBit2")
+			infile = open(outputFolder+"/minimapBit2")
+			usefulReads2 = set()
 
-			usefulReads2.add(fields[0])
-			if not fields[0] in aln2_info:
-				aln2_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
-		infile.close()
+			while True:
+				line = infile.readline().rstrip()
+				if not line:
+					overlap3=False
+					break
+				fields = line.split("\t")
+				subjectStart = int(fields[7])
+				subjectEnd = int(fields[8])
+				queryStart = int(fields[2])
+				queryEnd = int(fields[3])
+				orientation = fields[4]
+				alignmentLen = subjectEnd-subjectStart
 
-		if overlap3==True and overlap5==True:
-			bestRead="local"
+				usefulReads2.add(fields[0])
+				if not fields[0] in aln2_info:
+					aln2_info[fields[0]] = (alignmentLen,orientation,queryStart,queryEnd,subjectStart,subjectEnd)
+			infile.close()
+
+			if overlap3==True and overlap5==True:
+				bestRead="local"
+
 		
 
 		if aln1_info[bestRead][1] == "+" and aln2_info[bestRead][1] == "+":
