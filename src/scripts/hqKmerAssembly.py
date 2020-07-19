@@ -56,8 +56,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
     if float(numSeq)>refLength*0.8:
         os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/"+(reads.split("."))[-1]+"_output.fastq --pacbio "+reads+".fasta --phred-offset 33 --careful -o "+outputFolder+"/"+(reads.split("."))[-1]+"_outputSpades > "+outputFolder+"/null 2>&1")
         print("Spades completed")
-        print("ln -s "+reads+" "+reads+".fasta")
-        sys.stdin.read(1)
+
 
         maxScaffoldLength = 0
 
