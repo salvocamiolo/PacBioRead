@@ -31,13 +31,13 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
     #prepare kmer database 
 
-    os.system(installationDirectory+"/src/conda/bin/kmc -fa  -k"+str(kmerSize)+" "+reads+ " " +outputFolder+"/"+(reads.split("."))[-1]+" "+ outputFolder+"/")# > "+outputFolder+"/null 2>&1")
+    os.system(installationDirectory+"/src/conda/bin/kmc -fa  -k"+str(kmerSize)+" "+reads+ " " +outputFolder+"/"+(reads.split("."))[-1]+" "+ outputFolder+"/ > "+outputFolder+"/null 2>&1")
 
-    os.system(installationDirectory+"/src/conda/bin/kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/"+(reads.split("."))[-1]+" "+ outputFolder+"/"+(reads.split("."))[-1]+"_output")# > "+outputFolder+"/null 2>&1")
+    os.system(installationDirectory+"/src/conda/bin/kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/"+(reads.split("."))[-1]+" "+ outputFolder+"/"+(reads.split("."))[-1]+"_output > "+outputFolder+"/null 2>&1")
 
 
     infile = open(outputFolder+"/"+(reads.split("."))[-1]+"_output")
-    sys.stdin.read(1)
+
     outfile = open(outputFolder+"/"+(reads.split("."))[-1]+"_output.fastq","w")
     numSeq = 0
     os.system("rm -rf "+outputFolder+"/outputSpades")
