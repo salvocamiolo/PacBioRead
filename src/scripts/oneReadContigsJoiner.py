@@ -224,7 +224,7 @@ for a in range(len(orderedContigs)-1):
 		#Correcting best read
 		print("Correcting best joining read",bestRead)
 		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/bestRead.fasta -t 4 -of "+outputFolder)
-		for seq_record in SeqIO.parse(outputFolder+"/localAssembly.fasta","fasta"):
+		for seq_record in SeqIO.parse(outputFolder+"/mapped.fasta_localAssembly.fasta","fasta"):
 			if not str(seq_record.id) in readSequences:
 				readSequences[str(seq_record.id)] = str(seq_record.seq)
 
