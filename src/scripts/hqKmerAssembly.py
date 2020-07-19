@@ -26,7 +26,7 @@ assembledSequence = ""
 kmerSize = 61
 kmerCoverage = 50
 noAssembly = False
-os.system("ln -s "+reads+" "+reads+".fasta")
+os.system("cp  "+reads+" "+reads+".fasta")
 os.system("rm -rf "+outputFolder+"/kmerDB*")
 while float(len(assembledSequence))/float(refLength) < 0.8:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
