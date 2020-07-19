@@ -35,7 +35,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
 
     os.system(installationDirectory+"/src/conda/bin/kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/"+(reads.split("."))[-1]+" "+ outputFolder+"/"+(reads.split("."))[-1]+"_output > "+outputFolder+"/null 2>&1")
 
-
+    os.system("ln -s "+reads+" "+reads+".fasta")
     infile = open(outputFolder+"/"+(reads.split("."))[-1]+"_output")
 
     outfile = open(outputFolder+"/"+(reads.split("."))[-1]+"_output.fastq","w")
@@ -53,7 +53,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
         outfile.write("\n")
     outfile.close()
     if float(numSeq)>refLength*0.8:
-        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/"+(reads.split("."))[-1]+"_output.fastq --pacbio "+reads+" --phred-offset 33 --careful -o "+outputFolder+"/"+(reads.split("."))[-1]+"_outputSpades > "+outputFolder+"/null 2>&1")
+        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/"+(reads.split("."))[-1]+"_output.fastq --pacbio "+reads+".fasta --phred-offset 33 --careful -o "+outputFolder+"/"+(reads.split("."))[-1]+"_outputSpades > "+outputFolder+"/null 2>&1")
         print("Spades completed")
         sys.stdin.read(1)
 
