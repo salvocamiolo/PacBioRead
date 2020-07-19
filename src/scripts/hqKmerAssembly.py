@@ -31,14 +31,14 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
     #prepare kmer database 
 
-    os.system(installationDirectory+"/src/conda/bin/kmc -fa  -k"+str(kmerSize)+" "+reads+ " " +outputFolder+"/"+reads+" "+ outputFolder+"/")# > "+outputFolder+"/null 2>&1")
+    os.system(installationDirectory+"/src/conda/bin/kmc -fa  -k"+str(kmerSize)+" "+reads+ " " +outputFolder+"/"+(reads.split("."))[-1]+" "+ outputFolder+"/")# > "+outputFolder+"/null 2>&1")
 
-    os.system(installationDirectory+"/src/conda/bin/kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/"+reads+" "+ outputFolder+"/"+reads+"_output")# > "+outputFolder+"/null 2>&1")
+    os.system(installationDirectory+"/src/conda/bin/kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/"+(reads.split("."))[-1]+" "+ outputFolder+"/"+(reads.split("."))[-1]+"_output")# > "+outputFolder+"/null 2>&1")
 
 
-    infile = open(outputFolder+"/"+reads+"_output")
+    infile = open(outputFolder+"/"+(reads.split("."))[-1]+"_output")
     sys.stdin.read(1)
-    outfile = open(outputFolder+"/"+reads+"_output.fastq","w")
+    outfile = open(outputFolder+"/"+(reads.split("."))[-1]+"_output.fastq","w")
     numSeq = 0
     os.system("rm -rf "+outputFolder+"/outputSpades")
     while True:
@@ -53,13 +53,13 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
         outfile.write("\n")
     outfile.close()
     if float(numSeq)>refLength*0.8:
-        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/"+reads+"_output.fastq --pacbio "+reads+" --phred-offset 33 --careful -o "+outputFolder+"/"+reads+"_outputSpades > "+outputFolder+"/null 2>&1")
+        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/"+(reads.split("."))[-1]+"_output.fastq --pacbio "+reads+" --phred-offset 33 --careful -o "+outputFolder+"/"+(reads.split("."))[-1]+"_outputSpades > "+outputFolder+"/null 2>&1")
         print("Spades completed")
 
         maxScaffoldLength = 0
 
-        if os.path.isfile(outputFolder+"/"+reads+"_outputSpades/scaffolds.fasta") == True:
-            for seq_record in SeqIO.parse(outputFolder+"/"+reads+"_outputSpades/scaffolds.fasta","fasta"):
+        if os.path.isfile(outputFolder+"/"+(reads.split("."))[-1]+"_outputSpades/scaffolds.fasta") == True:
+            for seq_record in SeqIO.parse(outputFolder+"/"+(reads.split("."))[-1]+"_outputSpades/scaffolds.fasta","fasta"):
                 if len(str(seq_record.seq)) > maxScaffoldLength:
                     maxScaffoldLength = len(str(seq_record.seq))
                     assembledSequence = str(seq_record.seq)
