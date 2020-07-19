@@ -114,7 +114,7 @@ else:
 
 		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+numThreads+" "+outputFolder+"/partReference.fasta "+reads+" > "+outputFolder+"/outputMinimap_"+windowSuffix)
 
-		os.system("awk '($11/$2)>"+homology+"' "+outputFolder+"/outputMinimap_"windowSuffix+"  | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered_"+windowSuffix)
+		os.system("awk '($11/$2)>"+homology+"' "+outputFolder+"/outputMinimap_"+windowSuffix+"  | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered_"+windowSuffix)
 		# awk '($10/$2)>0.5' |
 		totalCollectedBases = 0
 		infile = open(outputFolder+"/outputMinimap_filtered_"+windowSuffix)
@@ -184,12 +184,12 @@ else:
 	
 	#Final alignment and consensus calling
 	print("* * Calling consensus.... ")
-	print("* * * Subsampling.... ")
+	#print("* * * Subsampling.... ")
 	
 	now = datetime.now()
 	current_time = now.strftime("%H:%M:%S")
 	logFile.write("Consensus calling started at "+str(current_time)+"\n\n")
-	outfile = open(outputFolder+"/subSample.fasta","w")
+	"""outfile = open(outputFolder+"/subSample.fasta","w")
 	totCoverage = 0
 	for seq_record in SeqIO.parse(reads,"fasta"):
 		totCoverage+=len(str(seq_record.seq))
@@ -197,7 +197,7 @@ else:
 		if totCoverage > 100*len(refSeq):
 			break
 	outfile.close()
-
+"""
 	print("* * * Assembly correction ")
 	print("* * * Chopping reads.... ")
 	
@@ -259,7 +259,7 @@ else:
 	print("* * * Calling variants.... ")
 	
 	os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup2.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output2.vcf")
-	os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output2.vcf -o "+outputFolder+"/output_filtered2.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 1  -r "+outputFolder+"/finalAssembly1.fasta -p "+installationDirectory +" -t "+numThreads) 
+	os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output2.vcf -o "+outputFolder+"/output_filtered2.vcf -1 "+reads+" -g 1  -r "+outputFolder+"/finalAssembly1.fasta -p "+installationDirectory +" -t "+numThreads) 
 	os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered2.vcf > "+outputFolder+"/output_filtered2.vcf.gz")
 	os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output_filtered2.vcf.gz")
 	os.system("cat "+outputFolder+"/finalAssembly1.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output_filtered2.vcf.gz > "+outputFolder+"/finalAssembly.fasta")

@@ -10,6 +10,7 @@ parser.add_argument("-1","--read1",required=False,help="First fastq file in read
 parser.add_argument("-r","--reference",required=False,help="Reference fasta file, needed for indel validation")
 parser.add_argument("-p","--installationDirectory",required=False,help="Full path to the GRACy directory")
 parser.add_argument("-t","--threads",required=False,help="Number of threads")
+parser.add_argument("-of","--outputFolder",required=False,help="Number of threads")
 
 
 args = vars(parser.parse_args())
@@ -17,6 +18,7 @@ inputFile = args['input']
 outputFile = args['output']
 reference = args['reference']
 numThreads = args['threads']
+outputFolder = args['outputFolder']
 if not args['validateIndel']:
 	validate = 0
 else:
@@ -27,7 +29,20 @@ read1 = args['read1']
 installationDirectory = args['installationDirectory']
 kmersInReads = []
 if validate == 1:
+	print("Counting kmers")
 	os.system(installationDirectory+"src/conda/bin/jellyfish count -m 50 -s 1G -t "+numThreads+" -C  -o kmerCount.jf "+read1)
+	os.system(installationDirectory+"/src/conda/bin/kmc -fa  -k50 "+read1+" "+outputFolder+"/kmcDB " + outputFolder+"/ > "+outputFolder+"/null 2>&1")
+	os.system(installationDirectory+"/src/conda/bin/kmc_dump  "+outputFolder+"/kmcDB "+ outputFolder+"/kmcDB_output > "+outputFolder+"/null 2>&1")
+
+	kmerCount = {}
+	infile = open(outputFolder+"/kmcDB_output")
+	while True:
+		line = infile.readline().rstrip()
+		if not line:
+			break
+		fields = line.split("\t")
+		if not fields[0] in kmerCount:
+			kmerCount[fields[0]]= int(fields[1])
 
 	refSeq = {}
 	for seq_record in SeqIO.parse(reference,"fasta"):
@@ -68,7 +83,7 @@ while True:
 			#print(refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+"-"+fields[4]+"-"+refSeq[fields[0]][int(fields[1]):int(fields[1])+25-len(fields[4])+1])
 			refAllele = refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+fields[3]+refSeq[fields[0]][int(fields[1]):int(fields[1])+25]
 			altAllele = refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+fields[4]+refSeq[fields[0]][int(fields[1]):int(fields[1])+25-len(fields[4])+1]
-			refReads = kmersInReads.count(refAllele) + kmersInReads.count(Seq.reverse_complement(refAllele))
+			"""refReads = kmersInReads.count(refAllele) + kmersInReads.count(Seq.reverse_complement(refAllele))
 			altReads = kmersInReads.count(altAllele) + kmersInReads.count(Seq.reverse_complement(altAllele))
 
 			#print(refAllele)
@@ -93,10 +108,10 @@ while True:
 				countList = countLine.split(" ")
 				altReads = int(countList[1])
 			countFile.close()
-			#print(altReads)
+			#print(altReads)"""
 		
 
-			if altReads>refReads:
+			if kmerCount[altReads]>kmerCount[refReads]:
 				outfile.write(line+"\n")
 
 		if len(fields[3])>1 and (int(info[5]) > int(info[4])):
@@ -105,7 +120,7 @@ while True:
 			#print(refSeq[int(fields[1])-25:int(fields[1])-1]+"-"+fields[4]+"-"+refSeq[int(fields[1])+len(fields[3])-1:int(fields[1])+25+len(fields[3])-1])
 			refAllele = refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+fields[3]+refSeq[fields[0]][int(fields[1])+len(fields[3])-1:int(fields[1])+25]
 			altAllele = refSeq[fields[0]][int(fields[1])-25:int(fields[1])-1]+fields[4]+refSeq[fields[0]][int(fields[1])+len(fields[3])-1:int(fields[1])+25+len(fields[3])-1]
-			refReads = kmersInReads.count(refAllele) + kmersInReads.count(Seq.reverse_complement(refAllele))
+			"""refReads = kmersInReads.count(refAllele) + kmersInReads.count(Seq.reverse_complement(refAllele))
 			altReads = kmersInReads.count(altAllele) + kmersInReads.count(Seq.reverse_complement(altAllele))
 
 			#print(refAllele)
@@ -130,10 +145,10 @@ while True:
 				countList = countLine.split(" ")
 				altReads = int(countList[1])
 			countFile.close()
-			#print(altReads)
+			#print(altReads)"""
 		
 
-			if altReads>refReads:
+			if kmerCount[altReads]>kmerCount[refReads]:
 				outfile.write(line+"\n")
 
 		if len(fields[3]) == 1 and len(fields[4]) == 1: #just a SNP

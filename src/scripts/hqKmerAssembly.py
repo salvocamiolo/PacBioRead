@@ -31,9 +31,9 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
     #prepare kmer database 
 
-    os.system("kmc -fa  -k"+str(kmerSize)+" "+reads+ " " +outputFolder+"/"+reads+" "+ outputFolder+"/ > "+outputFolder+"/null 2>&1")
+    os.system(installationDirectory+"/src/conda/bin/kmc -fa  -k"+str(kmerSize)+" "+reads+ " " +outputFolder+"/"+reads+" "+ outputFolder+"/ > "+outputFolder+"/null 2>&1")
 
-    os.system("kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/"+reads+" "+ outputFolder+"/"+reads+"_output > "+outputFolder+"/null 2>&1")
+    os.system(installationDirectory+"/src/conda/bin/kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/"+reads+" "+ outputFolder+"/"+reads+"_output > "+outputFolder+"/null 2>&1")
 
 
     infile = open(outputFolder+"/"+reads+"_output")
