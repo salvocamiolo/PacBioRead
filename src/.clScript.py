@@ -134,8 +134,8 @@ else:
 		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta_"+windowSuffix+" -ref "+outputFolder+"/partReference.fasta -t "+numThreads+" -of "+outputFolder)
 
 
-		if os.path.isfile(outputFolder+"/mapped.fasta"+windowSuffix+"_localAssembly.fasta") == True:
-			for seq_record in SeqIO.parse(outputFolder+"/mapped.fasta"+windowSuffix+"_localAssembly.fasta","fasta"):
+		if os.path.isfile(outputFolder+"/mapped.fasta_"+windowSuffix+"_localAssembly.fasta") == True:
+			for seq_record in SeqIO.parse(outputFolder+"/mapped.fasta_"+windowSuffix+"_localAssembly.fasta","fasta"):
 
 				maxScaffoldLength = len(str(seq_record.seq))
 				longestContig = str(seq_record.seq)

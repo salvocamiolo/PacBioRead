@@ -582,8 +582,8 @@ class Ui_Form(object):
 					
 				
 
-				if os.path.isfile(outputFolder+"/mapped.fasta"+windowSuffix+"_localAssembly.fasta") == True:
-					for seq_record in SeqIO.parse(outputFolder+"/mapped.fasta"+windowSuffix+"_localAssembly.fasta","fasta"):
+				if os.path.isfile(outputFolder+"/mapped.fasta_"+windowSuffix+"_localAssembly.fasta") == True:
+					for seq_record in SeqIO.parse(outputFolder+"/mapped.fasta_"+windowSuffix+"_localAssembly.fasta","fasta"):
 
 						maxScaffoldLength = len(str(seq_record.seq))
 						longestContig = str(seq_record.seq)
