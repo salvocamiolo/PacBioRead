@@ -533,12 +533,7 @@ class Ui_Form(object):
 
 			stage_a = open(outputFolder+"/local_assemblies.fasta","w")
 
-			"""self.logTextEdit.append("* * Converting high quality reads to fastq format....")
-			self.logTextEdit.repaint()
-			with open(reads, "r") as fasta, open(outputFolder+"/hq_reads.fastq", "w") as fastq:
-				for record in SeqIO.parse(fasta, "fasta"):
-					record.letter_annotations["phred_quality"] = [40] * len(record)
-					SeqIO.write(record, fastq, "fastq")"""
+
 
 
 			self.logTextEdit.append("* * Assembly on sliding windows started")
@@ -553,7 +548,7 @@ class Ui_Form(object):
 				if endPos>len(refSeq):
 					endPos=len(refSeq)
 					windowSize = len(refSeq) - a
-
+				windowSuffix = str(a)+"-"+str(endPos) 
 				self.logTextEdit.append("* * * Assembling region "+str(a)+"-"+str(endPos))
 				self.logTextEdit.repaint()
 				partSeq = refSeq[a:endPos]
@@ -561,14 +556,14 @@ class Ui_Form(object):
 				tempFasta.write(">partReference\n"+partSeq+"\n")
 				tempFasta.close()
 
-				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+reads+" > "+outputFolder+"/outputMinimap ")
+				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+reads+" > "+outputFolder+"/outputMinimap_"+windowSuffix)
 
 				homology = float(self.homologyLineEdit.text())
-				os.system("awk '($11/$2)>"+homology+"' "+outputFolder+"/outputMinimap | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered ")
-				# awk '($10/$2)>0.5' |
+				os.system("awk '($11/$2)>"+homology+"' "+outputFolder+"/outputMinimap_"+windowSuffix+" | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered_"+windowSuffix)
+
 				totalCollectedBases = 0
-				infile = open(outputFolder+"/outputMinimap_filtered")
-				outfile = open(outputFolder+"/mapped.fasta","w")
+				infile = open(outputFolder+"/outputMinimap_filtered_"+windowSuffix)
+				outfile = open(outputFolder+"/mapped.fasta_"+windowSuffix,"w")
 				while True:
 					line = infile.readline().rstrip()
 					if not line:
@@ -581,60 +576,14 @@ class Ui_Form(object):
 
 				outfile.close()
 				infile.close()
-				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta -ref "+outputFolder+"/partReference.fasta -t "+self.numThreadsLineEdit.text()+" -of "+outputFolder)
+				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/hqKmerAssembly.py -p "+installationDirectory+" -r "+outputFolder+"/mapped.fasta_"+windowSuffix+" -ref "+outputFolder+"/partReference.fasta -t "+self.numThreadsLineEdit.text()+" -of "+outputFolder)
 
 				
 					
-				"""readsToAssemble = set()
-				numAttempt = 0
-				maxScaffoldLength = 0
-
-				
 				
 
-				b=0
-				collectedReads = []
-				while b<(windowSize-150):
-				#for b in range(0,windowSize-500,+150):
-
-					tfile = open(outputFolder+"/outputMinimap_filtered")						
-
-					while True:
-						tline = tfile.readline().rstrip()
-						if not tline:
-							break
-						tfields = tline.split("\t")
-						if int(tfields[7]) >b and int(tfields[7]) <(b+150) and not tfields[0] in collectedReads:
-							readsToAssemble.add(tfields[0])
-							print(tfields[0])
-							b = int(tfields[8])-300
-							collectedReads.append(tfields[0])
-							break
-					b+=150	
-				tfile.close()
-
-				outfile = open(outputFolder+"/toAssemble.fasta","w")
-				numReadsToAssemble = 0
-				for item in readsToAssemble:
-					if not item == '':
-						numReadsToAssemble+=1
-						outfile.write(">Sequence_"+str(numReadsToAssemble)+"\n"+readsSeq[item]+"\n")
-				outfile.close()
-
-				print("Assembling %d reads" %numReadsToAssemble)
-				self.logTextEdit.append("* * * Using "+str(numReadsToAssemble)+" reads....")
-				self.logTextEdit.repaint()
-				os.system(installationDirectory+"/src/conda/bin/art_illumina -i "+outputFolder+"/toAssemble.fasta -l 150 -f 30 -ss HS25 -o "+outputFolder+"/simulatedReads -p -m 500 -s 50")
-				toAssembleFile = open(outputFolder+"/allSimulated.fasta","w")
-				os.system(installationDirectory+"/src/conda/bin/fq2fa --merge "+outputFolder+"/simulatedReads1.fq "+outputFolder+"/simulatedReads2.fq "+outputFolder+"/allSimulated.fasta")
-				os.system("rm -rf "+outputFolder+"/outputIdba/")
-				os.system(installationDirectory+"/src/conda/bin/idba_hybrid  --reference "+outputFolder+"/partReference.fasta -r "+outputFolder+"/allSimulated.fasta --num_threads "+self.numThreadsLineEdit.text()+" -o "+outputFolder+"/outputIdba > "+outputFolder+"/null 2>&1")
-				maxScaffoldLength = 0
-				longestContig = ""
-"""
-
-				if os.path.isfile(outputFolder+"/localAssembly.fasta") == True:
-					for seq_record in SeqIO.parse(outputFolder+"/localAssembly.fasta","fasta"):
+				if os.path.isfile(outputFolder+"/mapped.fasta"+windowSuffix+"_localAssembly.fasta") == True:
+					for seq_record in SeqIO.parse(outputFolder+"/mapped.fasta"+windowSuffix+"_localAssembly.fasta","fasta"):
 
 						maxScaffoldLength = len(str(seq_record.seq))
 						longestContig = str(seq_record.seq)
@@ -652,9 +601,7 @@ class Ui_Form(object):
 
 
 			stage_a.close()
-			os.system("rm -rf "+outputFolder+"/outputMinimap* "+outputFolder+"/partReference.fasta " +\
-				outputFolder+"/toAssemble.fasta "+outputFolder+"/simulatedReads* "+outputFolder+\
-					"/allSimulated.fasta "+outputFolder+"/outputIdba/ " +outputFolder+"/null")
+			
 
 			#Joining contigs
 			now = datetime.now()
@@ -708,64 +655,62 @@ class Ui_Form(object):
 			self.logTextEdit.repaint()
 			
 			
-			os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/scaffolds_gapClosed.fasta "+reads+"_chopped.fasta"+" > "+outputFolder+"/alignment.sam")
+			os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/scaffolds_gapClosed.fasta "+reads+"_chopped.fasta"+" > "+outputFolder+"/alignment1.sam")
 			self.logTextEdit.append("* * * Converting sam to bam.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
+			os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment1.sam > "+outputFolder+"/alignment1.bam")
 			self.logTextEdit.append("* * * Sorting.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
+			os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted1.bam "+outputFolder+"/alignment1.bam")
 			self.logTextEdit.append("* * * Indexing.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/alignment_sorted.bam")
+			os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/alignment_sorted1.bam")
 
 			self.logTextEdit.append("* * * Creating pilleup.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
-				"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
-					"/pileup.txt")
+				"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted1.bam > "+outputFolder+ \
+					"/pileup1.txt")
 
 			self.logTextEdit.append("* * * Calling variants.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-var-freq 0.5 --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
+			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup1.txt --variants --output-vcf --min-var-freq 0.5 --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output1.vcf")
 			
-			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output.vcf > "+outputFolder+"/output.vcf.gz")
-			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output.vcf.gz")
-			os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output.vcf.gz > "+outputFolder+"/finalAssembly1.fasta")
+			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output1.vcf > "+outputFolder+"/output1.vcf.gz")
+			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output1.vcf.gz")
+			os.system("cat "+outputFolder+"/scaffolds_gapClosed.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output1.vcf.gz > "+outputFolder+"/finalAssembly1.fasta")
 
-			os.chdir(outputFolder)
-			os.system("rm -rf *.vcf *.bam *.sam *.gz")
-			os.chdir("../")
+
 
 			self.logTextEdit.append("* * * Second assembly correction.... ")
 			self.logTextEdit.append("* * * Mapping original reads to the assembled sequence.... ")
 			self.logTextEdit.repaint()
 			
 			
-			os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/finalAssembly1.fasta "+reads+"_chopped.fasta"+" > "+outputFolder+"/alignment.sam")
+			os.system(installationDirectory+"/src/conda/bin/minimap2 -a -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/finalAssembly1.fasta "+reads+"_chopped.fasta"+" > "+outputFolder+"/alignment2.sam")
 			self.logTextEdit.append("* * * Converting sam to bam.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment.sam > "+outputFolder+"/alignment.bam")
+			os.system(installationDirectory+"/src/conda/bin/samtools view -F 4 -bS -h "+outputFolder+"/alignment2.sam > "+outputFolder+"/alignment2.bam")
 			self.logTextEdit.append("* * * Sorting.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted.bam "+outputFolder+"/alignment.bam")
+			os.system(installationDirectory+"/src/conda/bin/samtools sort -o "+outputFolder+"/alignment_sorted2.bam "+outputFolder+"/alignment2.bam")
 			self.logTextEdit.append("* * * Indexing.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/alignment_sorted.bam")
+			os.system(installationDirectory+"/src/conda/bin/samtools index "+outputFolder+"/alignment_sorted2.bam")
 
 			self.logTextEdit.append("* * * Creating pilleup.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
-				"/finalAssembly1.fasta "+outputFolder +"/alignment_sorted.bam > "+outputFolder+ \
-					"/pileup.txt")
+				"/finalAssembly1.fasta "+outputFolder +"/alignment_sorted2.bam > "+outputFolder+ \
+					"/pileup2.txt")
 
 			self.logTextEdit.append("* * * Calling variants.... ")
 			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output.vcf")
-			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output.vcf -o "+outputFolder+"/output_filtered.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 1  -r "+outputFolder+"/scaffolds_gapClosed.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
-			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered.vcf > "+outputFolder+"/output_filtered.vcf.gz")
-			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output_filtered.vcf.gz")
-			os.system("cat "+outputFolder+"/finalAssembly1.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output_filtered.vcf.gz > "+outputFolder+"/finalAssembly.fasta")
+			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup2.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output2.vcf")
+			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output2.vcf -o "+outputFolder+"/output_filtered2.vcf -1 "+outputFolder+"/subSample.fasta "+" -g 1  -r "+outputFolder+"/finalScaffold1.fasta -p "+installationDirectory +" -t "+self.numThreadsLineEdit.text()) 
+			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered2.vcf > "+outputFolder+"/output_filtered2.vcf.gz")
+			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output_filtered2.vcf.gz")
+			os.system("cat "+outputFolder+"/finalAssembly1.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output_filtered2.vcf.gz > "+outputFolder+"/finalAssembly.fasta")
 
 
 

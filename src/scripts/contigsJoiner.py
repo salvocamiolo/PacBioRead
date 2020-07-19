@@ -121,8 +121,6 @@ if len(elongingSequence)>0:
     outfile.write(">ElongedSequence_"+str(numElongedSequences)+"\n"+elongingSequence+"\n")
 
 
-os.system("rm -rf "+outputFolder+"/scaffoldMapping.txt "+outputFolder+"/"+contigs+"_oriented.fasta " +\
-    outputFolder+"/startSeq* "+outputFolder+"/endSeq* "+outputFolder+"/outputBlast.txt")
 
 
 

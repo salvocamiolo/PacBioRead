@@ -31,13 +31,13 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
     #prepare kmer database 
 
-    os.system("kmc -fa  -k"+str(kmerSize)+" "+reads+ " " +outputFolder+"/kmerDB "+outputFolder+"/ > "+outputFolder+"/null 2>&1")
+    os.system("kmc -fa  -k"+str(kmerSize)+" "+reads+ " " +outputFolder+"/"+reads+" "+ outputFolder+"/ > "+outputFolder+"/null 2>&1")
 
-    os.system("kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/kmerDB "+outputFolder+"/kmerDB_output > "+outputFolder+"/null 2>&1")
+    os.system("kmc_dump -ci"+str(int(kmerCoverage))+" "+outputFolder+"/"+reads+" "+ outputFolder+"/"+reads+"_output > "+outputFolder+"/null 2>&1")
 
 
-    infile = open(outputFolder+"/kmerDB_output")
-    outfile = open(outputFolder+"/kmerDB_output.fastq","w")
+    infile = open(outputFolder+"/"+reads+"_output")
+    outfile = open(outputFolder+"/"+reads+"_output.fastq","w")
     numSeq = 0
     os.system("rm -rf "+outputFolder+"/outputSpades")
     while True:
@@ -52,13 +52,13 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
         outfile.write("\n")
     outfile.close()
     if float(numSeq)>refLength*0.8:
-        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/kmerDB_output.fastq --pacbio "+reads+" --phred-offset 33 --careful -o "+outputFolder+"/outputSpades > "+outputFolder+"/null 2>&1")
+        os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/"+reads+"_output.fastq --pacbio "+reads+" --phred-offset 33 --careful -o "+outputFolder+"/"+reads+"_outputSpades > "+outputFolder+"/null 2>&1")
         print("Spades completed")
 
         maxScaffoldLength = 0
 
-        if os.path.isfile(outputFolder+"/outputSpades/scaffolds.fasta") == True:
-            for seq_record in SeqIO.parse(outputFolder+"/outputSpades/scaffolds.fasta","fasta"):
+        if os.path.isfile(outputFolder+"/"+reads+"_outputSpades/scaffolds.fasta") == True:
+            for seq_record in SeqIO.parse(outputFolder+"/"+reads+"_outputSpades/scaffolds.fasta","fasta"):
                 if len(str(seq_record.seq)) > maxScaffoldLength:
                     maxScaffoldLength = len(str(seq_record.seq))
                     assembledSequence = str(seq_record.seq)
@@ -75,7 +75,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
             break
 
 if noAssembly==False:
-    outfile = open(outputFolder+"/localAssembly.fasta","w")
+    outfile = open(outputFolder+"/"+reads+"_localAssembly.fasta","w")
     outfile.write(">local\n"+assembledSequence+"\n")
     outfile.close()
     
