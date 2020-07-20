@@ -28,7 +28,7 @@ kmerCoverage = 50
 noAssembly = False
 os.system("cp  "+reads+" "+reads+".fasta")
 os.system("rm -rf "+outputFolder+"/kmerDB*")
-while float(len(assembledSequence))/float(refLength) < 0.8:
+while float(len(assembledSequence))/float(refLength) < 0.9:
     print("Trying kmer size %d / kmer coverage %f" %(kmerSize,kmerCoverage))
     #prepare kmer database 
 
@@ -53,7 +53,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
             outfile.write("G")
         outfile.write("\n")
     outfile.close()
-    if float(numSeq)>refLength*0.8:
+    if float(numSeq)>refLength*0.9:
         os.system("spades.py -t "+numThreads+" -s "+outputFolder+"/"+(reads.split("."))[-1]+"_output.fastq --pacbio "+reads+".fasta --phred-offset 33 --careful -o "+outputFolder+"/"+(reads.split("."))[-1]+"_outputSpades > "+outputFolder+"/null 2>&1")
         print("Spades completed")
 
@@ -70,7 +70,7 @@ while float(len(assembledSequence))/float(refLength) < 0.8:
         kmerCoverage = kmerCoverage - 10
     else:
         kmerCoverage = kmerCoverage - 2
-    if kmerCoverage < 3:
+    if kmerCoverage < 2:
         kmerCoverage = 50
         kmerSize = kmerSize - 10
         if kmerSize <31:

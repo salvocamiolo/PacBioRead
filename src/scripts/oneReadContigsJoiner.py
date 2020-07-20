@@ -196,7 +196,7 @@ for a in range(len(orderedContigs)-1):
 
 		r_outfile = open(outputFolder+"/bestRead.fasta","w")
 		
-		r_outfile.write(">Best_read\n"+contigsSeq[orderedContigs[a]][-3000:]+readSequences[bestRead]+contigsSeq[orderedContigs[a+1]][:3000]+"\n")
+		r_outfile.write(">Best_read\n"+readSequences[bestRead]+"\n")
 		r_outfile.close()
 
 		os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t 4 "+outputFolder+"/bestRead.fasta "+reads+" > "+outputFolder+"/outputMinimap")
