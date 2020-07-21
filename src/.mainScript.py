@@ -709,7 +709,7 @@ class Ui_Form(object):
 			self.logTextEdit.append("* * * Calling variants.... ")
 			self.logTextEdit.repaint()
 			os.system(installationDirectory+"/src/conda/bin/varscan mpileup2cns "+outputFolder+"/pileup2.txt --variants --output-vcf --min-avg-qual 0 --strand-filter 0 --min-coverage 5   > "+outputFolder+"/output2.vcf")
-			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output2.vcf -o "+outputFolder+"/output_filtered2.vcf -1 "+reads+" -g 1  -r "+outputFolder+"/finalScaffold1.fasta -p "+installationDirectory +" -of "+outputFolder+" -t "+self.numThreadsLineEdit.text()) 
+			os.system(installationDirectory+"src/conda/bin/python "+installationDirectory+"src/scripts/varscanFilter.py -i "+outputFolder+"/output2.vcf -o "+outputFolder+"/output_filtered2.vcf -1 "+reads+" -g 1  -r "+outputFolder+"/finalAssembly1.fasta -p "+installationDirectory +" -of "+outputFolder+" -t "+self.numThreadsLineEdit.text()) 
 			os.system(installationDirectory+"/src/conda/bin/bgzip -f -c "+outputFolder+"/output_filtered2.vcf > "+outputFolder+"/output_filtered2.vcf.gz")
 			os.system(installationDirectory+"/src/conda/bin/tabix -f "+outputFolder+"/output_filtered2.vcf.gz")
 			os.system("cat "+outputFolder+"/finalAssembly1.fasta | "+installationDirectory+"/src/conda/bin/bcftools consensus "+outputFolder+"/output_filtered2.vcf.gz > "+outputFolder+"/finalAssembly.fasta")
