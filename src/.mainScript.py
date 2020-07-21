@@ -558,7 +558,7 @@ class Ui_Form(object):
 
 				os.system(installationDirectory+"/src/conda/bin/minimap2 -x map-pb -t "+self.numThreadsLineEdit.text()+" "+outputFolder+"/partReference.fasta "+reads+" > "+outputFolder+"/outputMinimap_"+windowSuffix)
 
-				homology = float(self.homologyLineEdit.text())
+				homology = self.homologyLineEdit.text()
 				os.system("awk '($11/$2)>"+homology+"' "+outputFolder+"/outputMinimap_"+windowSuffix+" | sort -k2rn,2rn >  "+outputFolder+"/outputMinimap_filtered_"+windowSuffix)
 
 				totalCollectedBases = 0
