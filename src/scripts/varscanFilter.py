@@ -111,7 +111,17 @@ while True:
 			#print(altReads)"""
 		
 
-			if kmerCount[altReads]>kmerCount[refReads]:
+			if not altAllele in kmerCount:
+				altAllele = Seq.reverse_complement(altAllele)
+			
+			if not refAllele in kmerCount:
+				refAllele = Seq.reverse_complement(refAllele)
+
+			if refAllele in kmerCount and altAllele in kmerCount: #a validation can be computed
+				if kmerCount[altAllele]>kmerCount[refAllele]:
+					outfile.write(line+"\n")
+			else:
+				if int(info[5]) > int(info[4]): #the alternate allele has a highe number of reads than the reference allele
 				outfile.write(line+"\n")
 
 		if len(fields[3])>1 and (int(info[5]) > int(info[4])):
@@ -152,9 +162,14 @@ while True:
 			
 			if not refAllele in kmerCount:
 				refAllele = Seq.reverse_complement(refAllele)
-				
-			if kmerCount[altAllele]>kmerCount[refAllele]:
+
+			if refAllele in kmerCount and altAllele in kmerCount: #a validation can be computed
+				if kmerCount[altAllele]>kmerCount[refAllele]:
+					outfile.write(line+"\n")
+			else:
+				if int(info[5]) > int(info[4]): #the alternate allele has a highe number of reads than the reference allele
 				outfile.write(line+"\n")
+
 
 		if len(fields[3]) == 1 and len(fields[4]) == 1: #just a SNP
 			if int(info[5]) > int(info[4]): #the alternate allele has a highe number of reads than the reference allele
