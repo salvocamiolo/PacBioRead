@@ -122,7 +122,7 @@ while True:
 					outfile.write(line+"\n")
 			else:
 				if int(info[5]) > int(info[4]): #the alternate allele has a highe number of reads than the reference allele
-				outfile.write(line+"\n")
+					outfile.write(line+"\n")
 
 		if len(fields[3])>1 and (int(info[5]) > int(info[4])):
 			#print("Validating deletion at position %s" %fields[1])
@@ -168,7 +168,7 @@ while True:
 					outfile.write(line+"\n")
 			else:
 				if int(info[5]) > int(info[4]): #the alternate allele has a highe number of reads than the reference allele
-				outfile.write(line+"\n")
+					outfile.write(line+"\n")
 
 
 		if len(fields[3]) == 1 and len(fields[4]) == 1: #just a SNP
