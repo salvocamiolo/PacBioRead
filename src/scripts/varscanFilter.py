@@ -148,7 +148,7 @@ while True:
 			#print(altReads)"""
 		
 
-			if kmerCount[altReads]>kmerCount[refReads]:
+			if kmerCount[altAllele]>kmerCount[refAllele]:
 				outfile.write(line+"\n")
 
 		if len(fields[3]) == 1 and len(fields[4]) == 1: #just a SNP
