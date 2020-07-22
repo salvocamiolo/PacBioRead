@@ -147,7 +147,12 @@ while True:
 			countFile.close()
 			#print(altReads)"""
 		
-
+			if not altAllele in kmerCount:
+				altAllele = Seq.reverse_complement(altAllele)
+			
+			if not refAllele in kmerCount:
+				refAllele = Seq.reverse_complement(refAllele)
+				
 			if kmerCount[altAllele]>kmerCount[refAllele]:
 				outfile.write(line+"\n")
 
