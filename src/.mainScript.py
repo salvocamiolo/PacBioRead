@@ -604,30 +604,39 @@ class Ui_Form(object):
 			
 
 			#Joining contigs
-			now = datetime.now()
-			current_time = now.strftime("%H:%M:%S")
-			logFile.write("Conting joining started at "+str(current_time)+"\n\n")
-
-			self.logTextEdit.append("* * Joining contigs.... ")
-			self.logTextEdit.repaint()
-			os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/local_assemblies.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
-
-			#Check final number of scaffold and attempt gap closure if > 1
-			self.logTextEdit.append("* * Attempting gap closure.... ")
-			self.logTextEdit.repaint()
-			finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta","fasta"))
-
-			if len(finalScaffols)>1:
-				self.logTextEdit.append("\nAttempting gap closure.... ")
-				self.logTextEdit.repaint()
+			#Count contigs in local_assemblies
+			numContigs = 0
+			for seq_record in SeqIO.parse(outputFolder+"/local_assemblies.fasta","fasta"):
+				numContigs+=1
+			
+			if numContigs>1:
 				now = datetime.now()
 				current_time = now.strftime("%H:%M:%S")
-				logFile.write("Gap closure started at "+str(current_time)+"\n\n")
-				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
-					-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
-						outputFolder+" -s "+ self.gapClosingReadsLineEdit.text() +" -o scaffolds_gapClosed.fasta")
+				logFile.write("Conting joining started at "+str(current_time)+"\n\n")
+
+				self.logTextEdit.append("* * Joining contigs.... ")
+				self.logTextEdit.repaint()
+				os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/local_assemblies.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
+
+				#Check final number of scaffold and attempt gap closure if > 1
+				self.logTextEdit.append("* * Attempting gap closure.... ")
+				self.logTextEdit.repaint()
+				finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta","fasta"))
+
+				if len(finalScaffols)>1:
+					self.logTextEdit.append("\nAttempting gap closure.... ")
+					self.logTextEdit.repaint()
+					now = datetime.now()
+					current_time = now.strftime("%H:%M:%S")
+					logFile.write("Gap closure started at "+str(current_time)+"\n\n")
+					os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
+						-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
+							outputFolder+" -s "+ self.gapClosingReadsLineEdit.text() +" -o scaffolds_gapClosed.fasta")
+				else:
+					os.system("cp "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
+			
 			else:
-				os.system("cp "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
+				os.system("cp "+outputFolder+"/local_assemblies.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
 			
 			
 			#Final alignment and consensus calling

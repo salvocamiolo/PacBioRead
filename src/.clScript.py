@@ -156,30 +156,39 @@ else:
 
 
 	#Joining contigs
-	now = datetime.now()
-	current_time = now.strftime("%H:%M:%S")
-	logFile.write("Conting joining started at "+str(current_time)+"\n\n")
-
-	print("* * Joining contigs.... ")
+	#Count contigs in local_assemblies
+	numContigs = 0
+	for seq_record in SeqIO.parse(outputFolder+"/local_assemblies.fasta","fasta"):
+		numContigs+=1
 	
-	os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/local_assemblies.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
-
-	#Check final number of scaffold and attempt gap closure if > 1
-	print("* * Attempting gap closure.... ")
-	
-	finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta","fasta"))
-
-	if len(finalScaffols)>1:
-		print("\nAttempting gap closure.... ")
-		
+	if numContigs>1:
 		now = datetime.now()
 		current_time = now.strftime("%H:%M:%S")
-		logFile.write("Gap closure started at "+str(current_time)+"\n\n")
-		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
-			-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
-				outputFolder+" -s "+ closingReads +" -o scaffolds_gapClosed.fasta")
+		logFile.write("Conting joining started at "+str(current_time)+"\n\n")
+
+		print("* * Joining contigs.... ")
+		
+		os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/contigsJoiner.py -c "+outputFolder+"/local_assemblies.fasta -r "+refFile+" -p "+installationDirectory+" -o "+outputFolder)
+
+		#Check final number of scaffold and attempt gap closure if > 1
+		print("* * Attempting gap closure.... ")
+		
+		finalScaffols = SeqIO.to_dict(SeqIO.parse(outputFolder+"/scaffolds.fasta","fasta"))
+
+		if len(finalScaffols)>1:
+			print("\nAttempting gap closure.... ")
+			
+			now = datetime.now()
+			current_time = now.strftime("%H:%M:%S")
+			logFile.write("Gap closure started at "+str(current_time)+"\n\n")
+			os.system(installationDirectory+"/src/conda/bin/python "+installationDirectory+"/src/scripts/oneReadContigsJoiner.py \
+				-p "+installationDirectory+ " -c "+outputFolder+"/scaffolds.fasta -r "+refFile+" -x " + \
+					outputFolder+" -s "+ closingReads +" -o scaffolds_gapClosed.fasta")
+		else:
+			os.system("cp "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
+	
 	else:
-		os.system("cp "+outputFolder+"/scaffolds.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
+		os.system("cp "+outputFolder+"/local_assemblies.fasta "+outputFolder+"/scaffolds_gapClosed.fasta")
 	
 	
 	#Final alignment and consensus calling
