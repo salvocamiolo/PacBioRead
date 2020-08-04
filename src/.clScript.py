@@ -98,12 +98,16 @@ else:
 	current_time = now.strftime("%H:%M:%S")
 	logFile.write("Sliding window assembly started at "+str(current_time)+"\n\n")
 	logFile.write("Range\tContig_size\n")
+	lastWindow = False
 	for a in range(0,len(refSeq),+windowStep):
+		if lastWindow == True:
+			break
 	#for a in range(1):
 		endPos = a+windowSize
 		if endPos>len(refSeq):
 			endPos=len(refSeq)
 			windowSize = len(refSeq) - a
+			lastWindow = True
 		windowSuffix = str(a)+"-"+str(endPos) 
 		print("* * * Assembling region "+str(a)+"-"+str(endPos))
 		
