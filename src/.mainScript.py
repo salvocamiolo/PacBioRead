@@ -682,6 +682,8 @@ class Ui_Form(object):
 			os.system(installationDirectory+"/src/conda/bin/samtools mpileup -f "+outputFolder+ \
 				"/scaffolds_gapClosed.fasta "+outputFolder +"/alignment_sorted1.bam > "+outputFolder+ \
 					"/pileup1.txt")
+			os.system("awk '$3!=\"N\"' "+outputFolder+"/pileup1.txt >"+outputFolder+"/pileup2.txt")
+			os.system("mv "+outputFolder+"/pileup2.txt "+outputFolder+"/pileup1.txt")
 
 			self.logTextEdit.append("* * * Calling variants.... ")
 			self.logTextEdit.repaint()
